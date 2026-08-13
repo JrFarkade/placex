@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Code2, Play, Send, CheckCircle2, Sparkles, RotateCcw, Maximize2, Minimize2, ArrowRight, CheckSquare, XCircle, FileCode2 } from 'lucide-react';
+import { Code2, Play, Send, Sparkles, RotateCcw, Maximize2, Minimize2, ArrowRight, CheckSquare, XCircle, FileCode2 } from 'lucide-react';
 import axios from 'axios';
 
 interface CodingSandboxProps {
@@ -145,25 +145,25 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
   };
 
   return (
-    <div className={`space-y-6 max-w-7xl mx-auto pb-12 ${isFullscreen ? 'fixed inset-0 z-50 bg-[#F8F7FC] p-6 overflow-y-auto max-w-none' : ''}`}>
+    <div className={`space-y-6 max-w-7xl mx-auto pb-12 text-[#202321] ${isFullscreen ? 'fixed inset-0 z-50 bg-[#F7F4EE] p-6 overflow-y-auto max-w-none' : ''}`}>
       {/* Header Controls */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-6 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
+          <div className="w-11 h-11 rounded-2xl bg-[#059669] flex items-center justify-center text-white shadow-xs">
             <Code2 className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-indigo-600 font-extrabold uppercase tracking-wider">PlaceX Practice Platform</span>
-              <span className="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md font-mono font-bold">Judge0 Sandboxed</span>
+              <span className="text-[10px] text-[#059669] font-extrabold uppercase tracking-wider">PlaceX Practice Sandbox</span>
+              <span className="text-[10px] bg-[#E6F4EA] text-[#047857] px-2 py-0.5 rounded-md font-mono font-bold">Judge0 Engine</span>
             </div>
             <select
               value={selectedQuestionId}
               onChange={(e) => setSelectedQuestionId(Number(e.target.value))}
-              className="bg-transparent text-slate-900 font-black text-lg focus:outline-none cursor-pointer mt-0.5"
+              className="bg-transparent text-[#202321] font-black text-lg focus:outline-none cursor-pointer mt-0.5"
             >
               {questions.map((q) => (
-                <option key={q.id} value={q.id} className="bg-white text-slate-800 font-bold">
+                <option key={q.id} value={q.id} className="bg-white text-[#202321] font-bold">
                   #{q.id}. {q.title} ({q.difficulty})
                 </option>
               ))}
@@ -176,7 +176,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <select
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white cursor-pointer"
+            className="bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl px-4 py-2 text-xs font-bold text-[#202321] focus:outline-none focus:border-[#059669] focus:bg-white cursor-pointer"
           >
             <option value="python">Python 3</option>
             <option value="javascript">JavaScript (Node.js)</option>
@@ -186,7 +186,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={handleResetCode}
             title="Reset to Starter Code"
-            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#666B67] hover:text-[#202321] transition-all cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -194,7 +194,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Editor"}
-            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
+            className="p-2.5 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#666B67] hover:text-[#202321] transition-all cursor-pointer"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
@@ -202,16 +202,16 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={handleRunCode}
             disabled={running}
-            className="px-5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition-all cursor-pointer"
+            className="px-5 py-2.5 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] text-[#202321] font-bold text-xs flex items-center gap-2 border border-[#EAE7DF] transition-all cursor-pointer"
           >
-            <Play className="w-3.5 h-3.5 text-indigo-600" />
+            <Play className="w-3.5 h-3.5 text-[#059669]" />
             <span>Run Code</span>
           </button>
 
           <button
             onClick={handleSubmitSolution}
             disabled={running}
-            className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+            className="px-6 py-2.5 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs flex items-center gap-2 shadow-md shadow-[#059669]/20 transition-all cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Submit Solution</span>
@@ -221,17 +221,17 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
       {/* Recommendation Banner */}
       {recommendation?.recommended_question && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-900 to-purple-900 text-white flex items-center justify-between shadow-sm">
+        <div className="p-4 rounded-2xl bg-[#059669] text-white flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-2.5 text-xs font-medium">
-            <Sparkles className="w-4 h-4 text-purple-300 shrink-0" />
+            <Sparkles className="w-4 h-4 text-emerald-200 shrink-0" />
             <span>{recommendation.reason}</span>
           </div>
           <button
             onClick={() => setSelectedQuestionId(recommendation.recommended_question.id)}
-            className="text-xs bg-white hover:bg-slate-100 text-indigo-950 px-3.5 py-1.5 rounded-xl font-extrabold flex items-center gap-1 transition-all cursor-pointer shrink-0"
+            className="text-xs bg-white hover:bg-[#FAF8F5] text-[#047857] px-3.5 py-1.5 rounded-xl font-extrabold flex items-center gap-1 transition-all cursor-pointer shrink-0"
           >
             <span>Try #{recommendation.recommended_question.id}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#059669]" />
           </button>
         </div>
       )}
@@ -239,13 +239,13 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column: Problem Statement */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="bg-white p-6 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            <div className="flex bg-slate-100 p-1 rounded-2xl max-w-xs">
+            <div className="flex bg-[#FAF8F5] p-1 rounded-2xl max-w-xs border border-[#EAE7DF]">
               <button
                 onClick={() => setActiveTab('problem')}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'problem' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                  activeTab === 'problem' ? 'bg-white text-[#059669] shadow-xs' : 'text-[#666B67] hover:text-[#202321]'
                 }`}
               >
                 Problem
@@ -253,7 +253,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
               <button
                 onClick={() => setActiveTab('hints')}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'hints' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                  activeTab === 'hints' ? 'bg-white text-[#059669] shadow-xs' : 'text-[#666B67] hover:text-[#202321]'
                 }`}
               >
                 Hints ({currentQuestion?.hints?.length || 0})
@@ -261,7 +261,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
               <button
                 onClick={() => setActiveTab('editorial')}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'editorial' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                  activeTab === 'editorial' ? 'bg-white text-[#059669] shadow-xs' : 'text-[#666B67] hover:text-[#202321]'
                 }`}
               >
                 Solution
@@ -270,31 +270,31 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
             {activeTab === 'problem' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center justify-between border-b border-[#F4F1EA] pb-3">
                   <div>
-                    <h3 className="text-xl font-black text-slate-900">{currentQuestion?.title}</h3>
-                    <span className="text-xs text-slate-400 font-semibold">Estimated Time: {currentQuestion?.estimated_time || '20 mins'}</span>
+                    <h3 className="text-xl font-black text-[#202321]">{currentQuestion?.title}</h3>
+                    <span className="text-xs text-[#949A95] font-semibold">Estimated Time: {currentQuestion?.estimated_time || '20 mins'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      currentQuestion?.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                      currentQuestion?.difficulty === 'Easy' ? 'bg-[#E6F4EA] text-[#047857]' : 'bg-[#FEF3C7] text-[#D97706]'
                     }`}>
                       {currentQuestion?.difficulty}
                     </span>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#FAF8F5] text-[#059669] border border-[#EAE7DF]">
                       {currentQuestion?.category}
                     </span>
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-700 leading-relaxed font-medium whitespace-pre-wrap">
+                <div className="text-xs text-[#525753] leading-relaxed font-medium whitespace-pre-wrap">
                   {currentQuestion?.problem_statement}
                 </div>
 
                 {(currentQuestion?.visible_testcases || []).map((tc: any, i: number) => (
                   <div key={i} className="space-y-1.5 pt-2">
-                    <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Example {i + 1}</h4>
-                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs font-mono space-y-1 text-slate-800">
+                    <h4 className="text-xs font-extrabold text-[#949A95] uppercase tracking-wider">Example {i + 1}</h4>
+                    <div className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs font-mono space-y-1 text-[#202321]">
                       <div><strong>Input:</strong> {tc.input}</div>
                       <div><strong>Output:</strong> {tc.expected || tc.output}</div>
                     </div>
@@ -305,10 +305,10 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
             {activeTab === 'hints' && (
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Progressive Hints</h4>
+                <h4 className="text-xs font-extrabold text-[#949A95] uppercase tracking-wider">Progressive Hints</h4>
                 {(currentQuestion?.hints || []).map((h: string, idx: number) => (
-                  <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 font-medium space-y-1">
-                    <div className="font-bold text-indigo-600">Hint {idx + 1}</div>
+                  <div key={idx} className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs text-[#525753] font-medium space-y-1">
+                    <div className="font-bold text-[#059669]">Hint {idx + 1}</div>
                     <div>{h}</div>
                   </div>
                 ))}
@@ -317,8 +317,8 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
             {activeTab === 'editorial' && (
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Reference Editorial</h4>
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-800 font-mono whitespace-pre-wrap leading-relaxed">
+                <h4 className="text-xs font-extrabold text-[#949A95] uppercase tracking-wider">Reference Solution</h4>
+                <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs text-[#202321] font-mono whitespace-pre-wrap leading-relaxed">
                   {currentQuestion?.editorial || "Review time and space complexity."}
                 </div>
               </div>
@@ -328,29 +328,29 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
         {/* Right Column: Code Editor & Console */}
         <div className="space-y-4">
-          <div className="bg-slate-900 rounded-3xl overflow-hidden flex flex-col h-[340px] shadow-sm">
-            <div className="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+          <div className="bg-[#202321] rounded-3xl overflow-hidden flex flex-col h-[340px] shadow-sm">
+            <div className="px-4 py-2.5 bg-[#1A1D1A] border-b border-[#333734] flex items-center justify-between text-xs text-[#949A95] font-mono">
               <span className="flex items-center gap-2">
-                <FileCode2 className="w-3.5 h-3.5 text-indigo-400" />
+                <FileCode2 className="w-3.5 h-3.5 text-[#059669]" />
                 <span>solution.{language === 'python' ? 'py' : language === 'javascript' ? 'js' : 'cpp'}</span>
               </span>
-              <span className="text-emerald-400 font-bold">Monaco Sandbox Ready</span>
+              <span className="text-[#10B981] font-bold">Judge0 Ready</span>
             </div>
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full flex-1 p-4 bg-slate-900 text-slate-100 font-mono text-xs focus:outline-none resize-none leading-relaxed"
+              className="w-full flex-1 p-4 bg-[#202321] text-[#FAF8F5] font-mono text-xs focus:outline-none resize-none leading-relaxed"
               spellCheck={false}
             />
           </div>
 
-          <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+          <div className="bg-white p-5 rounded-3xl border border-[#EAE7DF] shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#F4F1EA] pb-2">
               <div className="flex gap-2">
                 <button
                   onClick={() => setConsoleTab('results')}
                   className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                    consoleTab === 'results' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
+                    consoleTab === 'results' ? 'bg-[#059669] text-white' : 'text-[#666B67] hover:text-[#202321]'
                   }`}
                 >
                   Test Results
@@ -358,7 +358,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
                 <button
                   onClick={() => setConsoleTab('history')}
                   className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                    consoleTab === 'history' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
+                    consoleTab === 'history' ? 'bg-[#059669] text-white' : 'text-[#666B67] hover:text-[#202321]'
                   }`}
                 >
                   Submissions ({submissions.length})
@@ -366,7 +366,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
                 <button
                   onClick={() => setConsoleTab('input')}
                   className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
-                    consoleTab === 'input' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
+                    consoleTab === 'input' ? 'bg-[#059669] text-white' : 'text-[#666B67] hover:text-[#202321]'
                   }`}
                 >
                   Custom Input
@@ -375,7 +375,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
               {result && (
                 <span className={`px-3 py-0.5 rounded-full text-[10px] font-extrabold ${
-                  result.status === 'Accepted' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                  result.status === 'Accepted' ? 'bg-[#E6F4EA] text-[#047857]' : 'bg-[#FEF3C7] text-[#D97706]'
                 }`}>
                   {result.status}
                 </span>
@@ -386,27 +386,27 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
               <div>
                 {result ? (
                   <div className="space-y-3">
-                    <div className="p-3 rounded-2xl bg-slate-900 font-mono text-xs text-slate-100 max-h-32 overflow-y-auto">
+                    <div className="p-3 rounded-2xl bg-[#202321] font-mono text-xs text-[#FAF8F5] max-h-32 overflow-y-auto">
                       {result.stdout || result.stderr || 'No stdout output.'}
                     </div>
 
                     <div className="grid grid-cols-3 gap-3 text-center">
-                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">Runtime</div>
-                        <div className="text-xs font-black text-indigo-600 mt-0.5">{result.runtime_ms} ms</div>
+                      <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF]">
+                        <div className="text-[10px] font-bold text-[#949A95] uppercase">Runtime</div>
+                        <div className="text-xs font-black text-[#059669] mt-0.5">{result.runtime_ms} ms</div>
                       </div>
-                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">Complexity</div>
-                        <div className="text-xs font-black text-emerald-600 mt-0.5">{result.time_complexity || 'O(n)'}</div>
+                      <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF]">
+                        <div className="text-[10px] font-bold text-[#949A95] uppercase">Complexity</div>
+                        <div className="text-xs font-black text-[#047857] mt-0.5">{result.time_complexity || 'O(n)'}</div>
                       </div>
-                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">Quality</div>
-                        <div className="text-xs font-black text-purple-600 mt-0.5">{result.code_quality_score || 85}/100</div>
+                      <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF]">
+                        <div className="text-[10px] font-bold text-[#949A95] uppercase">Quality</div>
+                        <div className="text-xs font-black text-[#D97706] mt-0.5">{result.code_quality_score || 85}/100</div>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-400 text-center py-4 font-medium">
+                  <div className="text-xs text-[#949A95] text-center py-4 font-medium">
                     Click 'Run Code' or 'Submit Solution' to execute code in Judge0 container.
                   </div>
                 )}
@@ -417,34 +417,34 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {submissions.length > 0 ? (
                   submissions.map((sub: any) => (
-                    <div key={sub.id} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs font-mono">
+                    <div key={sub.id} className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE7DF] flex items-center justify-between text-xs font-mono">
                       <div className="flex items-center gap-2">
                         {sub.status === 'Accepted' ? (
-                          <CheckSquare className="w-4 h-4 text-emerald-600" />
+                          <CheckSquare className="w-4 h-4 text-[#059669]" />
                         ) : (
-                          <XCircle className="w-4 h-4 text-amber-600" />
+                          <XCircle className="w-4 h-4 text-[#D97706]" />
                         )}
-                        <span className="font-bold text-slate-800">{sub.status}</span>
-                        <span className="text-slate-400">({sub.language})</span>
+                        <span className="font-bold text-[#202321]">{sub.status}</span>
+                        <span className="text-[#949A95]">({sub.language})</span>
                       </div>
-                      <span className="text-slate-500 font-semibold">{sub.runtime_ms} ms</span>
+                      <span className="text-[#666B67] font-semibold">{sub.runtime_ms} ms</span>
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs text-slate-400 text-center py-4 font-medium">No submissions recorded yet.</div>
+                  <div className="text-xs text-[#949A95] text-center py-4 font-medium">No submissions recorded yet.</div>
                 )}
               </div>
             )}
 
             {consoleTab === 'input' && (
               <div className="space-y-2">
-                <label className="block text-[11px] font-bold text-slate-500">Custom Standard Input (stdin)</label>
+                <label className="block text-[11px] font-bold text-[#666B67]">Custom Standard Input (stdin)</label>
                 <textarea
                   value={customInput}
                   onChange={(e) => setCustomInput(e.target.value)}
                   placeholder="Paste stdin inputs here..."
                   rows={3}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-800 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white resize-none"
+                  className="w-full bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl p-3 text-xs text-[#202321] font-mono focus:outline-none focus:border-[#059669] focus:bg-white resize-none"
                 />
               </div>
             )}

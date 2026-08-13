@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Lock, Mail, User, Loader2, CheckCircle2, ShieldCheck, Map, Code2, Bot } from 'lucide-react';
+import { Sparkles, ArrowRight, Lock, Mail, User, Loader2, ShieldCheck, Map, Code2, Bot } from 'lucide-react';
 import axios from 'axios';
 
 interface LoginProps {
@@ -69,68 +69,67 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F7FC] flex items-center justify-center p-6 lg:p-12 relative overflow-hidden">
-      {/* Soft Pastel Background Blobs */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-200/30 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-200/30 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen bg-[#F7F4EE] flex items-center justify-center p-6 lg:p-12 relative overflow-hidden text-[#202321]">
+      {/* Warm Background Subtle Elements */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-[#E6F4EA]/40 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#FEF3C7]/40 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
-        {/* Left Column: Editorial Hero & Value Proposition */}
+        {/* Left Column: Warm Editorial Headline & Value Proposition */}
         <div className="lg:col-span-7 space-y-8 text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100/80 border border-purple-200 text-purple-700 text-xs font-bold shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-            <span>AI-Powered Placement & Career OS</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E6F4EA] border border-[#BBF7D0] text-[#047857] text-xs font-extrabold shadow-xs">
+            <Sparkles className="w-4 h-4 text-[#059669]" />
+            <span>Intelligent Career Companion for Students</span>
           </div>
 
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] tracking-tight">
-              Turn your <br />
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-                career preparation
-              </span> <br />
-              into progress.
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#202321] leading-[1.15] tracking-tight">
+              Build your career. <br />
+              <span className="text-[#059669]">
+                Prepare with purpose.
+              </span>
             </h1>
-            <p className="text-base text-slate-600 font-medium max-w-xl leading-relaxed">
-              PlaceX brings your resume, coding sandbox, mock interviews, and personalized dynamic career roadmap into one intelligent operating system.
+            <p className="text-base text-[#525753] font-medium max-w-xl leading-relaxed">
+              PlaceX brings your resume ATS score, coding sandbox, mock interviews, and dynamic career roadmap into one calm, intelligent operating system.
             </p>
           </div>
 
-          {/* Module Pill Highlights */}
+          {/* Module Feature Badges */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
-              <Bot className="w-4 h-4 text-indigo-600 shrink-0" />
-              <span className="text-xs font-bold text-slate-800">Host AI</span>
+            <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
+              <Bot className="w-5 h-5 text-[#059669] shrink-0" />
+              <span className="text-xs font-bold text-[#202321]">Host AI Mentor</span>
             </div>
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
-              <ShieldCheck className="w-4 h-4 text-purple-600 shrink-0" />
-              <span className="text-xs font-bold text-slate-800">Resume ATS</span>
+            <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
+              <ShieldCheck className="w-5 h-5 text-[#0284C7] shrink-0" />
+              <span className="text-xs font-bold text-[#202321]">Resume ATS</span>
             </div>
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
-              <Code2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="text-xs font-bold text-slate-800">Coding Practice</span>
+            <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
+              <Code2 className="w-5 h-5 text-[#F59E0B] shrink-0" />
+              <span className="text-xs font-bold text-[#202321]">Coding Sandbox</span>
             </div>
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2.5">
-              <Map className="w-4 h-4 text-rose-500 shrink-0" />
-              <span className="text-xs font-bold text-slate-800">Career Roadmap</span>
+            <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
+              <Map className="w-5 h-5 text-[#F43F5E] shrink-0" />
+              <span className="text-xs font-bold text-[#202321]">Career Roadmap</span>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Clean Authentication Form Card */}
+        {/* Right Column: Clean White Authentication Form Card */}
         <div className="lg:col-span-5">
-          <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-xl shadow-indigo-500/5 space-y-6">
+          <div className="bg-white p-8 sm:p-10 rounded-3xl border border-[#EAE7DF] shadow-xl shadow-[#202321]/5 space-y-6">
             <div className="space-y-1.5 text-center">
-              <h2 className="text-2xl font-extrabold text-slate-900">
-                {isRegister ? 'Create Student Account' : 'Welcome back to PlaceX'}
+              <h2 className="text-2xl font-black text-[#202321]">
+                {isRegister ? 'Create PlaceX Account' : 'Welcome back to PlaceX'}
               </h2>
-              <p className="text-xs text-slate-500 font-medium">
-                {isRegister ? 'Get your personalized career operating system' : 'Sign in to continue your career preparation'}
+              <p className="text-xs text-[#666B67] font-medium">
+                {isRegister ? 'Set up your personalized career operating system' : 'Sign in to access your student career workspace'}
               </p>
             </div>
 
             {error && (
-              <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-xs text-center font-semibold">
+              <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-xs text-center font-bold">
                 {error}
               </div>
             )}
@@ -138,15 +137,15 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {isRegister && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Full Name</label>
+                  <label className="block text-xs font-bold text-[#202321] mb-1.5">Full Name</label>
                   <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <User className="w-4 h-4 text-[#949A95] absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                      className="w-full bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#202321] font-semibold focus:outline-none focus:border-[#059669] focus:bg-white transition-all"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -154,30 +153,30 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               )}
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">Email Address</label>
+                <label className="block text-xs font-bold text-[#202321] mb-1.5">Email Address</label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-[#949A95] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                    className="w-full bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#202321] font-semibold focus:outline-none focus:border-[#059669] focus:bg-white transition-all"
                     placeholder="name@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">Password</label>
+                <label className="block text-xs font-bold text-[#202321] mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-[#949A95] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                    className="w-full bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#202321] font-semibold focus:outline-none focus:border-[#059669] focus:bg-white transition-all"
                     placeholder="••••••••"
                   />
                 </div>
@@ -186,7 +185,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               <button
                 type="submit"
                 disabled={loading || googleLoading}
-                className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition-all cursor-pointer mt-2"
+                className="w-full py-3.5 rounded-2xl bg-[#059669] hover:bg-[#047857] disabled:opacity-50 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-md shadow-[#059669]/20 transition-all cursor-pointer mt-2"
               >
                 <span>{loading ? 'Authenticating...' : isRegister ? 'Create Account' : 'Sign In'}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -196,9 +195,9 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             {/* Divider */}
             <div className="relative my-6 text-center">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200"></div>
+                <div className="w-full border-t border-[#EAE7DF]"></div>
               </div>
-              <span className="relative px-3 bg-white text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <span className="relative px-3 bg-white text-[10px] font-extrabold uppercase tracking-widest text-[#949A95]">
                 OR
               </span>
             </div>
@@ -208,11 +207,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               type="button"
               onClick={handleGoogleLogin}
               disabled={googleLoading || loading}
-              className="w-full py-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center gap-3 shadow-xs transition-all cursor-pointer disabled:opacity-50"
+              className="w-full py-3 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#202321] font-bold text-sm flex items-center justify-center gap-3 shadow-xs transition-all cursor-pointer disabled:opacity-50"
             >
               {googleLoading ? (
                 <>
-                  <Loader2 className="w-4 h-4 text-indigo-600 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-[#059669] animate-spin" />
                   <span>Signing in with Google...</span>
                 </>
               ) : (
@@ -246,7 +245,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                   setIsRegister(!isRegister);
                   setError('');
                 }}
-                className="text-xs text-slate-500 hover:text-indigo-600 font-bold transition-all cursor-pointer"
+                className="text-xs text-[#666B67] hover:text-[#059669] font-bold transition-all cursor-pointer"
               >
                 {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Create One"}
               </button>

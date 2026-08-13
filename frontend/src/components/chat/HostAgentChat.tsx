@@ -20,7 +20,7 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
     {
       id: '1',
       sender: 'agent',
-      text: "Welcome to PlaceX. What career direction are you currently interested in?",
+      text: "Welcome to PlaceX. What career direction or role are you currently preparing for?",
       recommendations: [
         'Data Analyst',
         'Software Engineer',
@@ -79,69 +79,69 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
   };
 
   return (
-    <div className="flex flex-col h-[600px] bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
-      {/* Agent Header */}
-      <div className="px-6 py-4 bg-slate-50/80 border-b border-slate-200/80 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-600/20">
-            <Bot className="w-5 h-5 text-white" />
+    <div className="flex flex-col h-[600px] bg-white rounded-3xl border border-[#EAE7DF] shadow-xs overflow-hidden text-[#202321]">
+      {/* Header */}
+      <div className="px-6 py-4 bg-[#FAF8F5] border-b border-[#EAE7DF] flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-2xl bg-[#059669] flex items-center justify-center text-white shadow-xs">
+            <Bot className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-black text-slate-900">Host AI Career Mentor</h2>
-              <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100/80 text-emerald-700 border border-emerald-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
+              <h2 className="text-sm font-black text-[#202321]">Host AI Career Companion</h2>
+              <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E6F4EA] text-[#047857] border border-[#BBF7D0]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse"></span> Active
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium">Personalized Career Guidance Engine</p>
+            <p className="text-[11px] text-[#666B67] font-medium">Personalized Student Mentorship Engine</p>
           </div>
         </div>
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-[#FBFBFE]">
+      <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-[#FAF8F5]/50">
         {messages.map((msg, index) => {
           const isLatestAgentMessage = msg.sender === 'agent' && index === messages.length - 1;
 
           return (
             <div key={msg.id} className="space-y-3">
               <div
-                className={`flex gap-3 max-w-2xl ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
+                className={`flex gap-3.5 max-w-2xl ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
               >
                 <div
                   className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 text-xs font-black shadow-xs ${
                     msg.sender === 'user'
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-white text-indigo-600 border border-slate-200'
+                      ? 'bg-[#059669] text-white'
+                      : 'bg-white text-[#059669] border border-[#EAE7DF]'
                   }`}
                 >
-                  {msg.sender === 'user' ? 'You' : <Bot className="w-4 h-4" />}
+                  {msg.sender === 'user' ? 'You' : <Bot className="w-4.5 h-4.5" />}
                 </div>
 
                 <div className="space-y-1">
                   <div
                     className={`p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
                       msg.sender === 'user'
-                        ? 'bg-indigo-600 text-white rounded-tr-none shadow-md shadow-indigo-600/10 font-medium'
-                        : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-xs font-medium'
+                        ? 'bg-[#059669] text-white rounded-tr-none shadow-sm font-medium'
+                        : 'bg-white border border-[#EAE7DF] text-[#202321] rounded-tl-none shadow-xs font-medium'
                     }`}
                   >
                     <div className="whitespace-pre-wrap">{msg.text}</div>
                   </div>
-                  <div className="text-[10px] text-slate-400 font-semibold px-1">{msg.timestamp}</div>
+                  <div className="text-[10px] text-[#949A95] font-bold px-1">{msg.timestamp}</div>
                 </div>
               </div>
 
-              {/* Contextual UI Action Buttons (Displayed only for latest agent message) */}
+              {/* Contextual Action Buttons */}
               {isLatestAgentMessage && msg.recommendations && msg.recommendations.length > 0 && (
                 <div className="flex flex-wrap gap-2 pl-12 pt-1">
                   {msg.recommendations.map((rec, idx) => (
                     <button
                       key={idx}
                       onClick={() => sendMessage(rec, true)}
-                      className="text-xs bg-white hover:bg-indigo-50 text-indigo-700 hover:text-indigo-800 px-4 py-2 rounded-2xl border border-indigo-100 hover:border-indigo-300 flex items-center gap-2 transition-all cursor-pointer font-bold shadow-xs"
+                      className="text-xs bg-white hover:bg-[#E6F4EA] text-[#047857] hover:text-[#064E3B] px-4 py-2 rounded-2xl border border-[#BBF7D0] flex items-center gap-2 transition-all cursor-pointer font-extrabold shadow-xs"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#059669]" />
                       <span>{rec}</span>
                     </button>
                   ))}
@@ -152,15 +152,15 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
         })}
 
         {loading && (
-          <div className="flex items-center gap-3 text-slate-500 text-xs font-semibold py-2 pl-12">
-            <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
-            <span>Host AI is thinking...</span>
+          <div className="flex items-center gap-3 text-[#666B67] text-xs font-bold py-2 pl-12">
+            <Loader2 className="w-4 h-4 animate-spin text-[#059669]" />
+            <span>Host AI is reasoning...</span>
           </div>
         )}
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-white border-t border-slate-200/80">
+      <div className="p-4 bg-white border-t border-[#EAE7DF]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -172,13 +172,13 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your AI Career Mentor anything..."
-            className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3 text-xs sm:text-sm text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all"
+            placeholder="Ask your AI Career Companion anything..."
+            className="flex-1 bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl px-5 py-3 text-xs sm:text-sm text-[#202321] font-semibold placeholder-[#949A95] focus:outline-none focus:border-[#059669] focus:bg-white transition-all"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+            className="bg-[#059669] hover:bg-[#047857] disabled:opacity-50 text-white px-6 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-[#059669]/20 transition-all cursor-pointer"
           >
             <span>Send</span>
             <Send className="w-4 h-4" />

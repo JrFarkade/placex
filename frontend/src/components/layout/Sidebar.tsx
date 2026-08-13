@@ -10,7 +10,8 @@ import {
   BarChart3, 
   User, 
   LogOut,
-  Sparkles
+  Sparkles,
+  Compass
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -32,73 +33,77 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeatur
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between h-screen sticky top-0 z-30 shadow-sm">
-      {/* Brand Header */}
+    <aside className="w-72 bg-[#FFFFFF] border-r border-[#EAE7DF] flex flex-col justify-between h-screen sticky top-0 z-30 shadow-xs">
       <div>
-        <div className="h-20 flex items-center px-6 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-md shadow-indigo-500/20">
-              <Sparkles className="w-5 h-5 text-white" />
+        {/* Brand Header */}
+        <div className="h-20 flex items-center px-6 border-b border-[#F4F1EA]">
+          <div className="flex items-center gap-3.5">
+            <div className="h-11 w-11 rounded-2xl bg-[#059669] flex items-center justify-center shadow-sm shadow-[#059669]/20">
+              <Compass className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                Place<span className="text-indigo-600">X</span>
+              <h1 className="text-2xl font-black text-[#202321] tracking-tight">
+                Place<span className="text-[#059669]">X</span>
               </h1>
-              <p className="text-[10px] text-purple-600 font-bold tracking-wider uppercase">Career Operating System</p>
+              <p className="text-[11px] text-[#666B67] font-bold tracking-wider uppercase">Career Workspace</p>
             </div>
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <div className="p-4 space-y-1.5">
-          <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Core Modules
+        {/* Core Modules Section Label & Navigation Items */}
+        <div className="p-4 space-y-2">
+          <div className="px-4 pt-3 pb-1 text-[11px] font-extrabold text-[#949A95] uppercase tracking-widest">
+            CORE MODULES
           </div>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeFeature === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveFeature(item.id)}
-                className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-indigo-50/80 text-indigo-700 border border-indigo-100 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="px-2 py-0.5 text-[9px] font-bold bg-purple-100 text-purple-700 rounded-full border border-purple-200">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          <div className="space-y-1.5">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeFeature === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveFeature(item.id)}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#059669] text-white shadow-md shadow-[#059669]/20'
+                      : 'text-[#525753] hover:text-[#202321] hover:bg-[#FAF8F5]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5">
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#666B67]'}`} />
+                    <span className="tracking-tight">{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span className={`px-2 py-0.5 text-[10px] font-extrabold rounded-full ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-[#E6F4EA] text-[#047857]'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Footer Profile & Sign Out */}
-      <div className="p-4 border-t border-slate-100 space-y-1.5 bg-slate-50/50">
+      {/* Footer Profile / Sign Out */}
+      <div className="p-4 border-t border-[#F4F1EA] space-y-2 bg-[#FAF8F5]">
         <button
           onClick={() => setActiveFeature('profile')}
-          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-200 transition-all cursor-pointer ${
-            activeFeature === 'profile' ? 'bg-white text-indigo-700 border-slate-200 shadow-xs' : ''
+          className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold text-[#525753] hover:text-[#202321] hover:bg-white border border-transparent hover:border-[#EAE7DF] transition-all cursor-pointer ${
+            activeFeature === 'profile' ? 'bg-white text-[#059669] border-[#EAE7DF] shadow-xs' : ''
           }`}
         >
-          <User className="w-4 h-4 text-slate-400" />
+          <User className="w-5 h-5 text-[#666B67]" />
           <span>Student Profile</span>
         </button>
         {onLogout && (
           <button
             onClick={onLogout}
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all cursor-pointer"
+            className="w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-100 transition-all cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-rose-500" />
+            <LogOut className="w-5 h-5 text-rose-500" />
             <span>Sign Out</span>
           </button>
         )}

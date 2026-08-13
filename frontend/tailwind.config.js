@@ -8,23 +8,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        pageBg: '#F8F7FC',
+        pageBg: '#F7F4EE',
+        pageBgDark: '#F4F1EA',
         cardBg: '#FFFFFF',
-        cardBorder: '#E2E8F0',
-        brand: {
-          50: '#EEF2FF',
-          100: '#E0E7FF',
-          200: '#C7D2FE',
-          500: '#6366F1',
-          600: '#4F46E5',
-          700: '#4338CA',
-          900: '#312E81',
+        cardSurface: '#FAF8F5',
+        cardBorder: '#EAE7DF',
+        cardBorderHover: '#D1CDC2',
+        
+        // Primary Text & Muted
+        textPrimary: '#202321',
+        textSecondary: '#666B67',
+        textMuted: '#949A95',
+
+        // Primary Accent: Teal / Muted Green
+        teal: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          500: '#10B981',
+          600: '#059669',
+          700: '#047857',
+          800: '#065F46',
+          900: '#064E3B',
         },
-        accentViolet: '#7C3AED',
+
+        // Controlled Small Accents
         accentCoral: '#F43F5E',
-        accentPink: '#FB7185',
-        textMain: '#0F172A',
-        textMuted: '#64748B',
+        accentOrange: '#F97316',
+        accentWarmYellow: '#EAB308',
+        accentSky: '#0284C7',
+        accentSage: '#D1FAE5',
+      },
+      fontFamily: {
+        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
     },
   },

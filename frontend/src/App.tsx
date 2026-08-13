@@ -93,8 +93,8 @@ export const App: React.FC = () => {
 
   if (validatingAuth) {
     return (
-      <div className="min-h-screen bg-[#F8F7FC] flex items-center justify-center text-slate-500 text-sm font-bold">
-        Verifying PlaceX Authentication Session...
+      <div className="min-h-screen bg-[#F7F4EE] flex items-center justify-center text-[#666B67] text-sm font-bold">
+        Verifying PlaceX Session...
       </div>
     );
   }
@@ -104,7 +104,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F8F7FC] text-slate-900">
+    <div className="flex min-h-screen bg-[#F7F4EE] text-[#202321]">
       {/* Left Sidebar Navigation */}
       <Sidebar activeFeature={activeFeature} setActiveFeature={setActiveFeature} onLogout={handleLogout} />
 
@@ -145,17 +145,17 @@ export const App: React.FC = () => {
           )}
 
           {activeFeature !== 'dashboard' && activeFeature !== 'agent' && activeFeature !== 'resume' && activeFeature !== 'coding' && activeFeature !== 'interview' && activeFeature !== 'roadmap' && (
-            <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto my-12 space-y-4 shadow-xs">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center mx-auto text-2xl font-bold">
+            <div className="bg-white p-12 rounded-3xl border border-[#EAE7DF] text-center max-w-2xl mx-auto my-12 space-y-4 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-[#E6F4EA] text-[#059669] border border-[#BBF7D0] flex items-center justify-center mx-auto text-2xl font-bold">
                 {activeFeature.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-xl font-bold text-slate-900 capitalize">{activeFeature} Module Ready</h2>
-              <p className="text-sm text-slate-500 font-medium">
+              <h2 className="text-xl font-black text-[#202321] capitalize">{activeFeature} Module Ready</h2>
+              <p className="text-sm text-[#666B67] font-medium">
                 Connected to FastAPI backend service layer. Use the Host Agent panel anytime for guided orchestration.
               </p>
               <button
                 onClick={() => setActiveFeature('agent')}
-                className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
+                className="px-6 py-2.5 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
               >
                 Open Host Agent Chat
               </button>

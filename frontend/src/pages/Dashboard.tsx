@@ -4,16 +4,14 @@ import {
   FileText, 
   Code2, 
   Mic, 
-  CheckCircle2, 
-  Clock, 
   Target,
   Sparkles,
-  AlertCircle,
   ArrowRight,
   Bot,
   Map,
-  TrendingUp,
-  Brain
+  Compass,
+  CheckCircle2,
+  ChevronRight
 } from 'lucide-react';
 import { HostAgentChat } from '../components/chat/HostAgentChat';
 import axios from 'axios';
@@ -55,222 +53,258 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
   const completedInterviews = memoryData?.completed_interviews || 0;
   const dailyTasks = roadmapData?.daily_tasks || [];
 
+  const journeySteps = [
+    { name: 'Profile', done: true },
+    { name: 'Skills', done: !!targetRole },
+    { name: 'Resume', done: resumeScore !== null && resumeScore !== undefined },
+    { name: 'Practice', done: codingSolved > 0 },
+    { name: 'Interview', done: completedInterviews > 0 },
+    { name: 'Placement Ready', done: (readinessScore || 0) >= 80 },
+  ];
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12 text-[#202321]">
       
-      {/* 1. Header Banner & Next Best Action Card */}
-      <div className="p-8 rounded-3xl bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-950 text-white relative overflow-hidden shadow-lg shadow-indigo-900/10">
-        <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/10 text-indigo-200 border border-white/15">
-              <Sparkles className="w-3.5 h-3.5 text-purple-300" />
-              <span>Personalized Career Space</span>
+      {/* 1. Top Greeting Banner & Target Role */}
+      <div className="p-8 rounded-3xl bg-white border border-[#EAE7DF] shadow-xs relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#E6F4EA] text-[#047857] border border-[#BBF7D0]">
+              <Compass className="w-4 h-4 text-[#059669]" />
+              <span>Career Operating Workspace</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-              Good morning, {user?.full_name?.split(' ')[0] || 'Student'}! 👋
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#202321]">
+              Good morning, {user?.full_name?.split(' ')[0] || 'Student'} 👋
             </h1>
-            <p className="text-sm text-indigo-100/90 font-medium max-w-xl leading-relaxed">
-              Target Role: <strong className="text-white underline font-bold">{targetRole || 'Not specified'}</strong> • Readiness: <strong className="text-emerald-300 font-bold">{readinessScore !== null && readinessScore !== undefined ? `${readinessScore}/100` : 'Not calculated'}</strong>
-            </p>
+            <div className="flex items-center gap-3 text-sm text-[#666B67] font-medium pt-1">
+              <span>Target Role:</span>
+              <span className="px-3 py-1 rounded-full bg-[#FAF8F5] border border-[#EAE7DF] text-[#059669] font-extrabold text-xs">
+                {targetRole || 'Not specified (Set in Profile / Host Agent)'}
+              </span>
+            </div>
           </div>
 
-          {/* Next Best Action Card */}
-          <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 max-w-md space-y-3 shrink-0">
-            <div className="flex items-center justify-between text-xs text-indigo-200 font-bold uppercase tracking-wider">
-              <span>Next Best Action</span>
-              <span className="bg-emerald-400/20 text-emerald-300 px-2 py-0.5 rounded text-[10px]">Recommended</span>
-            </div>
-            <p className="text-sm font-bold text-white">
-              {dailyTasks.length > 0 ? dailyTasks[0]?.task : 'Complete 3 SQL & Analytics practice problems to boost readiness.'}
-            </p>
-            <button
-              onClick={() => setActiveFeature('coding')}
-              className="w-full py-2.5 rounded-xl bg-white text-indigo-900 font-extrabold text-xs flex items-center justify-center gap-2 hover:bg-slate-100 transition-all cursor-pointer shadow-sm"
-            >
-              <span>Start Now</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Core Metrics Cards Grid (Placement Readiness & Stats) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        
-        {/* Placement Readiness */}
-        <div className="placex-card placex-card-hover p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Readiness Score</span>
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-slate-900">
-              {readinessScore !== null && readinessScore !== undefined ? `${readinessScore} / 100` : 'Not calculated'}
-            </div>
-            <div className="text-xs text-emerald-600 font-bold mt-0.5">{readinessLevel}</div>
-          </div>
-          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-            <div
-              className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-              style={{ width: `${readinessScore || 0}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* ATS Resume Score */}
-        <div className="placex-card placex-card-hover p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Resume ATS Score</span>
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-indigo-600" />
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-slate-900">
-              {resumeScore !== null && resumeScore !== undefined ? `${resumeScore} / 100` : 'No resume uploaded'}
-            </div>
-            <div className="text-xs text-indigo-600 font-bold mt-0.5">
-              {resumeScore !== null ? 'ATS Benchmark Passed' : 'Upload PDF/DOCX'}
-            </div>
-          </div>
-          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-            <div
-              className="bg-indigo-600 h-full rounded-full transition-all duration-500"
-              style={{ width: `${resumeScore || 0}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* Coding Solved */}
-        <div className="placex-card placex-card-hover p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Coding Solved</span>
-            <div className="w-9 h-9 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center">
-              <Code2 className="w-5 h-5 text-purple-600" />
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-slate-900">
-              {codingSolved > 0 ? `${codingSolved} Problems` : '0 Problems'}
-            </div>
-            <div className="text-xs text-purple-600 font-bold mt-0.5">
-              {codingSolved > 0 ? 'Sandboxed Submissions' : 'Start practice sandbox'}
-            </div>
-          </div>
-          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-            <div
-              className="bg-purple-600 h-full rounded-full transition-all duration-500"
-              style={{ width: `${min(100, codingSolved * 10)}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* Mock Interviews */}
-        <div className="placex-card placex-card-hover p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mock Interviews</span>
-            <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center">
-              <Mic className="w-5 h-5 text-rose-500" />
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-black text-slate-900">
-              {completedInterviews > 0 ? `${completedInterviews} Sessions` : '0 Sessions'}
-            </div>
-            <div className="text-xs text-rose-500 font-bold mt-0.5">
-              {completedInterviews > 0 ? 'Evaluated Feedback' : 'Try technical or HR mock'}
-            </div>
-          </div>
-          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-            <div
-              className="bg-rose-500 h-full rounded-full transition-all duration-500"
-              style={{ width: `${min(100, completedInterviews * 25)}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Interactive Gateway Modules Grid */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-black text-slate-900 tracking-tight">Career Preparation Modules</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Host AI Mentor Card */}
-          <div className="placex-card placex-card-hover p-6 flex flex-col justify-between space-y-4 border-indigo-100 bg-gradient-to-b from-indigo-50/50 to-white">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-600/20">
-                <Bot className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-slate-900">Host AI Career Mentor</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                Your personalized AI companion guiding your onboarding, skill gap analysis, and roadmap updates.
-              </p>
-            </div>
-            <button
-              onClick={() => setActiveFeature('agent')}
-              className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
-            >
-              <span>Open Host Chat</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Resume Intelligence Card */}
-          <div className="placex-card placex-card-hover p-6 flex flex-col justify-between space-y-4 border-purple-100 bg-gradient-to-b from-purple-50/50 to-white">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/20">
-                <FileText className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-slate-900">Resume Intelligence</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                Native ATS parser based on Resume-Matcher evaluating document structure, missing keywords, and score.
-              </p>
-            </div>
+          {/* Quick Action Switchers */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setActiveFeature('resume')}
-              className="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+              className="px-4 py-3 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#202321] font-bold text-xs flex items-center gap-2 transition-all cursor-pointer"
             >
+              <FileText className="w-4 h-4 text-[#059669]" />
               <span>Analyze Resume</span>
-              <ArrowRight className="w-3.5 h-3.5" />
             </button>
-          </div>
-
-          {/* Career Roadmap Card */}
-          <div className="placex-card placex-card-hover p-6 flex flex-col justify-between space-y-4 border-emerald-100 bg-gradient-to-b from-emerald-50/50 to-white">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/20">
-                <Map className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-extrabold text-slate-900">Personalized Roadmap</h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                Role-specific phase builder tracking mastered topics, progress, and next best milestone.
-              </p>
-            </div>
             <button
-              onClick={() => setActiveFeature('roadmap')}
-              className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+              onClick={() => setActiveFeature('coding')}
+              className="px-5 py-3 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs flex items-center gap-2 shadow-md shadow-[#059669]/20 transition-all cursor-pointer"
             >
-              <span>View Career Roadmap</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <Code2 className="w-4 h-4" />
+              <span>Practice Coding</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 4. Host Agent Chat Embed */}
+      {/* 2. Major Focus: NEXT BEST ACTION CARD */}
+      <div className="p-8 rounded-3xl bg-gradient-to-br from-[#059669] to-[#047857] text-white shadow-md shadow-[#059669]/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="space-y-2 max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-extrabold bg-white/15 text-emerald-100 border border-white/20 uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+            <span>PRIMARY NEXT BEST ACTION</span>
+          </div>
+          <h2 className="text-2xl font-extrabold tracking-tight text-white">
+            {dailyTasks.length > 0 ? dailyTasks[0]?.task : 'Strengthen your SQL & Analytical Data Skills'}
+          </h2>
+          <p className="text-xs text-emerald-100 font-medium leading-relaxed">
+            Your recent preparation history shows that SQL joins and query optimization are currently your highest-impact improvement areas for target role placement.
+          </p>
+        </div>
+
+        <button
+          onClick={() => setActiveFeature('coding')}
+          className="px-6 py-3.5 rounded-2xl bg-white hover:bg-[#FAF8F5] text-[#047857] font-black text-xs sm:text-sm flex items-center gap-2 shadow-sm shrink-0 transition-all cursor-pointer"
+        >
+          <span>Start Practice</span>
+          <ArrowRight className="w-4 h-4 text-[#059669]" />
+        </button>
+      </div>
+
+      {/* 3. YOUR PLACEMENT JOURNEY (Visual Progress Path) */}
+      <div className="p-7 rounded-3xl bg-white border border-[#EAE7DF] shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-extrabold text-[#202321] uppercase tracking-wider">YOUR PLACEMENT JOURNEY</h3>
+          <span className="text-xs font-bold text-[#059669]">Step-by-step Readiness</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {journeySteps.map((step, idx) => (
+            <div
+              key={step.name}
+              className={`p-3.5 rounded-2xl border text-center space-y-1.5 transition-all ${
+                step.done
+                  ? 'bg-[#E6F4EA] border-[#BBF7D0] text-[#047857]'
+                  : 'bg-[#FAF8F5] border-[#EAE7DF] text-[#666B67]'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                {step.done ? (
+                  <CheckCircle2 className="w-5 h-5 text-[#059669]" />
+                ) : (
+                  <span className="w-5 h-5 rounded-full border-2 border-[#949A95] text-[10px] font-bold flex items-center justify-center text-[#666B67]">
+                    {idx + 1}
+                  </span>
+                )}
+              </div>
+              <div className="text-xs font-extrabold">{step.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. PLACEMENT READINESS (Teal Visual Score & Breakdown) */}
+      <div className="p-8 rounded-3xl bg-white border border-[#EAE7DF] shadow-xs space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-xl font-black text-[#202321]">Placement Readiness</h3>
+            <p className="text-xs text-[#666B67] font-medium">
+              {readinessScore !== null && readinessScore !== undefined
+                ? `You're making solid progress. Technical practice is currently your main lever.`
+                : 'Upload a resume or complete coding tasks to generate your readiness baseline.'}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE7DF]">
+            <div className="text-3xl font-black text-[#059669]">
+              {readinessScore !== null && readinessScore !== undefined ? `${readinessScore} / 100` : '0 / 100'}
+            </div>
+            <div className="text-xs font-bold text-[#666B67] border-l border-[#EAE7DF] pl-4">
+              Tier: <strong className="text-[#047857] block">{readinessLevel}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full bg-[#FAF8F5] h-3 rounded-full overflow-hidden border border-[#EAE7DF]">
+          <div
+            className="bg-[#059669] h-full rounded-full transition-all duration-500"
+            style={{ width: `${readinessScore || 0}%` }}
+          ></div>
+        </div>
+      </div>
+
+      {/* 5. MODULE PREVIEW (Varied Visual Block Sizes) */}
       <div className="space-y-4">
-        <h2 className="text-xl font-black text-slate-900 tracking-tight">Interactive Career Mentor</h2>
+        <h2 className="text-xl font-black text-[#202321]">Career Modules Workspace</h2>
+
+        {/* Varied Block Sizes Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          {/* LARGE BLOCK: Host AI Mentor (7 columns) */}
+          <div className="lg:col-span-7 bg-white p-7 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#E6F4EA] border border-[#BBF7D0] text-[#059669] flex items-center justify-center">
+                <Bot className="w-6 h-6" />
+              </div>
+              <h3 className="text-2xl font-black text-[#202321]">Host AI Career Mentor</h3>
+              <p className="text-xs text-[#525753] font-medium leading-relaxed max-w-lg">
+                Your calm, intelligent AI companion for career guidance, skill evaluation, and roadmap orchestration. Ask questions anytime or request personalized practice tasks.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setActiveFeature('agent')}
+              className="w-full py-3.5 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+            >
+              <span>Ask PlaceX Mentor</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* MEDIUM BLOCK: Resume Intelligence (5 columns) */}
+          <div className="lg:col-span-5 bg-white p-7 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-[#0284C7] flex items-center justify-center">
+                <FileText className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-[#202321]">Resume Intelligence</h3>
+              <p className="text-xs text-[#525753] font-medium leading-relaxed">
+                Native ATS parser based on Resume-Matcher. Evaluates document health, missing job keywords, and score.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setActiveFeature('resume')}
+              className="w-full py-3 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#202321] font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <span>Upload & Check ATS</span>
+              <ChevronRight className="w-4 h-4 text-[#059669]" />
+            </button>
+          </div>
+
+          {/* MEDIUM BLOCK: Coding Sandbox (6 columns) */}
+          <div className="lg:col-span-6 bg-white p-7 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#FEF3C7] border border-[#FDE68A] text-[#D97706] flex items-center justify-center">
+                <Code2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-[#202321]">Coding Practice Sandbox</h3>
+              <p className="text-xs text-[#525753] font-medium leading-relaxed">
+                Judge0 execution container supporting Python, JavaScript, and C++. Includes visible/hidden testcases and AST complexity analysis.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setActiveFeature('coding')}
+              className="w-full py-3 rounded-2xl bg-[#FAF8F5] hover:bg-[#F4F1EA] border border-[#EAE7DF] text-[#202321] font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <span>Open Coding Sandbox</span>
+              <ChevronRight className="w-4 h-4 text-[#059669]" />
+            </button>
+          </div>
+
+          {/* SMALL SUPPORTING BLOCK: Mock Interview (3 columns) */}
+          <div className="lg:col-span-3 bg-white p-7 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[#FFE4E6] border border-[#FECDD3] text-[#E11D48] flex items-center justify-center">
+                <Mic className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-extrabold text-[#202321]">Mock Interview</h4>
+              <p className="text-xs text-[#666B67] font-medium">Technical, HR, & Project Viva with STT analysis.</p>
+            </div>
+
+            <button
+              onClick={() => setActiveFeature('interview')}
+              className="w-full py-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#F4F1EA] text-[#202321] font-bold text-xs transition-all cursor-pointer"
+            >
+              Start Session
+            </button>
+          </div>
+
+          {/* SMALL SUPPORTING BLOCK: Career Roadmap (3 columns) */}
+          <div className="lg:col-span-3 bg-white p-7 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[#E6F4EA] border border-[#BBF7D0] text-[#047857] flex items-center justify-center">
+                <Map className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-extrabold text-[#202321]">Career Roadmap</h4>
+              <p className="text-xs text-[#666B67] font-medium">Dynamic phase builder for target roles.</p>
+            </div>
+
+            <button
+              onClick={() => setActiveFeature('roadmap')}
+              className="w-full py-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#F4F1EA] text-[#202321] font-bold text-xs transition-all cursor-pointer"
+            >
+              View Journey
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 6. Host Agent Chat Embed */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-black text-[#202321]">Interactive Career Companion</h2>
         <HostAgentChat token={token} activeFeature="dashboard" />
       </div>
 
     </div>
   );
 };
-
-function min(a: number, b: number) {
-  return a < b ? a : b;
-}
