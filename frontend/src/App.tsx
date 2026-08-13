@@ -22,7 +22,6 @@ export const App: React.FC = () => {
   // Validate authentication session on startup & handle Google OAuth redirect callback params
   useEffect(() => {
     const validateSession = async () => {
-      // 1. Check if returning from Google OAuth Redirect (?token=...&user=...)
       const searchParams = new URLSearchParams(window.location.search);
       const urlToken = searchParams.get('token');
       const urlUser = searchParams.get('user');
@@ -37,7 +36,6 @@ export const App: React.FC = () => {
           currentToken = urlToken;
           setToken(urlToken);
           setUser(parsedUser);
-          // Clean token query parameters from URL bar
           window.history.replaceState({}, document.title, window.location.pathname);
         } catch (e) {
           console.error("Failed parsing URL oauth user", e);
@@ -59,13 +57,11 @@ export const App: React.FC = () => {
         setUser(res.data);
         localStorage.setItem('placex_user', JSON.stringify(res.data));
 
-        // Load authenticated student profile
         const profRes = await axios.get('/api/v1/auth/profile', {
           headers: { Authorization: `Bearer ${currentToken}` }
         });
         setUserProfile(profRes.data);
       } catch (error) {
-        // Invalid or expired token: clear fake/stale session
         localStorage.removeItem('placex_token');
         localStorage.removeItem('placex_user');
         setToken(null);
@@ -97,7 +93,7 @@ export const App: React.FC = () => {
 
   if (validatingAuth) {
     return (
-      <div className="min-h-screen bg-darkBg flex items-center justify-center text-slate-400 text-sm font-medium">
+      <div className="min-h-screen bg-[#F8F7FC] flex items-center justify-center text-slate-500 text-sm font-bold">
         Verifying PlaceX Authentication Session...
       </div>
     );
@@ -108,7 +104,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-darkBg text-slate-100">
+    <div className="flex min-h-screen bg-[#F8F7FC] text-slate-900">
       {/* Left Sidebar Navigation */}
       <Sidebar activeFeature={activeFeature} setActiveFeature={setActiveFeature} onLogout={handleLogout} />
 
@@ -121,7 +117,7 @@ export const App: React.FC = () => {
           onLogout={handleLogout}
         />
 
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-8 overflow-y-auto">
           {activeFeature === 'dashboard' && (
             <Dashboard token={token} user={user} setActiveFeature={setActiveFeature} />
           )}
@@ -149,17 +145,17 @@ export const App: React.FC = () => {
           )}
 
           {activeFeature !== 'dashboard' && activeFeature !== 'agent' && activeFeature !== 'resume' && activeFeature !== 'coding' && activeFeature !== 'interview' && activeFeature !== 'roadmap' && (
-            <div className="glass-card p-12 rounded-3xl border border-darkBorder text-center max-w-2xl mx-auto my-12 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-blue-600/10 text-blue-400 border border-blue-500/20 flex items-center justify-center mx-auto text-2xl font-bold">
+            <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto my-12 space-y-4 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center mx-auto text-2xl font-bold">
                 {activeFeature.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-xl font-bold text-slate-100 capitalize">{activeFeature} Module Ready</h2>
-              <p className="text-sm text-slate-400">
+              <h2 className="text-xl font-bold text-slate-900 capitalize">{activeFeature} Module Ready</h2>
+              <p className="text-sm text-slate-500 font-medium">
                 Connected to FastAPI backend service layer. Use the Host Agent panel anytime for guided orchestration.
               </p>
               <button
                 onClick={() => setActiveFeature('agent')}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs shadow-lg shadow-blue-500/20 transition-all"
+                className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
               >
                 Open Host Agent Chat
               </button>

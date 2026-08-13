@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Code2, Play, Send, CheckCircle2, AlertCircle, Clock, Cpu, Sparkles, Terminal, BookOpen, RotateCcw, Maximize2, Minimize2, ArrowRight, CheckSquare, XCircle, FileCode2 } from 'lucide-react';
+import { Code2, Play, Send, CheckCircle2, Sparkles, RotateCcw, Maximize2, Minimize2, ArrowRight, CheckSquare, XCircle, FileCode2 } from 'lucide-react';
 import axios from 'axios';
 
 interface CodingSandboxProps {
@@ -16,7 +16,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
   const [code, setCode] = useState<string>('');
   const [customInput, setCustomInput] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'problem' | 'hints' | 'editorial'>('problem');
-  const [consoleTab, setConsoleTab] = useState<'results' | 'history' | 'complexity' | 'input'>('results');
+  const [consoleTab, setConsoleTab] = useState<'results' | 'history' | 'input'>('results');
 
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -145,25 +145,25 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
   };
 
   return (
-    <div className={`space-y-6 max-w-7xl mx-auto pb-8 ${isFullscreen ? 'fixed inset-0 z-50 bg-darkBg p-6 overflow-y-auto max-w-none' : ''}`}>
-      {/* Top Header Controls */}
-      <div className="glass-card p-4 rounded-3xl border border-darkBorder flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md">
-            <Code2 className="w-5 h-5 text-white" />
+    <div className={`space-y-6 max-w-7xl mx-auto pb-12 ${isFullscreen ? 'fixed inset-0 z-50 bg-[#F8F7FC] p-6 overflow-y-auto max-w-none' : ''}`}>
+      {/* Header Controls */}
+      <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
+            <Code2 className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-blue-400 font-bold uppercase tracking-wider">PlaceX Practice Platform</span>
-              <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">Judge0 Sandboxed</span>
+              <span className="text-[10px] text-indigo-600 font-extrabold uppercase tracking-wider">PlaceX Practice Platform</span>
+              <span className="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md font-mono font-bold">Judge0 Sandboxed</span>
             </div>
             <select
               value={selectedQuestionId}
               onChange={(e) => setSelectedQuestionId(Number(e.target.value))}
-              className="bg-transparent text-slate-100 font-extrabold text-base focus:outline-none cursor-pointer mt-0.5"
+              className="bg-transparent text-slate-900 font-black text-lg focus:outline-none cursor-pointer mt-0.5"
             >
               {questions.map((q) => (
-                <option key={q.id} value={q.id} className="bg-slate-900 text-slate-200">
+                <option key={q.id} value={q.id} className="bg-white text-slate-800 font-bold">
                   #{q.id}. {q.title} ({q.difficulty})
                 </option>
               ))}
@@ -171,12 +171,12 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Actions */}
         <div className="flex flex-wrap items-center gap-3">
           <select
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
-            className="bg-slate-900 border border-darkBorder rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white cursor-pointer"
           >
             <option value="python">Python 3</option>
             <option value="javascript">JavaScript (Node.js)</option>
@@ -186,7 +186,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={handleResetCode}
             title="Reset to Starter Code"
-            className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-darkBorder text-slate-400 hover:text-slate-200 transition-all cursor-pointer"
+            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -194,7 +194,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Editor"}
-            className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-darkBorder text-slate-400 hover:text-slate-200 transition-all cursor-pointer"
+            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
@@ -202,16 +202,16 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
           <button
             onClick={handleRunCode}
             disabled={running}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-2 border border-slate-700 transition-all cursor-pointer"
+            className="px-5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition-all cursor-pointer"
           >
-            <Play className="w-3.5 h-3.5 text-blue-400" />
+            <Play className="w-3.5 h-3.5 text-indigo-600" />
             <span>Run Code</span>
           </button>
 
           <button
             onClick={handleSubmitSolution}
             disabled={running}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-blue-500/20 transition-all cursor-pointer"
+            className="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Submit Solution</span>
@@ -221,118 +221,104 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
       {/* Recommendation Banner */}
       {recommendation?.recommended_question && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-slate-900 border border-indigo-800/30 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 text-xs">
-            <Sparkles className="w-4 h-4 text-indigo-400 shrink-0" />
-            <span className="text-slate-300 font-medium">{recommendation.reason}</span>
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-900 to-purple-900 text-white flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-2.5 text-xs font-medium">
+            <Sparkles className="w-4 h-4 text-purple-300 shrink-0" />
+            <span>{recommendation.reason}</span>
           </div>
           <button
             onClick={() => setSelectedQuestionId(recommendation.recommended_question.id)}
-            className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 transition-all cursor-pointer shrink-0"
+            className="text-xs bg-white hover:bg-slate-100 text-indigo-950 px-3.5 py-1.5 rounded-xl font-extrabold flex items-center gap-1 transition-all cursor-pointer shrink-0"
           >
             <span>Try #{recommendation.recommended_question.id}</span>
-            <ArrowRight className="w-3 h-3" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
-      {/* Main Content Area: Problem Panel vs. Code Editor */}
+      {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column: Problem Panel with Tabs */}
-        <div className="glass-card p-6 rounded-3xl border border-darkBorder flex flex-col justify-between space-y-4">
+        {/* Left Column: Problem Statement */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            {/* Header Tabs */}
-            <div className="flex bg-slate-900/80 p-1 rounded-xl border border-darkBorder max-w-xs">
+            <div className="flex bg-slate-100 p-1 rounded-2xl max-w-xs">
               <button
                 onClick={() => setActiveTab('problem')}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === 'problem' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  activeTab === 'problem' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 Problem
               </button>
               <button
                 onClick={() => setActiveTab('hints')}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === 'hints' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  activeTab === 'hints' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 Hints ({currentQuestion?.hints?.length || 0})
               </button>
               <button
                 onClick={() => setActiveTab('editorial')}
-                className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === 'editorial' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                className={`flex-1 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  activeTab === 'editorial' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 Solution
               </button>
             </div>
 
-            {/* PROBLEM TAB CONTENT */}
             {activeTab === 'problem' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-darkBorder pb-3">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
-                    <h3 className="text-lg font-extrabold text-slate-100">{currentQuestion?.title}</h3>
-                    <span className="text-xs text-slate-500 font-medium">Estimated Time: {currentQuestion?.estimated_time || '20 mins'}</span>
+                    <h3 className="text-xl font-black text-slate-900">{currentQuestion?.title}</h3>
+                    <span className="text-xs text-slate-400 font-semibold">Estimated Time: {currentQuestion?.estimated_time || '20 mins'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                      currentQuestion?.difficulty === 'Easy' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      currentQuestion?.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                     }`}>
                       {currentQuestion?.difficulty}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
                       {currentQuestion?.category}
                     </span>
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">
+                <div className="text-xs text-slate-700 leading-relaxed font-medium whitespace-pre-wrap">
                   {currentQuestion?.problem_statement}
                 </div>
 
-                {/* Visible Testcases */}
                 {(currentQuestion?.visible_testcases || []).map((tc: any, i: number) => (
                   <div key={i} className="space-y-1.5 pt-2">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Example {i + 1}</h4>
-                    <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono space-y-1 text-slate-300">
+                    <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Example {i + 1}</h4>
+                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs font-mono space-y-1 text-slate-800">
                       <div><strong>Input:</strong> {tc.input}</div>
                       <div><strong>Output:</strong> {tc.expected || tc.output}</div>
                     </div>
                   </div>
                 ))}
-
-                {currentQuestion?.constraints && (
-                  <div className="pt-2">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Constraints</h4>
-                    <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 font-mono">
-                      {currentQuestion.constraints}
-                    </div>
-                  </div>
-                )}
               </div>
             )}
 
-            {/* HINTS TAB CONTENT */}
             {activeTab === 'hints' && (
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Progressive Guidance</h4>
+                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Progressive Hints</h4>
                 {(currentQuestion?.hints || []).map((h: string, idx: number) => (
-                  <div key={idx} className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 leading-relaxed space-y-1">
-                    <div className="font-bold text-blue-400">Hint {idx + 1}</div>
+                  <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 font-medium space-y-1">
+                    <div className="font-bold text-indigo-600">Hint {idx + 1}</div>
                     <div>{h}</div>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* EDITORIAL TAB CONTENT */}
             {activeTab === 'editorial' && (
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Solution Approach</h4>
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">
+                <h4 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Reference Editorial</h4>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-800 font-mono whitespace-pre-wrap leading-relaxed">
                   {currentQuestion?.editorial || "Review time and space complexity."}
                 </div>
               </div>
@@ -342,47 +328,45 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
         {/* Right Column: Code Editor & Console */}
         <div className="space-y-4">
-          {/* Code Editor Container */}
-          <div className="glass-card rounded-3xl border border-darkBorder overflow-hidden flex flex-col h-[340px]">
-            <div className="px-4 py-2 bg-slate-900 border-b border-darkBorder flex items-center justify-between text-xs text-slate-400 font-mono">
+          <div className="bg-slate-900 rounded-3xl overflow-hidden flex flex-col h-[340px] shadow-sm">
+            <div className="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
               <span className="flex items-center gap-2">
-                <FileCode2 className="w-3.5 h-3.5 text-blue-400" />
+                <FileCode2 className="w-3.5 h-3.5 text-indigo-400" />
                 <span>solution.{language === 'python' ? 'py' : language === 'javascript' ? 'js' : 'cpp'}</span>
               </span>
-              <span>Monaco Environment Ready</span>
+              <span className="text-emerald-400 font-bold">Monaco Sandbox Ready</span>
             </div>
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full flex-1 p-4 bg-darkBg text-slate-100 font-mono text-xs focus:outline-none resize-none leading-relaxed"
+              className="w-full flex-1 p-4 bg-slate-900 text-slate-100 font-mono text-xs focus:outline-none resize-none leading-relaxed"
               spellCheck={false}
             />
           </div>
 
-          {/* Console & Test Results Panel */}
-          <div className="glass-card p-5 rounded-3xl border border-darkBorder space-y-3">
-            <div className="flex items-center justify-between border-b border-darkBorder pb-2">
+          <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <div className="flex gap-2">
                 <button
                   onClick={() => setConsoleTab('results')}
-                  className={`text-xs font-bold px-3 py-1 rounded-lg transition-all ${
-                    consoleTab === 'results' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                  className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
+                    consoleTab === 'results' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Test Results
                 </button>
                 <button
                   onClick={() => setConsoleTab('history')}
-                  className={`text-xs font-bold px-3 py-1 rounded-lg transition-all ${
-                    consoleTab === 'history' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                  className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
+                    consoleTab === 'history' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Submissions ({submissions.length})
                 </button>
                 <button
                   onClick={() => setConsoleTab('input')}
-                  className={`text-xs font-bold px-3 py-1 rounded-lg transition-all ${
-                    consoleTab === 'input' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                  className={`text-xs font-bold px-3 py-1 rounded-xl transition-all cursor-pointer ${
+                    consoleTab === 'input' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   Custom Input
@@ -390,83 +374,77 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
               </div>
 
               {result && (
-                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                  result.status === 'Accepted' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                <span className={`px-3 py-0.5 rounded-full text-[10px] font-extrabold ${
+                  result.status === 'Accepted' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
                 }`}>
                   {result.status}
                 </span>
               )}
             </div>
 
-            {/* CONSOLE TAB: RESULTS */}
             {consoleTab === 'results' && (
               <div>
                 {result ? (
                   <div className="space-y-3">
-                    <div className="p-3 rounded-xl bg-slate-900 text-xs font-mono text-slate-300 whitespace-pre-wrap max-h-32 overflow-y-auto">
-                      {result.stdout || result.stderr || 'No stdout output generated.'}
+                    <div className="p-3 rounded-2xl bg-slate-900 font-mono text-xs text-slate-100 max-h-32 overflow-y-auto">
+                      {result.stdout || result.stderr || 'No stdout output.'}
                     </div>
 
                     <div className="grid grid-cols-3 gap-3 text-center">
-                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <div className="text-[10px] text-slate-500">Runtime</div>
-                        <div className="text-xs font-bold text-blue-400 mt-0.5">{result.runtime_ms} ms</div>
+                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase">Runtime</div>
+                        <div className="text-xs font-black text-indigo-600 mt-0.5">{result.runtime_ms} ms</div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <div className="text-[10px] text-slate-500">Estimated Complexity</div>
-                        <div className="text-xs font-bold text-emerald-400 mt-0.5">{result.time_complexity || 'O(n)'}</div>
+                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase">Complexity</div>
+                        <div className="text-xs font-black text-emerald-600 mt-0.5">{result.time_complexity || 'O(n)'}</div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                        <div className="text-[10px] text-slate-500">Code Quality</div>
-                        <div className="text-xs font-bold text-purple-400 mt-0.5">{result.code_quality_score || 85}/100</div>
+                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase">Quality</div>
+                        <div className="text-xs font-black text-purple-600 mt-0.5">{result.code_quality_score || 85}/100</div>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-500 text-center py-4">
-                    Click 'Run Code' for quick testing or 'Submit Solution' for official evaluation.
+                  <div className="text-xs text-slate-400 text-center py-4 font-medium">
+                    Click 'Run Code' or 'Submit Solution' to execute code in Judge0 container.
                   </div>
                 )}
               </div>
             )}
 
-            {/* CONSOLE TAB: SUBMISSION HISTORY */}
             {consoleTab === 'history' && (
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {submissions.length > 0 ? (
                   submissions.map((sub: any) => (
-                    <div key={sub.id} className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs font-mono">
+                    <div key={sub.id} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs font-mono">
                       <div className="flex items-center gap-2">
                         {sub.status === 'Accepted' ? (
-                          <CheckSquare className="w-4 h-4 text-emerald-400" />
+                          <CheckSquare className="w-4 h-4 text-emerald-600" />
                         ) : (
-                          <XCircle className="w-4 h-4 text-amber-400" />
+                          <XCircle className="w-4 h-4 text-amber-600" />
                         )}
-                        <span className="font-bold text-slate-200">{sub.status}</span>
-                        <span className="text-slate-500">({sub.language})</span>
+                        <span className="font-bold text-slate-800">{sub.status}</span>
+                        <span className="text-slate-400">({sub.language})</span>
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-slate-400">
-                        <span>{sub.runtime_ms} ms</span>
-                        <span>{sub.submitted_at.slice(11, 16)}</span>
-                      </div>
+                      <span className="text-slate-500 font-semibold">{sub.runtime_ms} ms</span>
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs text-slate-500 text-center py-4">No submissions recorded yet.</div>
+                  <div className="text-xs text-slate-400 text-center py-4 font-medium">No submissions recorded yet.</div>
                 )}
               </div>
             )}
 
-            {/* CONSOLE TAB: CUSTOM INPUT */}
             {consoleTab === 'input' && (
               <div className="space-y-2">
-                <label className="block text-[11px] font-semibold text-slate-400">Custom Standard Input (stdin)</label>
+                <label className="block text-[11px] font-bold text-slate-500">Custom Standard Input (stdin)</label>
                 <textarea
                   value={customInput}
                   onChange={(e) => setCustomInput(e.target.value)}
-                  placeholder="Paste custom input lines here..."
+                  placeholder="Paste stdin inputs here..."
                   rows={3}
-                  className="w-full bg-slate-900 border border-darkBorder rounded-xl p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500 resize-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-800 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white resize-none"
                 />
               </div>
             )}
