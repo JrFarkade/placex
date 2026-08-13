@@ -88,12 +88,12 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-black text-[#202321]">Host AI Career Companion</h2>
+              <h2 className="text-sm font-black text-[#202321]">Career Mentor</h2>
               <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E6F4EA] text-[#047857] border border-[#BBF7D0]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse"></span> Active
               </span>
             </div>
-            <p className="text-[11px] text-[#666B67] font-medium">Personalized Student Mentorship Engine</p>
+            <p className="text-[11px] text-[#666B67] font-medium">Guides your placement journey</p>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
         {loading && (
           <div className="flex items-center gap-3 text-[#666B67] text-xs font-bold py-2 pl-12">
             <Loader2 className="w-4 h-4 animate-spin text-[#059669]" />
-            <span>Host AI is reasoning...</span>
+            <span>Career Mentor is thinking...</span>
           </div>
         )}
       </div>
@@ -172,7 +172,7 @@ export const HostAgentChat: React.FC<HostAgentChatProps> = ({ token, activeFeatu
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your AI Career Companion anything..."
+            placeholder="Ask your Career Mentor anything..."
             className="flex-1 bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl px-5 py-3 text-xs sm:text-sm text-[#202321] font-semibold placeholder-[#949A95] focus:outline-none focus:border-[#059669] focus:bg-white transition-all"
           />
           <button

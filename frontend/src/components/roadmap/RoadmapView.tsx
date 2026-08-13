@@ -77,9 +77,9 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ token }) => {
             <Map className="w-3.5 h-3.5 text-[#059669]" />
             <span>Personalized Career Roadmap</span>
           </div>
-          <h2 className="text-2xl font-black text-[#202321] tracking-tight">Your Career Path & Milestones</h2>
+          <h2 className="text-2xl font-black text-[#202321] tracking-tight">Personalized Career Roadmap</h2>
           <p className="text-xs text-[#666B67] font-medium max-w-xl leading-relaxed">
-            Built dynamically around your target role, mastered skills, skill gaps, and preparation timeline.
+            Turn your current skills and gaps into a clear path toward your target role.
           </p>
         </div>
 

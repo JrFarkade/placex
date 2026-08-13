@@ -8,6 +8,7 @@ import { CodingSandbox } from './components/coding/CodingSandbox';
 import { InterviewSimulator } from './components/interview/InterviewSimulator';
 import { RoadmapView } from './components/roadmap/RoadmapView';
 import { Login } from './pages/Login';
+import { BookOpen, BarChart3 } from 'lucide-react';
 import axios from 'axios';
 
 export const App: React.FC = () => {
@@ -144,21 +145,29 @@ export const App: React.FC = () => {
             <RoadmapView token={token} />
           )}
 
-          {activeFeature !== 'dashboard' && activeFeature !== 'agent' && activeFeature !== 'resume' && activeFeature !== 'coding' && activeFeature !== 'interview' && activeFeature !== 'roadmap' && (
+          {activeFeature === 'knowledge' && (
             <div className="bg-white p-12 rounded-3xl border border-[#EAE7DF] text-center max-w-2xl mx-auto my-12 space-y-4 shadow-xs">
-              <div className="w-16 h-16 rounded-2xl bg-[#E6F4EA] text-[#059669] border border-[#BBF7D0] flex items-center justify-center mx-auto text-2xl font-bold">
-                {activeFeature.charAt(0).toUpperCase()}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#FAF8F5] text-[#0284C7] border border-[#EAE7DF]">
+                <BookOpen className="w-4 h-4 text-[#0284C7]" />
+                <span>Coming Soon</span>
               </div>
-              <h2 className="text-xl font-black text-[#202321] capitalize">{activeFeature} Module Ready</h2>
-              <p className="text-sm text-[#666B67] font-medium">
-                Connected to FastAPI backend service layer. Use the Host Agent panel anytime for guided orchestration.
+              <h2 className="text-2xl font-black text-[#202321]">Knowledge Base</h2>
+              <p className="text-sm text-[#666B67] font-medium leading-relaxed">
+                A dedicated knowledge layer for career resources and personalized guidance.
               </p>
-              <button
-                onClick={() => setActiveFeature('agent')}
-                className="px-6 py-2.5 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
-              >
-                Open Host Agent Chat
-              </button>
+            </div>
+          )}
+
+          {activeFeature === 'analytics' && (
+            <div className="bg-white p-12 rounded-3xl border border-[#EAE7DF] text-center max-w-2xl mx-auto my-12 space-y-4 shadow-xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#FEF3C7] text-[#D97706] border border-[#FDE68A]">
+                <BarChart3 className="w-4 h-4 text-[#D97706]" />
+                <span>Under Development</span>
+              </div>
+              <h2 className="text-2xl font-black text-[#202321]">Analytics</h2>
+              <p className="text-sm text-[#666B67] font-medium leading-relaxed">
+                Progress analytics and placement-readiness insights will be available in a future update.
+              </p>
             </div>
           )}
         </main>

@@ -10,7 +10,6 @@ import {
   BarChart3, 
   User, 
   LogOut,
-  Sparkles,
   Compass
 } from 'lucide-react';
 
@@ -23,10 +22,10 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeature, onLogout }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'agent', label: 'Host AI Mentor', icon: Bot, badge: 'AI OS' },
-    { id: 'resume', label: 'Resume Intelligence', icon: FileText },
+    { id: 'agent', label: 'Host Agent', icon: Bot },
+    { id: 'resume', label: 'ATS Resume Checker', icon: FileText },
     { id: 'coding', label: 'Coding Sandbox', icon: Code2 },
-    { id: 'interview', label: 'Mock Interview', icon: Mic },
+    { id: 'interview', label: 'AI Mock Interview', icon: Mic },
     { id: 'roadmap', label: 'Career Roadmap', icon: Map },
     { id: 'knowledge', label: 'Knowledge Base', icon: BookOpen },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -45,7 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeatur
               <h1 className="text-2xl font-black text-[#202321] tracking-tight">
                 Place<span className="text-[#059669]">X</span>
               </h1>
-              <p className="text-[11px] text-[#666B67] font-bold tracking-wider uppercase">Career Workspace</p>
+              <p className="text-[11px] text-[#666B67] font-bold tracking-wider uppercase">Career Operating System</p>
             </div>
           </div>
         </div>
@@ -73,13 +72,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeatur
                     <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#666B67]'}`} />
                     <span className="tracking-tight">{item.label}</span>
                   </div>
-                  {item.badge && (
-                    <span className={`px-2 py-0.5 text-[10px] font-extrabold rounded-full ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-[#E6F4EA] text-[#047857]'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
                 </button>
               );
             })}

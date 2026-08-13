@@ -81,11 +81,11 @@ export const ResumeAnalyzer: React.FC<ResumeAnalyzerProps> = ({ token }) => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-[#FAF8F5] text-[#0284C7] border border-[#EAE7DF]">
             <FileText className="w-3.5 h-3.5 text-[#0284C7]" />
-            <span>Native Resume-Matcher Engine</span>
+            <span>ATS Resume Checker</span>
           </div>
-          <h2 className="text-2xl font-black text-[#202321] tracking-tight">Resume Intelligence & ATS Matcher</h2>
+          <h2 className="text-2xl font-black text-[#202321] tracking-tight">Resume Analysis & Job Match</h2>
           <p className="text-xs text-[#666B67] font-medium max-w-xl leading-relaxed">
-            Multi-engine PDF/DOCX parser evaluating ATS structural health, missing job keywords, and match score.
+            Analyzes your resume for ATS compatibility, identifies missing job keywords, and calculates your match score.
           </p>
         </div>
       </div>

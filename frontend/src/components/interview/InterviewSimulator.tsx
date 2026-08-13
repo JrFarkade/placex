@@ -107,37 +107,27 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token })
       {/* Header Banner */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#EAE7DF] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-[#FFE4E6] text-[#E11D48] border border-[#FECDD3]">
-            <Mic className="w-3.5 h-3.5 text-[#E11D48]" />
-            <span>AI Mock Interview Room</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-[#FEF3C7] text-[#D97706] border border-[#FDE68A]">
+            <Mic className="w-3.5 h-3.5 text-[#D97706]" />
+            <span>Under Development</span>
           </div>
-          <h2 className="text-2xl font-black text-[#202321] tracking-tight">Immersive Interview Environment</h2>
+          <h2 className="text-2xl font-black text-[#202321] tracking-tight">AI Mock Interview</h2>
           <p className="text-xs text-[#666B67] font-medium max-w-xl leading-relaxed">
-            Simulate Technical, HR, and Viva interviews with real-time Speech STT & non-verbal analysis.
+            An interactive interview module for Technical, HR, and Project Viva preparation, with AI-based evaluation and feedback.
           </p>
         </div>
 
-        {!sessionStarted && (
-          <div className="flex items-center gap-3">
-            <select
-              value={interviewType}
-              onChange={(e) => setInterviewType(e.target.value)}
-              className="bg-[#FAF8F5] border border-[#EAE7DF] rounded-2xl px-4 py-2.5 text-xs font-bold text-[#202321] focus:outline-none focus:border-[#059669] cursor-pointer"
-            >
-              <option value="Technical">Technical Interview</option>
-              <option value="HR">HR & Behavioral</option>
-              <option value="Viva">Project Viva Mode</option>
-            </select>
-
-            <button
-              onClick={handleStartSession}
-              className="px-6 py-2.5 rounded-2xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs flex items-center gap-2 shadow-md shadow-[#059669]/20 transition-all cursor-pointer"
-            >
-              <Play className="w-4 h-4 fill-white" />
-              <span>Start Session</span>
-            </button>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-3.5 py-1.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs font-bold text-[#202321]">
+            Technical Interview
+          </span>
+          <span className="px-3.5 py-1.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs font-bold text-[#202321]">
+            HR & Behavioral
+          </span>
+          <span className="px-3.5 py-1.5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF] text-xs font-bold text-[#202321]">
+            Project Viva
+          </span>
+        </div>
       </div>
 
       {sessionStarted && !finalReport && (
