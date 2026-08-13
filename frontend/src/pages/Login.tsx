@@ -76,22 +76,22 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
-        {/* Left Column: Warm Editorial Headline & Value Proposition */}
+        {/* Left Column: Warm Editorial Headline & Student-Focused Value Proposition */}
         <div className="lg:col-span-7 space-y-8 text-left">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E6F4EA] border border-[#BBF7D0] text-[#047857] text-xs font-extrabold shadow-xs">
             <Sparkles className="w-4 h-4 text-[#059669]" />
-            <span>Intelligent Career Companion for Students</span>
+            <span>Placement preparation, without the confusion.</span>
           </div>
 
           <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#202321] leading-[1.15] tracking-tight">
-              Build your career. <br />
+              Everything you need <br />
               <span className="text-[#059669]">
-                Prepare with purpose.
+                to get placement-ready.
               </span>
             </h1>
             <p className="text-base text-[#525753] font-medium max-w-xl leading-relaxed">
-              PlaceX brings your resume ATS score, coding sandbox, mock interviews, and dynamic career roadmap into one calm, intelligent operating system.
+              From improving your resume to practicing coding and interviews, PlaceX helps you figure out what to work on and keeps you moving forward.
             </p>
           </div>
 
@@ -99,19 +99,19 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
               <Bot className="w-5 h-5 text-[#059669] shrink-0" />
-              <span className="text-xs font-bold text-[#202321]">Host AI Mentor</span>
+              <span className="text-xs font-bold text-[#202321]">Career Guidance</span>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
               <ShieldCheck className="w-5 h-5 text-[#0284C7] shrink-0" />
-              <span className="text-xs font-bold text-[#202321]">Resume ATS</span>
+              <span className="text-xs font-bold text-[#202321]">Resume Check</span>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
               <Code2 className="w-5 h-5 text-[#F59E0B] shrink-0" />
-              <span className="text-xs font-bold text-[#202321]">Coding Sandbox</span>
+              <span className="text-xs font-bold text-[#202321]">Coding Practice</span>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-[#EAE7DF] shadow-xs flex items-center gap-3">
               <Map className="w-5 h-5 text-[#F43F5E] shrink-0" />
-              <span className="text-xs font-bold text-[#202321]">Career Roadmap</span>
+              <span className="text-xs font-bold text-[#202321]">Personalized Roadmap</span>
             </div>
           </div>
         </div>
@@ -124,7 +124,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                 {isRegister ? 'Create PlaceX Account' : 'Welcome back to PlaceX'}
               </h2>
               <p className="text-xs text-[#666B67] font-medium">
-                {isRegister ? 'Set up your personalized career operating system' : 'Sign in to access your student career workspace'}
+                {isRegister ? 'Set up your student career profile' : 'Sign in to access your placement workspace'}
               </p>
             </div>
 
