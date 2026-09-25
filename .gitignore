@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Databases & local storage
+*.db
+*.sqlite
+*.sqlite3
+data/chromadb/
+uploads/
+logs/
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

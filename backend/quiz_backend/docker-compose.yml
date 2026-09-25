@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  mcq-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: mcq-service
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/mcq_service.db
+    volumes:
+      # Persist SQLite database across container restarts
+      - mcq_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── Optional: Adminer for SQLite inspection ────────────────────────────────
+  # Uncomment if you want a DB browser on http://localhost:8080
+  # adminer:
+  #   image: adminer:latest
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mcq-service
+
+volumes:
+  mcq_data:
+    driver: local
