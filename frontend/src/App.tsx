@@ -64,10 +64,21 @@ class TabErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundary
 }
 
 export const App: React.FC = () => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('placex_token'));
-  const [user, setUser] = useState<any>(
-    localStorage.getItem('placex_user') ? JSON.parse(localStorage.getItem('placex_user')!) : null
-  );
+  const [token, setToken] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('placex_token');
+    } catch {
+      return null;
+    }
+  });
+  const [user, setUser] = useState<any>(() => {
+    try {
+      const saved = localStorage.getItem('placex_user');
+      return saved && saved !== 'undefined' ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [userProfile, setUserProfile] = useState<any>(null);
   const [activeFeature, setActiveFeature] = useState('dashboard');
   const [validatingAuth, setValidatingAuth] = useState<boolean>(true);

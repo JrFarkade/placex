@@ -17,11 +17,19 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   // Check for OAuth URL error query param (e.g. ?error=Google%20sign-in%20was%20cancelled.)
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const urlError = searchParams.get('error');
-    if (urlError) {
-      setError(decodeURIComponent(urlError));
-      window.history.replaceState({}, document.title, window.location.pathname);
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlError = searchParams.get('error');
+      if (urlError) {
+        try {
+          setError(decodeURIComponent(urlError));
+        } catch {
+          setError(urlError);
+        }
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch (e) {
+      console.warn("Failed parsing location search", e);
     }
   }, []);
 
