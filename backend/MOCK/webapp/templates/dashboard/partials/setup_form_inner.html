@@ -1,0 +1,118 @@
+<form method="POST" action="{% url 'dashboard:setup_create' %}" id="prep-setup-form" class="space-y-6" onsubmit="handleFormSubmit(event)">
+    {% csrf_token %}
+
+    {% if error %}
+    <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm flex items-start gap-3">
+        <svg class="w-5 h-5 text-rose-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <div>
+            <p class="font-semibold">Generation Error</p>
+            <p class="text-xs text-rose-300/90 mt-0.5">{{ error }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Target Company -->
+    <div>
+        <label for="company" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Target Company <span class="text-rose-400">*</span>
+        </label>
+        <input type="text" id="company" name="company" value="{{ company|default:'' }}" required placeholder="e.g. Stripe, Datadog, Snowflake, Uber"
+               class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm transition">
+        <p class="text-xs text-slate-500 mt-1.5">Tavily will research this company's tech stack, culture, and architecture signals in real-time.</p>
+    </div>
+
+    <!-- Target Role -->
+    <div>
+        <label for="role" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Target Role Title <span class="text-rose-400">*</span>
+        </label>
+        <input type="text" id="role" name="role" value="{{ role|default:default_role }}" required placeholder="e.g. Senior Backend Distributed Systems Engineer"
+               class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm transition">
+    </div>
+
+    <!-- Difficulty Level -->
+    <div>
+        <label for="difficulty" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Difficulty / Seniority Tier
+        </label>
+        <select id="difficulty" name="difficulty"
+                class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm transition">
+            {% for code, label in difficulty_choices %}
+                <option value="{{ code }}" {% if difficulty == code or not difficulty and code == 'Senior' %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Domain Interests -->
+    <div>
+        <label for="domain_interests" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Domain Focus & Technical Interests (Comma-separated)
+        </label>
+        <input type="text" id="domain_interests" name="domain_interests" value="{{ domain_interests_str|default:'Distributed Systems, Idempotency, Kafka Pipelines, Database Sharding' }}"
+               placeholder="e.g. Distributed Consensus, High-Throughput APIs, Kafka, Sharding"
+               class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm font-mono text-xs transition">
+        <div class="flex flex-wrap gap-2 mt-2">
+            <span class="text-xs text-slate-500">Suggested:</span>
+            <button type="button" onclick="addDomainTag('Kafka Streams')" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60">+ Kafka Streams</button>
+            <button type="button" onclick="addDomainTag('Idempotent APIs')" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60">+ Idempotent APIs</button>
+            <button type="button" onclick="addDomainTag('Database Sharding')" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60">+ Database Sharding</button>
+            <button type="button" onclick="addDomainTag('Raft Consensus')" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60">+ Raft Consensus</button>
+        </div>
+    </div>
+
+    <!-- Direct Loading & Progress Bar Indicator Above Submit Button -->
+    <div id="btn-progress-container" class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
+        <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-amber-400 font-semibold flex items-center gap-1.5">
+                <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span id="btn-progress-label">Prep Brain Pipeline: Ready</span>
+            </span>
+            <span class="text-slate-400 font-bold" id="btn-progress-status">Auto-Calibrated</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-900 rounded-full p-0.5 border border-slate-800 overflow-hidden shadow-inner">
+            <div id="btn-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-emerald-400 animate-pulse" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- Submit Action Button -->
+    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+        <a href="{% url 'dashboard:index' %}" class="text-sm font-medium text-slate-400 hover:text-white transition">Cancel</a>
+        
+        <button type="submit" id="submit-btn" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-emerald-600 hover:from-amber-500 hover:to-emerald-500 text-slate-950 font-bold text-sm transition shadow-lg shadow-amber-500/25 flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span id="submit-btn-text">Research Company & Generate Questions</span>
+        </button>
+    </div>
+</form>
+
+<script>
+    function addDomainTag(tag) {
+        const input = document.getElementById('domain_interests');
+        if (!input) return;
+        const current = input.value.trim();
+        if (!current) {
+            input.value = tag;
+        } else if (!current.includes(tag)) {
+            input.value = current + ', ' + tag;
+        }
+    }
+
+    function handleFormSubmit(e) {
+        const btn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('submit-btn-text');
+        const label = document.getElementById('btn-progress-label');
+        const status = document.getElementById('btn-progress-status');
+
+        if (btnText) btnText.innerText = "⏳ Deep Scanning & Calibrating Questions...";
+        if (label) label.innerText = "Researching Company Context via Tavily & Gemini...";
+        if (status) status.innerText = "In Progress";
+        if (btn) {
+            btn.classList.add('opacity-90', 'animate-pulse');
+        }
+        return true;
+    }
+</script>

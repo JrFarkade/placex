@@ -1,0 +1,20 @@
+# Secrets — never commit these
+.env
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# PlaceX intermediates — see PLACEX_AGENT_INSTRUCTIONS.md File Organization
+# section: always regeneratable, never committed.
+.tmp/
+
+# OS cruft
+.DS_Store
+Thumbs.db

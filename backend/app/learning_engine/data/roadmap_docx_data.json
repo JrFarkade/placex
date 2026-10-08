@@ -1,0 +1,2338 @@
+{
+  "Data Science": {
+    "Beginner": [
+      {
+        "week": 1,
+        "topic": "Python Programming Foundations & Computational Problem Solving",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Beginner Data Science roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Python Programming Foundations & Computational Problem Solving' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Functions, Modules, Packages & File-Based Data Processing",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Python Programming Foundations & Computational Problem Solving' — since this week builds on it directly.",
+        "completion_criteria": "'Functions, Modules, Packages & File-Based Data Processing' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Python Data Structures, Collections & Exception Handling",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Functions, Modules, Packages & File-Based Data Processing' — since this week builds on it directly.",
+        "completion_criteria": "'Python Data Structures, Collections & Exception Handling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Python Foundations Consolidation & Assessment",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Python Programming Foundations & Computational Problem Solving', 'Functions, Modules, Packages & File-Based Data Processing', and 'Python Data Structures, Collections & Exception Handling' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Numerical Computing & Array Operations with NumPy",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Python Foundations Consolidation & Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Numerical Computing & Array Operations with NumPy' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Tabular Data Manipulation & Analysis with Pandas",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Numerical Computing & Array Operations with NumPy' — since this week builds on it directly.",
+        "completion_criteria": "'Tabular Data Manipulation & Analysis with Pandas' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Data Cleaning, Transformation & Quality Handling",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Tabular Data Manipulation & Analysis with Pandas' — since this week builds on it directly.",
+        "completion_criteria": "'Data Cleaning, Transformation & Quality Handling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Data Processing Consolidation & Assessment",
+        "difficulty": "Beginner · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Numerical Computing & Array Operations with NumPy', 'Tabular Data Manipulation & Analysis with Pandas', and 'Data Cleaning, Transformation & Quality Handling' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Statistical Foundations for Data-Driven Analysis",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Data Processing Consolidation & Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Statistical Foundations for Data-Driven Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Probability Concepts & Probabilistic Reasoning",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Statistical Foundations for Data-Driven Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Probability Concepts & Probabilistic Reasoning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Data Distributions, Variability & Statistical Interpretation",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Probability Concepts & Probabilistic Reasoning' — since this week builds on it directly.",
+        "completion_criteria": "'Data Distributions, Variability & Statistical Interpretation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Statistics & Probability Consolidation Assessment",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Statistical Foundations for Data-Driven Analysis', 'Probability Concepts & Probabilistic Reasoning', and 'Data Distributions, Variability & Statistical Interpretation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Relational Databases & Analytical SQL Foundations",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Statistics & Probability Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Relational Databases & Analytical SQL Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Relational Data Joins, Aggregations & Group-Based Analysis",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Relational Databases & Analytical SQL Foundations' — since this week builds on it directly.",
+        "completion_criteria": "'Relational Data Joins, Aggregations & Group-Based Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Subqueries, CTEs & Advanced SQL Query Construction",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Relational Data Joins, Aggregations & Group-Based Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Subqueries, CTEs & Advanced SQL Query Construction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "SQL Consolidation & Analytical Query Assessment",
+        "difficulty": "Beginner · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Relational Databases & Analytical SQL Foundations', 'Relational Data Joins, Aggregations & Group-Based Analysis', and 'Subqueries, CTEs & Advanced SQL Query Construction' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Data Visualization & Analytical Storytelling",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'SQL Consolidation & Analytical Query Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Data Visualization & Analytical Storytelling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Exploratory Data Analysis & Insight Discovery",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Data Visualization & Analytical Storytelling' — since this week builds on it directly.",
+        "completion_criteria": "'Exploratory Data Analysis & Insight Discovery' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Machine Learning Foundations & Predictive Modeling",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Exploratory Data Analysis & Insight Discovery' — since this week builds on it directly.",
+        "completion_criteria": "'Machine Learning Foundations & Predictive Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Data Science Technical Consolidation & Assessment",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Data Visualization & Analytical Storytelling', 'Exploratory Data Analysis & Insight Discovery', and 'Machine Learning Foundations & Predictive Modeling' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "End-to-End Beginner Data Science Project",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Data Science Technical Consolidation & Assessment') should be reasonably solid; this project draws on the whole Beginner Data Science syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Project Enhancement, Model Evaluation & Documentation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('End-to-End Beginner Data Science Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "GitHub Portfolio, Data Science Interview & Placement Preparation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Project Enhancement, Model Evaluation & Documentation') plus the full set of topics from earlier weeks, since interview prep draws on the entire Beginner Data Science syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Data Science Assessment & Placement Readiness",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('GitHub Portfolio, Data Science Interview & Placement Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Intermediate": [
+      {
+        "week": 1,
+        "topic": "Advanced Python for Data Science & Skill-Gap Correction",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Intermediate Data Science roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Advanced Python for Data Science & Skill-Gap Correction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced NumPy & High-Performance Data Manipulation",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Advanced Python for Data Science & Skill-Gap Correction' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced NumPy & High-Performance Data Manipulation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Advanced Pandas, Data Cleaning & Feature Preparation",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced NumPy & High-Performance Data Manipulation' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Pandas, Data Cleaning & Feature Preparation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Python & Data Processing Consolidation Assessment",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Advanced Python for Data Science & Skill-Gap Correction', 'Advanced NumPy & High-Performance Data Manipulation', and 'Advanced Pandas, Data Cleaning & Feature Preparation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Statistical Analysis for Data-Driven Decision Making",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Python & Data Processing Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Statistical Analysis for Data-Driven Decision Making' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Probability, Sampling & Hypothesis Testing",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Statistical Analysis for Data-Driven Decision Making' — since this week builds on it directly.",
+        "completion_criteria": "'Probability, Sampling & Hypothesis Testing' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Correlation, Regression Statistics & Statistical Relationships",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Probability, Sampling & Hypothesis Testing' — since this week builds on it directly.",
+        "completion_criteria": "'Correlation, Regression Statistics & Statistical Relationships' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Statistical Analysis Consolidation Assessment",
+        "difficulty": "Intermediate · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Statistical Analysis for Data-Driven Decision Making', 'Probability, Sampling & Hypothesis Testing', and 'Correlation, Regression Statistics & Statistical Relationships' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Advanced SQL for Analytical Data Retrieval",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Statistical Analysis Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced SQL for Analytical Data Retrieval' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Window Functions & Analytical Query Engineering",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Advanced SQL for Analytical Data Retrieval' — since this week builds on it directly.",
+        "completion_criteria": "'Window Functions & Analytical Query Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "CTEs, Complex Queries & SQL Query Optimization",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Window Functions & Analytical Query Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'CTEs, Complex Queries & SQL Query Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Advanced SQL Consolidation & Assessment",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Advanced SQL for Analytical Data Retrieval', 'Window Functions & Analytical Query Engineering', and 'CTEs, Complex Queries & SQL Query Optimization' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Advanced Exploratory Data Analysis",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Advanced SQL Consolidation & Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Exploratory Data Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Data Visualization, Storytelling & Business Insight Communication",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Advanced Exploratory Data Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Data Visualization, Storytelling & Business Insight Communication' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Feature Engineering & Predictive Data Preparation",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Data Visualization, Storytelling & Business Insight Communication' — since this week builds on it directly.",
+        "completion_criteria": "'Feature Engineering & Predictive Data Preparation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "EDA & Feature Engineering Assessment",
+        "difficulty": "Intermediate · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Advanced Exploratory Data Analysis', 'Data Visualization, Storytelling & Business Insight Communication', and 'Feature Engineering & Predictive Data Preparation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Machine Learning Algorithms & Predictive Modeling",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'EDA & Feature Engineering Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Machine Learning Algorithms & Predictive Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Model Evaluation, Validation & Performance Analysis",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Machine Learning Algorithms & Predictive Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'Model Evaluation, Validation & Performance Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Hyperparameter Optimization & Ensemble Learning",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Model Evaluation, Validation & Performance Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Hyperparameter Optimization & Ensemble Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Machine Learning Consolidation Assessment",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Machine Learning Algorithms & Predictive Modeling', 'Model Evaluation, Validation & Performance Analysis', and 'Hyperparameter Optimization & Ensemble Learning' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "End-to-End Industry-Oriented Data Science Project",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Machine Learning Consolidation Assessment') should be reasonably solid; this project draws on the whole Intermediate Data Science syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Model Improvement, Deployment & Project Documentation",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('End-to-End Industry-Oriented Data Science Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Data Science Technical Interview & Portfolio Preparation",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Model Improvement, Deployment & Project Documentation') plus the full set of topics from earlier weeks, since interview prep draws on the entire Intermediate Data Science syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Data Science Placement Readiness Assessment",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Data Science Technical Interview & Portfolio Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Advanced": [
+      {
+        "week": 1,
+        "topic": "Advanced Python Programming, Optimization & Performance",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Advanced Data Science roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Advanced Python Programming, Optimization & Performance' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced Data Processing & Efficient Data Pipelines",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Advanced Python Programming, Optimization & Performance' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Data Processing & Efficient Data Pipelines' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Advanced Feature Engineering & Representation Strategies",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced Data Processing & Efficient Data Pipelines' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Feature Engineering & Representation Strategies' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Advanced Python & Data Engineering Assessment",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Advanced Python Programming, Optimization & Performance', 'Advanced Data Processing & Efficient Data Pipelines', and 'Advanced Feature Engineering & Representation Strategies' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Statistical Inference & Analytical Reasoning",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Advanced Python & Data Engineering Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Statistical Inference & Analytical Reasoning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Bayesian Reasoning & Probabilistic Modeling Foundations",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Statistical Inference & Analytical Reasoning' — since this week builds on it directly.",
+        "completion_criteria": "'Bayesian Reasoning & Probabilistic Modeling Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Experimental Design, A/B Testing & Causal Reasoning",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Bayesian Reasoning & Probabilistic Modeling Foundations' — since this week builds on it directly.",
+        "completion_criteria": "'Experimental Design, A/B Testing & Causal Reasoning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Advanced Statistical Analysis Assessment",
+        "difficulty": "Advanced · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Statistical Inference & Analytical Reasoning', 'Bayesian Reasoning & Probabilistic Modeling Foundations', and 'Experimental Design, A/B Testing & Causal Reasoning' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Advanced Analytical SQL & Complex Data Modeling",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Advanced Statistical Analysis Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Analytical SQL & Complex Data Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "SQL Performance Engineering & Query Optimization",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Advanced Analytical SQL & Complex Data Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'SQL Performance Engineering & Query Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Large-Scale Data Processing & Distributed Data Concepts",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'SQL Performance Engineering & Query Optimization' — since this week builds on it directly.",
+        "completion_criteria": "'Large-Scale Data Processing & Distributed Data Concepts' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Advanced SQL & Data Processing Assessment",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Advanced Analytical SQL & Complex Data Modeling', 'SQL Performance Engineering & Query Optimization', and 'Large-Scale Data Processing & Distributed Data Concepts' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Advanced Exploratory Analysis & Multivariate Reasoning",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Advanced SQL & Data Processing Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Exploratory Analysis & Multivariate Reasoning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Advanced Visualization & Executive Data Storytelling",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Advanced Exploratory Analysis & Multivariate Reasoning' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Visualization & Executive Data Storytelling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Advanced Feature Engineering & Predictive Signal Discovery",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Advanced Visualization & Executive Data Storytelling' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Feature Engineering & Predictive Signal Discovery' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Advanced Analytics Consolidation Assessment",
+        "difficulty": "Advanced · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Advanced Exploratory Analysis & Multivariate Reasoning', 'Advanced Visualization & Executive Data Storytelling', and 'Advanced Feature Engineering & Predictive Signal Discovery' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Advanced Machine Learning & Model Selection",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Advanced Analytics Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Machine Learning & Model Selection' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Ensemble Methods & Advanced Predictive Modeling",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Advanced Machine Learning & Model Selection' — since this week builds on it directly.",
+        "completion_criteria": "'Ensemble Methods & Advanced Predictive Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Model Optimization, Interpretation & Robustness",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Ensemble Methods & Advanced Predictive Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'Model Optimization, Interpretation & Robustness' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Advanced Machine Learning Assessment",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Advanced Machine Learning & Model Selection', 'Ensemble Methods & Advanced Predictive Modeling', and 'Model Optimization, Interpretation & Robustness' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Production-Grade Data Science Capstone",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Advanced Machine Learning Assessment') should be reasonably solid; this project draws on the whole Advanced Data Science syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Model Deployment, Monitoring & Production Workflow",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Production-Grade Data Science Capstone'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Advanced Data Science Technical Interview Preparation",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Model Deployment, Monitoring & Production Workflow') plus the full set of topics from earlier weeks, since interview prep draws on the entire Advanced Data Science syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Data Science Placement Readiness",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Advanced Data Science Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ]
+  },
+  "AI/ML Engineering": {
+    "Beginner": [
+      {
+        "week": 1,
+        "topic": "Python Programming Foundations for Artificial Intelligence",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Beginner AI/ML roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Python Programming Foundations for Artificial Intelligence' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Numerical Computing & Data Manipulation with NumPy and Pandas",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Python Programming Foundations for Artificial Intelligence' — since this week builds on it directly.",
+        "completion_criteria": "'Numerical Computing & Data Manipulation with NumPy and Pandas' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Data Preprocessing & Machine Learning Dataset Preparation",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Numerical Computing & Data Manipulation with NumPy and Pandas' — since this week builds on it directly.",
+        "completion_criteria": "'Data Preprocessing & Machine Learning Dataset Preparation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "AI Programming & Data Preparation Assessment",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Python Programming Foundations for Artificial Intelligence', 'Numerical Computing & Data Manipulation with NumPy and Pandas', and 'Data Preprocessing & Machine Learning Dataset Preparation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Linear Algebra Foundations for Machine Learning",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'AI Programming & Data Preparation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Linear Algebra Foundations for Machine Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Probability & Probabilistic Reasoning for AI",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Linear Algebra Foundations for Machine Learning' — since this week builds on it directly.",
+        "completion_criteria": "'Probability & Probabilistic Reasoning for AI' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Statistical Foundations for Machine Learning",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Probability & Probabilistic Reasoning for AI' — since this week builds on it directly.",
+        "completion_criteria": "'Statistical Foundations for Machine Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Mathematical Foundations Consolidation Assessment",
+        "difficulty": "Beginner · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Linear Algebra Foundations for Machine Learning', 'Probability & Probabilistic Reasoning for AI', and 'Statistical Foundations for Machine Learning' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Linear Regression & Predictive Modeling",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Mathematical Foundations Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Linear Regression & Predictive Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Logistic Regression & Binary Classification",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Linear Regression & Predictive Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'Logistic Regression & Binary Classification' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Decision Trees & Rule-Based Predictive Modeling",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Logistic Regression & Binary Classification' — since this week builds on it directly.",
+        "completion_criteria": "'Decision Trees & Rule-Based Predictive Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Supervised Learning Consolidation Assessment",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Linear Regression & Predictive Modeling', 'Logistic Regression & Binary Classification', and 'Decision Trees & Rule-Based Predictive Modeling' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "K-Nearest Neighbors & Probabilistic Classification",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Supervised Learning Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'K-Nearest Neighbors & Probabilistic Classification' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Clustering & Unsupervised Learning",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'K-Nearest Neighbors & Probabilistic Classification' — since this week builds on it directly.",
+        "completion_criteria": "'Clustering & Unsupervised Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Feature Engineering & Model Input Optimization",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Clustering & Unsupervised Learning' — since this week builds on it directly.",
+        "completion_criteria": "'Feature Engineering & Model Input Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Machine Learning Practice & Assessment",
+        "difficulty": "Beginner · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'K-Nearest Neighbors & Probabilistic Classification', 'Clustering & Unsupervised Learning', and 'Feature Engineering & Model Input Optimization' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Neural Network Foundations & Perceptron-Based Learning",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Machine Learning Practice & Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Neural Network Foundations & Perceptron-Based Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Deep Learning Architecture & Training Fundamentals",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Neural Network Foundations & Perceptron-Based Learning' — since this week builds on it directly.",
+        "completion_criteria": "'Deep Learning Architecture & Training Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Convolutional Neural Networks for Computer Vision",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Deep Learning Architecture & Training Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Convolutional Neural Networks for Computer Vision' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Deep Learning Consolidation Assessment",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Neural Network Foundations & Perceptron-Based Learning', 'Deep Learning Architecture & Training Fundamentals', and 'Convolutional Neural Networks for Computer Vision' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "End-to-End Beginner AI Project",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Deep Learning Consolidation Assessment') should be reasonably solid; this project draws on the whole Beginner AI/ML syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "AI Project Enhancement & Model Evaluation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('End-to-End Beginner AI Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "AI/ML GitHub Portfolio & Technical Interview Preparation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('AI Project Enhancement & Model Evaluation') plus the full set of topics from earlier weeks, since interview prep draws on the entire Beginner AI/ML syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final AI/ML Placement Readiness Assessment",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('AI/ML GitHub Portfolio & Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Intermediate": [
+      {
+        "week": 1,
+        "topic": "Python, Mathematics & Machine Learning Skill-Gap Correction",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Intermediate AI/ML roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Python, Mathematics & Machine Learning Skill-Gap Correction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced Data Processing & Feature Preparation",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Python, Mathematics & Machine Learning Skill-Gap Correction' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Data Processing & Feature Preparation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Feature Engineering & Representation Learning Foundations",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced Data Processing & Feature Preparation' — since this week builds on it directly.",
+        "completion_criteria": "'Feature Engineering & Representation Learning Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Machine Learning Foundations Assessment",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Python, Mathematics & Machine Learning Skill-Gap Correction', 'Advanced Data Processing & Feature Preparation', and 'Feature Engineering & Representation Learning Foundations' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Regression & Classification Model Engineering",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Machine Learning Foundations Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Regression & Classification Model Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Ensemble Learning & Boosting-Based Models",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Regression & Classification Model Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Ensemble Learning & Boosting-Based Models' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Clustering & Dimensionality Reduction",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Ensemble Learning & Boosting-Based Models' — since this week builds on it directly.",
+        "completion_criteria": "'Clustering & Dimensionality Reduction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Advanced Machine Learning Consolidation",
+        "difficulty": "Intermediate · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Regression & Classification Model Engineering', 'Ensemble Learning & Boosting-Based Models', and 'Clustering & Dimensionality Reduction' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Model Evaluation, Validation & Error Analysis",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Advanced Machine Learning Consolidation' — since this week builds on it directly.",
+        "completion_criteria": "'Model Evaluation, Validation & Error Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Hyperparameter Optimization & Model Selection",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Model Evaluation, Validation & Error Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Hyperparameter Optimization & Model Selection' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Advanced Feature Engineering & Model Improvement",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Hyperparameter Optimization & Model Selection' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Feature Engineering & Model Improvement' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Machine Learning Engineering Assessment",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Model Evaluation, Validation & Error Analysis', 'Hyperparameter Optimization & Model Selection', and 'Advanced Feature Engineering & Model Improvement' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Neural Network Architecture & Deep Learning Training",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Machine Learning Engineering Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Neural Network Architecture & Deep Learning Training' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Convolutional Neural Networks & Image Understanding",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Neural Network Architecture & Deep Learning Training' — since this week builds on it directly.",
+        "completion_criteria": "'Convolutional Neural Networks & Image Understanding' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Transfer Learning & Pretrained Model Adaptation",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Convolutional Neural Networks & Image Understanding' — since this week builds on it directly.",
+        "completion_criteria": "'Transfer Learning & Pretrained Model Adaptation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Deep Learning Consolidation Assessment",
+        "difficulty": "Intermediate · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Neural Network Architecture & Deep Learning Training', 'Convolutional Neural Networks & Image Understanding', and 'Transfer Learning & Pretrained Model Adaptation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Natural Language Processing Foundations",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Deep Learning Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Natural Language Processing Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Computer Vision Pipelines & Visual Intelligence",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Natural Language Processing Foundations' — since this week builds on it directly.",
+        "completion_criteria": "'Computer Vision Pipelines & Visual Intelligence' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Transformer Architecture & Modern AI Foundations",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Computer Vision Pipelines & Visual Intelligence' — since this week builds on it directly.",
+        "completion_criteria": "'Transformer Architecture & Modern AI Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "AI Specialization Consolidation Assessment",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Natural Language Processing Foundations', 'Computer Vision Pipelines & Visual Intelligence', and 'Transformer Architecture & Modern AI Foundations' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "End-to-End AI Application Project",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('AI Specialization Consolidation Assessment') should be reasonably solid; this project draws on the whole Intermediate AI/ML syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Model Deployment, API Integration & AI Application Engineering",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('End-to-End AI Application Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "AI/ML Technical Interview & Portfolio Preparation",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Model Deployment, API Integration & AI Application Engineering') plus the full set of topics from earlier weeks, since interview prep draws on the entire Intermediate AI/ML syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final AI/ML Placement Readiness Assessment",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('AI/ML Technical Interview & Portfolio Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Advanced": [
+      {
+        "week": 1,
+        "topic": "Advanced Mathematical Foundations for Machine Learning",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Advanced AI/ML roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Advanced Mathematical Foundations for Machine Learning' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced Python, Computational Optimization & Performance",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Advanced Mathematical Foundations for Machine Learning' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Python, Computational Optimization & Performance' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Production-Oriented Data Pipelines & Feature Processing",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced Python, Computational Optimization & Performance' — since this week builds on it directly.",
+        "completion_criteria": "'Production-Oriented Data Pipelines & Feature Processing' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Advanced AI Foundations Assessment",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Advanced Mathematical Foundations for Machine Learning', 'Advanced Python, Computational Optimization & Performance', and 'Production-Oriented Data Pipelines & Feature Processing' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Machine Learning Algorithms & Model Engineering",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Advanced AI Foundations Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Machine Learning Algorithms & Model Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Ensemble Learning, Boosting & Model Stacking",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Machine Learning Algorithms & Model Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Ensemble Learning, Boosting & Model Stacking' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Advanced Feature Engineering & Representation Strategies",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Ensemble Learning, Boosting & Model Stacking' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Feature Engineering & Representation Strategies' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Advanced Machine Learning Assessment",
+        "difficulty": "Advanced · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Machine Learning Algorithms & Model Engineering', 'Ensemble Learning, Boosting & Model Stacking', and 'Advanced Feature Engineering & Representation Strategies' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Deep Neural Network Architectures & Training Optimization",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Advanced Machine Learning Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Deep Neural Network Architectures & Training Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Advanced CNN Architectures & Computer Vision Systems",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Deep Neural Network Architectures & Training Optimization' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced CNN Architectures & Computer Vision Systems' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Transfer Learning & Domain-Specific Model Adaptation",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Advanced CNN Architectures & Computer Vision Systems' — since this week builds on it directly.",
+        "completion_criteria": "'Transfer Learning & Domain-Specific Model Adaptation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Advanced Deep Learning Assessment",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Deep Neural Network Architectures & Training Optimization', 'Advanced CNN Architectures & Computer Vision Systems', and 'Transfer Learning & Domain-Specific Model Adaptation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Advanced Natural Language Processing",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Advanced Deep Learning Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Natural Language Processing' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Transformer Architectures & Attention Mechanisms",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Advanced Natural Language Processing' — since this week builds on it directly.",
+        "completion_criteria": "'Transformer Architectures & Attention Mechanisms' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Advanced Computer Vision & Multimodal AI Concepts",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Transformer Architectures & Attention Mechanisms' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Computer Vision & Multimodal AI Concepts' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Advanced AI Specialization Assessment",
+        "difficulty": "Advanced · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Advanced Natural Language Processing', 'Transformer Architectures & Attention Mechanisms', and 'Advanced Computer Vision & Multimodal AI Concepts' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "MLOps Foundations & Machine Learning Lifecycle Management",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Advanced AI Specialization Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'MLOps Foundations & Machine Learning Lifecycle Management' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Model Serving, Inference APIs & Production Deployment",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'MLOps Foundations & Machine Learning Lifecycle Management' — since this week builds on it directly.",
+        "completion_criteria": "'Model Serving, Inference APIs & Production Deployment' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Experiment Tracking, Monitoring & Model Reliability",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Model Serving, Inference APIs & Production Deployment' — since this week builds on it directly.",
+        "completion_criteria": "'Experiment Tracking, Monitoring & Model Reliability' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "MLOps Consolidation Assessment",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'MLOps Foundations & Machine Learning Lifecycle Management', 'Model Serving, Inference APIs & Production Deployment', and 'Experiment Tracking, Monitoring & Model Reliability' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Advanced Industry-Oriented AI Capstone",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('MLOps Consolidation Assessment') should be reasonably solid; this project draws on the whole Advanced AI/ML syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Production Deployment & AI System Engineering",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Advanced Industry-Oriented AI Capstone'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Advanced AI/ML Technical Interview Preparation",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Production Deployment & AI System Engineering') plus the full set of topics from earlier weeks, since interview prep draws on the entire Advanced AI/ML syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final AI/ML Placement Readiness",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Advanced AI/ML Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ]
+  },
+  "Cybersecurity": {
+    "Beginner": [
+      {
+        "week": 1,
+        "topic": "Cybersecurity Principles, Threat Landscape & Security Fundamentals",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Beginner Cybersecurity roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Cybersecurity Principles, Threat Landscape & Security Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "CIA Triad, Security Controls & Risk Concepts",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Cybersecurity Principles, Threat Landscape & Security Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'CIA Triad, Security Controls & Risk Concepts' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Threats, Vulnerabilities & Common Attack Categories",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'CIA Triad, Security Controls & Risk Concepts' — since this week builds on it directly.",
+        "completion_criteria": "'Threats, Vulnerabilities & Common Attack Categories' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Cybersecurity Foundations Assessment",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Cybersecurity Principles, Threat Landscape & Security Fundamentals', 'CIA Triad, Security Controls & Risk Concepts', and 'Threats, Vulnerabilities & Common Attack Categories' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Computer Networking Foundations for Cybersecurity",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Cybersecurity Foundations Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Computer Networking Foundations for Cybersecurity' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "TCP/IP Architecture & Network Communication",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Computer Networking Foundations for Cybersecurity' — since this week builds on it directly.",
+        "completion_criteria": "'TCP/IP Architecture & Network Communication' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "DNS, HTTP/HTTPS & Web Communication Fundamentals",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'TCP/IP Architecture & Network Communication' — since this week builds on it directly.",
+        "completion_criteria": "'DNS, HTTP/HTTPS & Web Communication Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Networking Security Consolidation Assessment",
+        "difficulty": "Beginner · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Computer Networking Foundations for Cybersecurity', 'TCP/IP Architecture & Network Communication', and 'DNS, HTTP/HTTPS & Web Communication Fundamentals' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Linux Operating System Fundamentals for Security",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Networking Security Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Linux Operating System Fundamentals for Security' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Linux Commands, Permissions & Access Control",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Linux Operating System Fundamentals for Security' — since this week builds on it directly.",
+        "completion_criteria": "'Linux Commands, Permissions & Access Control' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Processes, Services & Basic System Security",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Linux Commands, Permissions & Access Control' — since this week builds on it directly.",
+        "completion_criteria": "'Processes, Services & Basic System Security' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Linux Security Consolidation Assessment",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Linux Operating System Fundamentals for Security', 'Linux Commands, Permissions & Access Control', and 'Processes, Services & Basic System Security' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Web Application Security Fundamentals",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Linux Security Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Web Application Security Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Authentication, Authorization & Session Security",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Web Application Security Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Authentication, Authorization & Session Security' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "OWASP Web Security Concepts & Common Vulnerabilities",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Authentication, Authorization & Session Security' — since this week builds on it directly.",
+        "completion_criteria": "'OWASP Web Security Concepts & Common Vulnerabilities' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Web Security Consolidation Assessment",
+        "difficulty": "Beginner · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Web Application Security Fundamentals', 'Authentication, Authorization & Session Security', and 'OWASP Web Security Concepts & Common Vulnerabilities' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Security Monitoring & Security Event Fundamentals",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Web Security Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Security Monitoring & Security Event Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Log Analysis & Basic Incident Response",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Security Monitoring & Security Event Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Log Analysis & Basic Incident Response' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Security Tools & Defensive Security Workflows",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Log Analysis & Basic Incident Response' — since this week builds on it directly.",
+        "completion_criteria": "'Security Tools & Defensive Security Workflows' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Security Operations Assessment",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Security Monitoring & Security Event Fundamentals', 'Log Analysis & Basic Incident Response', and 'Security Tools & Defensive Security Workflows' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Beginner Cybersecurity Monitoring Project",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Security Operations Assessment') should be reasonably solid; this project draws on the whole Beginner Cybersecurity syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Security Project Documentation & Evidence Analysis",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Beginner Cybersecurity Monitoring Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Cybersecurity Technical Interview Preparation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Security Project Documentation & Evidence Analysis') plus the full set of topics from earlier weeks, since interview prep draws on the entire Beginner Cybersecurity syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Cybersecurity Placement Readiness Assessment",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Cybersecurity Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Intermediate": [
+      {
+        "week": 1,
+        "topic": "Networking Skill-Gap Correction for Security Engineering",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Intermediate Cybersecurity roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Networking Skill-Gap Correction for Security Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Linux Administration & System Security",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Networking Skill-Gap Correction for Security Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Linux Administration & System Security' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Cybersecurity Architecture, Threats & Risk Management",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Linux Administration & System Security' — since this week builds on it directly.",
+        "completion_criteria": "'Cybersecurity Architecture, Threats & Risk Management' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Infrastructure Security Consolidation Assessment",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Networking Skill-Gap Correction for Security Engineering', 'Linux Administration & System Security', and 'Cybersecurity Architecture, Threats & Risk Management' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Networking & Secure Network Architecture",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Infrastructure Security Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Networking & Secure Network Architecture' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Network Security Controls & Traffic Analysis",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Networking & Secure Network Architecture' — since this week builds on it directly.",
+        "completion_criteria": "'Network Security Controls & Traffic Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Firewalls, VPNs & Network Access Security",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Network Security Controls & Traffic Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Firewalls, VPNs & Network Access Security' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Network Security Assessment",
+        "difficulty": "Intermediate · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Networking & Secure Network Architecture', 'Network Security Controls & Traffic Analysis', and 'Firewalls, VPNs & Network Access Security' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Web Application Security Engineering",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Network Security Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Web Application Security Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "OWASP Top 10 & Application Security Risks",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Web Application Security Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'OWASP Top 10 & Application Security Risks' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Vulnerability Assessment & Security Testing Concepts",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 8–10 — 'Network Security Assessment', 'Web Application Security Engineering', and 'OWASP Top 10 & Application Security Risks' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 8–10 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 12,
+        "topic": "Application Security Consolidation Assessment",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Web Application Security Engineering', 'OWASP Top 10 & Application Security Risks', and 'Vulnerability Assessment & Security Testing Concepts' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Security Monitoring & SOC Operations",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Application Security Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Security Monitoring & SOC Operations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Security Log Analysis & Event Correlation",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Security Monitoring & SOC Operations' — since this week builds on it directly.",
+        "completion_criteria": "'Security Log Analysis & Event Correlation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Incident Response Lifecycle & Investigation",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Security Log Analysis & Event Correlation' — since this week builds on it directly.",
+        "completion_criteria": "'Incident Response Lifecycle & Investigation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "SOC Operations Assessment",
+        "difficulty": "Intermediate · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Security Monitoring & SOC Operations', 'Security Log Analysis & Event Correlation', and 'Incident Response Lifecycle & Investigation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Security Tools & Defensive Security Operations",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'SOC Operations Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Security Tools & Defensive Security Operations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Authorized Security Labs & Practical Investigation",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Security Tools & Defensive Security Operations' — since this week builds on it directly.",
+        "completion_criteria": "'Authorized Security Labs & Practical Investigation' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Security Risk Assessment & Security Controls",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 16–18 — 'SOC Operations Assessment', 'Security Tools & Defensive Security Operations', and 'Authorized Security Labs & Practical Investigation' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 16–18 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 20,
+        "topic": "Security Engineering Consolidation",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Security Tools & Defensive Security Operations', 'Authorized Security Labs & Practical Investigation', and 'Security Risk Assessment & Security Controls' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Intermediate Cybersecurity Capstone Project",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Security Engineering Consolidation') should be reasonably solid; this project draws on the whole Intermediate Cybersecurity syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Security Documentation, Reporting & Portfolio",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Intermediate Cybersecurity Capstone Project'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Cybersecurity Technical Interview Preparation",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Security Documentation, Reporting & Portfolio') plus the full set of topics from earlier weeks, since interview prep draws on the entire Intermediate Cybersecurity syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Cybersecurity Placement Readiness",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Cybersecurity Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Advanced": [
+      {
+        "week": 1,
+        "topic": "Advanced Network Architecture & Security Engineering",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Advanced Cybersecurity roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Advanced Network Architecture & Security Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Secure Network Architecture, Segmentation & Defense",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Advanced Network Architecture & Security Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Secure Network Architecture, Segmentation & Defense' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Enterprise Security Architecture & Defense-in-Depth",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Secure Network Architecture, Segmentation & Defense' — since this week builds on it directly.",
+        "completion_criteria": "'Enterprise Security Architecture & Defense-in-Depth' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Advanced Security Architecture Assessment",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Advanced Network Architecture & Security Engineering', 'Secure Network Architecture, Segmentation & Defense', and 'Enterprise Security Architecture & Defense-in-Depth' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Application Security Engineering",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Advanced Security Architecture Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Application Security Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Secure Authentication, Authorization & Identity Architecture",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Application Security Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Secure Authentication, Authorization & Identity Architecture' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Advanced Web Security & Application Threat Modeling",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Secure Authentication, Authorization & Identity Architecture' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Web Security & Application Threat Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Application Security Assessment",
+        "difficulty": "Advanced · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Application Security Engineering', 'Secure Authentication, Authorization & Identity Architecture', and 'Advanced Web Security & Application Threat Modeling' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Advanced Security Monitoring & Detection Engineering",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Application Security Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Security Monitoring & Detection Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "SIEM Architecture, Correlation & Security Analytics",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Advanced Security Monitoring & Detection Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'SIEM Architecture, Correlation & Security Analytics' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Advanced Incident Response & Digital Investigation Concepts",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'SIEM Architecture, Correlation & Security Analytics' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Incident Response & Digital Investigation Concepts' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "SOC & Detection Engineering Assessment",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Advanced Security Monitoring & Detection Engineering', 'SIEM Architecture, Correlation & Security Analytics', and 'Advanced Incident Response & Digital Investigation Concepts' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Threat Intelligence & Adversary Analysis",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'SOC & Detection Engineering Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Threat Intelligence & Adversary Analysis' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Enterprise Risk Management & Security Governance",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Threat Intelligence & Adversary Analysis' — since this week builds on it directly.",
+        "completion_criteria": "'Enterprise Risk Management & Security Governance' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Security Testing Methodology & Assessment Strategy",
+        "difficulty": "Advanced · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 12–14 — 'SOC & Detection Engineering Assessment', 'Threat Intelligence & Adversary Analysis', and 'Enterprise Risk Management & Security Governance' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 12–14 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 16,
+        "topic": "Advanced Security Assessment",
+        "difficulty": "Advanced · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Threat Intelligence & Adversary Analysis', 'Enterprise Risk Management & Security Governance', and 'Security Testing Methodology & Assessment Strategy' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Cloud Security Architecture & Identity Controls",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Advanced Security Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Cloud Security Architecture & Identity Controls' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Container & Workload Security Fundamentals",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Cloud Security Architecture & Identity Controls' — since this week builds on it directly.",
+        "completion_criteria": "'Container & Workload Security Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Security Automation & Security Operations Engineering",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Container & Workload Security Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Security Automation & Security Operations Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Advanced Security Engineering Revision",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Cloud Security Architecture & Identity Controls', 'Container & Workload Security Fundamentals', and 'Security Automation & Security Operations Engineering' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Advanced Cybersecurity Engineering Capstone",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('Advanced Security Engineering Revision') should be reasonably solid; this project draws on the whole Advanced Cybersecurity syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Security Project Documentation & Professional Portfolio",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Advanced Cybersecurity Engineering Capstone'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Advanced Cybersecurity Technical Interview Preparation",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Security Project Documentation & Professional Portfolio') plus the full set of topics from earlier weeks, since interview prep draws on the entire Advanced Cybersecurity syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Cybersecurity Placement Readiness",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Advanced Cybersecurity Technical Interview Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ]
+  },
+  "Computer Science / Software Development": {
+    "Beginner": [
+      {
+        "week": 1,
+        "topic": "Programming Foundations & Computational Problem Solving",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Beginner Software Development roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Programming Foundations & Computational Problem Solving' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Functions, Modules & Structured Program Design",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Programming Foundations & Computational Problem Solving' — since this week builds on it directly.",
+        "completion_criteria": "'Functions, Modules & Structured Program Design' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Object-Oriented Programming Foundations",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Functions, Modules & Structured Program Design' — since this week builds on it directly.",
+        "completion_criteria": "'Object-Oriented Programming Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Programming & OOP Consolidation Assessment",
+        "difficulty": "Beginner · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Programming Foundations & Computational Problem Solving', 'Functions, Modules & Structured Program Design', and 'Object-Oriented Programming Foundations' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Arrays, Strings & Fundamental Problem-Solving Patterns",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Programming & OOP Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Arrays, Strings & Fundamental Problem-Solving Patterns' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Linked Lists & Pointer-Based Data Structures",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Arrays, Strings & Fundamental Problem-Solving Patterns' — since this week builds on it directly.",
+        "completion_criteria": "'Linked Lists & Pointer-Based Data Structures' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Stacks, Queues & Linear Data Structure Applications",
+        "difficulty": "Beginner · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Linked Lists & Pointer-Based Data Structures' — since this week builds on it directly.",
+        "completion_criteria": "'Stacks, Queues & Linear Data Structure Applications' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Core Data Structures Assessment",
+        "difficulty": "Beginner · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Arrays, Strings & Fundamental Problem-Solving Patterns', 'Linked Lists & Pointer-Based Data Structures', and 'Stacks, Queues & Linear Data Structure Applications' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Searching, Sorting & Algorithmic Complexity",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Core Data Structures Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Searching, Sorting & Algorithmic Complexity' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Trees, Binary Search Trees & Hierarchical Data",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Searching, Sorting & Algorithmic Complexity' — since this week builds on it directly.",
+        "completion_criteria": "'Trees, Binary Search Trees & Hierarchical Data' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Algorithmic Problem Solving with Core Data Structures",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Trees, Binary Search Trees & Hierarchical Data' — since this week builds on it directly.",
+        "completion_criteria": "'Algorithmic Problem Solving with Core Data Structures' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "DSA Consolidation Assessment",
+        "difficulty": "Beginner · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Searching, Sorting & Algorithmic Complexity', 'Trees, Binary Search Trees & Hierarchical Data', and 'Algorithmic Problem Solving with Core Data Structures' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Database Management Systems & Relational Data",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'DSA Consolidation Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Database Management Systems & Relational Data' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "SQL Querying & Database Operations",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Database Management Systems & Relational Data' — since this week builds on it directly.",
+        "completion_criteria": "'SQL Querying & Database Operations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Joins, Transactions & Data Consistency",
+        "difficulty": "Beginner · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'SQL Querying & Database Operations' — since this week builds on it directly.",
+        "completion_criteria": "'Joins, Transactions & Data Consistency' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "DBMS & SQL Assessment",
+        "difficulty": "Beginner · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Database Management Systems & Relational Data', 'SQL Querying & Database Operations', and 'Joins, Transactions & Data Consistency' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Operating System Fundamentals",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'DBMS & SQL Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Operating System Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Computer Networking Fundamentals",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Operating System Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Computer Networking Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Git, GitHub & Software Engineering Workflow",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Computer Networking Fundamentals' — since this week builds on it directly.",
+        "completion_criteria": "'Git, GitHub & Software Engineering Workflow' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Core Computer Science Assessment",
+        "difficulty": "Beginner · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Operating System Fundamentals', 'Computer Networking Fundamentals', and 'Git, GitHub & Software Engineering Workflow' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Web Development & REST API Fundamentals",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 20's topic — 'Core Computer Science Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Web Development & REST API Fundamentals' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 22,
+        "topic": "Beginner Software Development Project",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 21 ('Web Development & REST API Fundamentals') should be reasonably solid; this project draws on the whole Beginner Software Development syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 23,
+        "topic": "Technical Interview, DSA & GitHub Portfolio Preparation",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Beginner Software Development Project') plus the full set of topics from earlier weeks, since interview prep draws on the entire Beginner Software Development syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Software Development Placement Assessment",
+        "difficulty": "Beginner · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Technical Interview, DSA & GitHub Portfolio Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Intermediate": [
+      {
+        "week": 1,
+        "topic": "Programming Proficiency & Algorithmic Skill-Gap Correction",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Intermediate Software Development roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Programming Proficiency & Algorithmic Skill-Gap Correction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced Object-Oriented Design & Maintainable Class Architecture",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Programming Proficiency & Algorithmic Skill-Gap Correction' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Object-Oriented Design & Maintainable Class Architecture' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Algorithmic Problem-Solving Patterns",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced Object-Oriented Design & Maintainable Class Architecture' — since this week builds on it directly.",
+        "completion_criteria": "'Algorithmic Problem-Solving Patterns' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Programming & Problem-Solving Assessment",
+        "difficulty": "Intermediate · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Programming Proficiency & Algorithmic Skill-Gap Correction', 'Advanced Object-Oriented Design & Maintainable Class Architecture', and 'Algorithmic Problem-Solving Patterns' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Array & String Problem-Solving Techniques",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Programming & Problem-Solving Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Array & String Problem-Solving Techniques' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Linked Lists, Stacks & Queues — Advanced Applications",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Array & String Problem-Solving Techniques' — since this week builds on it directly.",
+        "completion_criteria": "'Linked Lists, Stacks & Queues — Advanced Applications' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Trees, Heaps & Priority-Based Data Structures",
+        "difficulty": "Intermediate · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Linked Lists, Stacks & Queues — Advanced Applications' — since this week builds on it directly.",
+        "completion_criteria": "'Trees, Heaps & Priority-Based Data Structures' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Advanced DSA Assessment",
+        "difficulty": "Intermediate · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Array & String Problem-Solving Techniques', 'Linked Lists, Stacks & Queues — Advanced Applications', and 'Trees, Heaps & Priority-Based Data Structures' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Graph Representation & Graph Traversal Algorithms",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Advanced DSA Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Graph Representation & Graph Traversal Algorithms' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Recursion, Backtracking & Search-Space Optimization",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Graph Representation & Graph Traversal Algorithms' — since this week builds on it directly.",
+        "completion_criteria": "'Recursion, Backtracking & Search-Space Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Dynamic Programming & State-Based Problem Solving",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Recursion, Backtracking & Search-Space Optimization' — since this week builds on it directly.",
+        "completion_criteria": "'Dynamic Programming & State-Based Problem Solving' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Advanced Algorithmic Assessment",
+        "difficulty": "Intermediate · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Graph Representation & Graph Traversal Algorithms', 'Recursion, Backtracking & Search-Space Optimization', and 'Dynamic Programming & State-Based Problem Solving' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Database Architecture & Relational Data Modeling",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Advanced Algorithmic Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Database Architecture & Relational Data Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Advanced SQL & Analytical Query Construction",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Database Architecture & Relational Data Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced SQL & Analytical Query Construction' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Transactions, Indexing & Database Performance",
+        "difficulty": "Intermediate · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Advanced SQL & Analytical Query Construction' — since this week builds on it directly.",
+        "completion_criteria": "'Transactions, Indexing & Database Performance' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "DBMS & SQL Engineering Assessment",
+        "difficulty": "Intermediate · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Database Architecture & Relational Data Modeling', 'Advanced SQL & Analytical Query Construction', and 'Transactions, Indexing & Database Performance' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "Operating Systems, Processes & Resource Management",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'DBMS & SQL Engineering Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Operating Systems, Processes & Resource Management' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Computer Networks, HTTP & Application Communication",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'Operating Systems, Processes & Resource Management' — since this week builds on it directly.",
+        "completion_criteria": "'Computer Networks, HTTP & Application Communication' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Software Engineering, Git & Collaborative Development",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Computer Networks, HTTP & Application Communication' — since this week builds on it directly.",
+        "completion_criteria": "'Software Engineering, Git & Collaborative Development' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "Computer Science Fundamentals Assessment",
+        "difficulty": "Intermediate · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'Operating Systems, Processes & Resource Management', 'Computer Networks, HTTP & Application Communication', and 'Software Engineering, Git & Collaborative Development' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Backend Development & REST API Engineering",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 20's topic — 'Computer Science Fundamentals Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Backend Development & REST API Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 22,
+        "topic": "Intermediate End-to-End Software Development Project",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 21 ('Backend Development & REST API Engineering') should be reasonably solid; this project draws on the whole Intermediate Software Development syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 23,
+        "topic": "Technical Interview, DSA & Software Engineering Preparation",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Intermediate End-to-End Software Development Project') plus the full set of topics from earlier weeks, since interview prep draws on the entire Intermediate Software Development syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Software Development Placement Assessment",
+        "difficulty": "Intermediate · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Technical Interview, DSA & Software Engineering Preparation'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ],
+    "Advanced": [
+      {
+        "week": 1,
+        "topic": "Advanced Programming Techniques & Performance-Oriented Problem Solving",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Starting point for the Advanced Software Development roadmap — no prior week in this track is required, though comfort with general computer use and basic logical thinking helps.",
+        "completion_criteria": "'Advanced Programming Techniques & Performance-Oriented Problem Solving' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 2,
+        "topic": "Advanced OOP, SOLID Principles & Software Design",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 1's topic — 'Advanced Programming Techniques & Performance-Oriented Problem Solving' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced OOP, SOLID Principles & Software Design' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 3,
+        "topic": "Algorithmic Problem-Solving Patterns & Complexity Optimization",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 2's topic — 'Advanced OOP, SOLID Principles & Software Design' — since this week builds on it directly.",
+        "completion_criteria": "'Algorithmic Problem-Solving Patterns & Complexity Optimization' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 4,
+        "topic": "Advanced Programming & Design Assessment",
+        "difficulty": "Advanced · Entry-level",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 1–3 — 'Advanced Programming Techniques & Performance-Oriented Problem Solving', 'Advanced OOP, SOLID Principles & Software Design', and 'Algorithmic Problem-Solving Patterns & Complexity Optimization' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 1–3 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 5,
+        "topic": "Advanced Tree Structures & Tree-Based Algorithms",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 4's topic — 'Advanced Programming & Design Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Tree Structures & Tree-Based Algorithms' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 6,
+        "topic": "Graph Algorithms, Shortest Paths & Connectivity",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 5's topic — 'Advanced Tree Structures & Tree-Based Algorithms' — since this week builds on it directly.",
+        "completion_criteria": "'Graph Algorithms, Shortest Paths & Connectivity' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 7,
+        "topic": "Dynamic Programming & Advanced Optimization Techniques",
+        "difficulty": "Advanced · Building",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 6's topic — 'Graph Algorithms, Shortest Paths & Connectivity' — since this week builds on it directly.",
+        "completion_criteria": "'Dynamic Programming & Advanced Optimization Techniques' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 8,
+        "topic": "Advanced DSA Assessment",
+        "difficulty": "Advanced · Building",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 5–7 — 'Advanced Tree Structures & Tree-Based Algorithms', 'Graph Algorithms, Shortest Paths & Connectivity', and 'Dynamic Programming & Advanced Optimization Techniques' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 5–7 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 9,
+        "topic": "Advanced Database Architecture & Data Modeling",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 8's topic — 'Advanced DSA Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Database Architecture & Data Modeling' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 10,
+        "topic": "Query Optimization & Database Performance Engineering",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 9's topic — 'Advanced Database Architecture & Data Modeling' — since this week builds on it directly.",
+        "completion_criteria": "'Query Optimization & Database Performance Engineering' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 11,
+        "topic": "Transactions, Concurrency & Distributed Data Concepts",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 10's topic — 'Query Optimization & Database Performance Engineering' — since this week builds on it directly.",
+        "completion_criteria": "'Transactions, Concurrency & Distributed Data Concepts' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 12,
+        "topic": "Advanced Database Assessment",
+        "difficulty": "Advanced · Intermediate practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 9–11 — 'Advanced Database Architecture & Data Modeling', 'Query Optimization & Database Performance Engineering', and 'Transactions, Concurrency & Distributed Data Concepts' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 9–11 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 13,
+        "topic": "Advanced Operating Systems & Resource Management",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 12's topic — 'Advanced Database Assessment' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Operating Systems & Resource Management' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 14,
+        "topic": "Advanced Computer Networking & Distributed Communication",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 13's topic — 'Advanced Operating Systems & Resource Management' — since this week builds on it directly.",
+        "completion_criteria": "'Advanced Computer Networking & Distributed Communication' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 15,
+        "topic": "Concurrency, Parallelism & Distributed Systems Foundations",
+        "difficulty": "Advanced · Applied",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 14's topic — 'Advanced Computer Networking & Distributed Communication' — since this week builds on it directly.",
+        "completion_criteria": "'Concurrency, Parallelism & Distributed Systems Foundations' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 16,
+        "topic": "Advanced Systems Consolidation",
+        "difficulty": "Advanced · Applied",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 13–15 — 'Advanced Operating Systems & Resource Management', 'Advanced Computer Networking & Distributed Communication', and 'Concurrency, Parallelism & Distributed Systems Foundations' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 13–15 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 17,
+        "topic": "System Design Fundamentals & Architecture Decomposition",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 16's topic — 'Advanced Systems Consolidation' — since this week builds on it directly.",
+        "completion_criteria": "'System Design Fundamentals & Architecture Decomposition' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 18,
+        "topic": "Scalable API Design & Distributed Application Architecture",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 17's topic — 'System Design Fundamentals & Architecture Decomposition' — since this week builds on it directly.",
+        "completion_criteria": "'Scalable API Design & Distributed Application Architecture' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 19,
+        "topic": "Software Architecture, Design Patterns & Maintainability",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "High",
+        "prerequisites": "Working knowledge of Week 18's topic — 'Scalable API Design & Distributed Application Architecture' — since this week builds on it directly.",
+        "completion_criteria": "'Software Architecture, Design Patterns & Maintainability' subtopics can be explained from memory, the week's practical task is finished and committed, and the topic quiz is passed at the required threshold."
+      },
+      {
+        "week": 20,
+        "topic": "System Design Consolidation Assessment",
+        "difficulty": "Advanced · Advanced practice",
+        "priority": "Medium",
+        "prerequisites": "Solid grasp of Weeks 17–19 — 'System Design Fundamentals & Architecture Decomposition', 'Scalable API Design & Distributed Application Architecture', and 'Software Architecture, Design Patterns & Maintainability' — since this week reviews and tests all three together.",
+        "completion_criteria": "All flagged weak spots from Weeks 17–19 are fixed, the mixed assessment is attempted, and remaining gaps are written down before moving on."
+      },
+      {
+        "week": 21,
+        "topic": "Advanced Industry-Oriented Software Engineering Capstone",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "All teaching and consolidation weeks through Week 20 ('System Design Consolidation Assessment') should be reasonably solid; this project draws on the whole Advanced Software Development syllabus covered so far.",
+        "completion_criteria": "A working baseline exists, the repo is organized, the README explains the problem and approach, and the core requirements run end-to-end."
+      },
+      {
+        "week": 22,
+        "topic": "Production Deployment, Scalability & Project Engineering",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A working first draft from Week 21 ('Advanced Industry-Oriented Software Engineering Capstone'); this week improves and hardens that same project rather than starting new material.",
+        "completion_criteria": "The project is noticeably improved over the prior week, has some form of evaluation or testing, and the README/documentation is up to date."
+      },
+      {
+        "week": 23,
+        "topic": "Advanced Software Engineering & System Design Interviews",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "A completed, working project from Week 22 ('Production Deployment, Scalability & Project Engineering') plus the full set of topics from earlier weeks, since interview prep draws on the entire Advanced Software Development syllabus.",
+        "completion_criteria": "8–10 questions answered confidently, the project can be explained clearly end-to-end, and the portfolio/README reads well to an outside reviewer."
+      },
+      {
+        "week": 24,
+        "topic": "Final Software Development Placement Readiness",
+        "difficulty": "Advanced · Capstone / Expert",
+        "priority": "Critical",
+        "prerequisites": "Interview prep and portfolio polish from Week 23 ('Advanced Software Engineering & System Design Interviews'); this week is a checkpoint on the whole level, not new content.",
+        "completion_criteria": "The full syllabus has been reviewed at least once, the practical assessment is attempted, and the capstone project can be walked through without notes."
+      }
+    ]
+  }
+}

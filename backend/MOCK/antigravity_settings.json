@@ -1,0 +1,43 @@
+{
+  "toolPermission": "proceed-in-sandbox",
+  "artifactReviewPolicy": "always-proceed",
+  "enableTerminalSandbox": true,
+  "permissions": {
+    "allow": [
+      "command(git status*)",
+      "command(git diff*)",
+      "command(git add*)",
+      "command(git commit*)",
+      "command(git branch*)",
+      "command(git checkout*)",
+      "command(python execution/*)",
+      "command(python -m pytest*)",
+      "command(pip install*)",
+      "command(mkdir*)",
+      "command(cat*)",
+      "command(ls*)",
+      "read_file(*)",
+      "write_file(directives/*)",
+      "write_file(execution/*)",
+      "write_file(.tmp/*)"
+    ],
+    "ask": [
+      "command(python execution/render_avatar_clip*)",
+      "command(python execution/run_live_brain*)",
+      "command(python execution/*--live*)",
+      "command(python execution/*_live*)",
+      "command(python execution/reproduce_*)",
+      "command(git push*)",
+      "command(git push --force*)",
+      "mcp(*)",
+      "url(*)"
+    ],
+    "deny": [
+      "command(rm -rf*)",
+      "command(git push --force origin main*)",
+      "write_file(.env)",
+      "write_file(credentials.json)",
+      "write_file(token.json)"
+    ]
+  }
+}

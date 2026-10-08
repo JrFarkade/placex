@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — PlaceX Platform{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- Top Grid: Left Column (Light/Paper, ~420px) & Right Column (Dark/Ink, Flex-1) -->
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+        
+        <!-- LEFT COLUMN: Candidate Profile & Intake Actions (Paper theme) -->
+        <div class="w-full lg:w-[420px] bg-paper text-onPaper p-6 sm:p-7 rounded-3xl border border-paper-raised space-y-6 shadow-sm shrink-0">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-onPaper">Welcome back, {{ user.first_name|default:user.username }}</h1>
+                <p class="text-sm text-onPaper-dim mt-2 leading-relaxed">
+                    Targeting <span class="text-onPaper font-semibold">{{ user.target_role }}</span> ({{ user.target_level }}).
+                    Prep Brain extracts company context and candidate signals to generate calibrated technical rounds.
+                </p>
+            </div>
+
+            <!-- Action Controls Group -->
+            <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
+                <a href="{% url 'dashboard:setup_create' %}" class="px-5 py-3 rounded-xl bg-brass hover:bg-brass/90 text-ink font-semibold text-sm transition shadow-sm flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    Custom Prep Brain Setup
+                </a>
+
+                <!-- Permanently Visible Prep Brain Progress Banner -->
+                <div class="p-3.5 rounded-xl bg-ink/90 text-onInk border border-brass/30 space-y-2">
+                    <div class="flex items-center justify-between text-[11px] font-mono">
+                        <span class="text-brass font-bold flex items-center gap-1.5">
+                            <span class="inline-block w-2 h-2 rounded-full bg-brass animate-ping"></span>
+                            Prep Brain Pipeline
+                        </span>
+                        <span class="text-moss font-semibold">100% Active</span>
+                    </div>
+                    <div class="w-full h-2 bg-ink-raised rounded-full overflow-hidden p-0.5 border border-white/10">
+                        <div class="h-full rounded-full bg-gradient-to-r from-brass via-amber-400 to-moss shadow-[0_0_8px_rgba(185,134,46,0.6)] animate-pulse" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <form hx-post="{% url 'dashboard:create_session' %}" hx-target="#session-table-container" hx-swap="innerHTML" class="w-full">
+                    {% csrf_token %}
+                    <input type="hidden" name="company_name" value="Stripe">
+                    <input type="hidden" name="role_title" value="{{ user.target_role }}">
+                    <button type="submit" class="w-full px-4 py-3 rounded-xl bg-paper-raised hover:bg-paper text-onPaper border border-onPaper/20 font-semibold text-sm transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Quick Round
+                    </button>
+                </form>
+            </div>
+
+            <!-- Upcoming Session Card -->
+            <div class="p-4 rounded-2xl bg-paper-raised border border-onPaper/10 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono font-semibold text-onPaper-dim">Upcoming session</span>
+                </div>
+                {% if upcoming_session %}
+                    <div class="space-y-1.5">
+                        <h3 class="text-base font-bold text-onPaper">{{ upcoming_session.company_name }} — {{ upcoming_session.role_title }}</h3>
+                        <div>
+                            <span class="inline-block px-2 py-0.5 rounded-md bg-brass/20 text-onPaper font-medium font-mono text-[11px]">{{ upcoming_session.round_type|default:"Interview" }}</span>
+                        </div>
+                        <p class="text-xs text-onPaper-dim">{{ upcoming_session.scheduled_at|date:"D, M j, g:i A" }}</p>
+                    </div>
+                    <div class="pt-2">
+                        <button hx-get="{% url 'dashboard:session_detail_partial' upcoming_session.id %}" hx-target="#session-detail-container" hx-swap="innerHTML" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brass/20 hover:bg-brass/30 text-onPaper transition border border-brass/30">
+                            View details
+                        </button>
+                    </div>
+                {% else %}
+                    <p class="text-xs text-onPaper-dim">No upcoming session scheduled yet. <a href="{% url 'dashboard:setup_create' %}" class="text-brass hover:underline font-medium">Schedule round</a></p>
+                {% endif %}
+            </div>
+
+            <!-- Active Assignment Card -->
+            <div class="p-4 rounded-2xl bg-paper-raised border border-onPaper/10 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono font-semibold text-onPaper-dim">Active assignment</span>
+                </div>
+                {% if active_assignment %}
+                    <div class="space-y-1">
+                        <h3 class="text-base font-bold text-onPaper">{{ active_assignment.company_name }} — {{ active_assignment.role_title }}</h3>
+                        <p class="text-xs text-onPaper-dim">
+                            Status: <span class="font-medium text-onPaper">{{ active_assignment.get_status_display }}</span>
+                        </p>
+                    </div>
+                {% else %}
+                    <p class="text-xs text-onPaper-dim">No active assignment right now.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Telemetry, Metrics, Skill Map, & Profiles (Ink theme) -->
+        <div class="flex-1 w-full space-y-6">
+            
+            <!-- Stats Card -->
+            <div class="bg-ink-raised border border-slate-800 p-6 rounded-3xl text-onInk">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div>
+                        <h2 class="text-lg font-bold text-onInk tracking-tight">Performance Metrics</h2>
+                        <p class="text-xs text-onInk-dim mt-0.5">{{ sessions_this_week }} session{{ sessions_this_week|pluralize }} this week</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5">
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800">
+                        <p class="text-xs font-medium text-onInk-dim">Total Rounds</p>
+                        <p class="text-2xl font-bold text-onInk mt-1 font-mono">{{ total_sessions }}</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800">
+                        <p class="text-xs font-medium text-onInk-dim">Evaluated Rounds</p>
+                        <p class="text-2xl font-bold text-moss mt-1 font-mono">{{ completed_sessions }}</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800">
+                        <p class="text-xs font-medium text-onInk-dim">Average Score</p>
+                        <p class="text-2xl font-bold text-brass mt-1 font-mono">
+                            {% if avg_score %}{{ avg_score }} / 10{% else %}--{% endif %}
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800">
+                        <p class="text-xs font-medium text-onInk-dim">Day Streak</p>
+                        <p class="text-2xl font-bold text-brass mt-1 font-mono">{{ user.day_streak }}d</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Map Graph Card (6 nodes with SQL added) -->
+            <div class="bg-ink-raised border border-slate-800 p-6 rounded-3xl text-onInk">
+                <div class="pb-3 border-b border-slate-800">
+                    <h3 class="text-base font-bold text-onInk">Skill Map</h3>
+                </div>
+                <div class="py-4 flex flex-col items-center justify-center">
+                    <svg class="w-full max-w-md h-44" viewBox="0 0 400 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Edges -->
+                        <line x1="70" y1="50" x2="150" y2="35" stroke="#14171D" stroke-width="2"/>
+                        <line x1="150" y1="35" x2="250" y2="35" stroke="#14171D" stroke-width="2"/>
+                        <line x1="250" y1="35" x2="330" y2="50" stroke="#14171D" stroke-width="2"/>
+                        <line x1="70" y1="50" x2="130" y2="120" stroke="#14171D" stroke-width="2"/>
+                        <line x1="150" y1="35" x2="130" y2="120" stroke="#14171D" stroke-width="2"/>
+                        <line x1="130" y1="120" x2="200" y2="120" stroke="#14171D" stroke-width="2"/>
+                        <line x1="200" y1="120" x2="270" y2="120" stroke="#14171D" stroke-width="2"/>
+                        <line x1="250" y1="35" x2="270" y2="120" stroke="#14171D" stroke-width="2"/>
+                        <line x1="330" y1="50" x2="270" y2="120" stroke="#14171D" stroke-width="2"/>
+
+                        <!-- Node 1: System Design (Brass) -->
+                        <circle cx="70" cy="50" r="18" fill="#14171D" stroke="#B9862E" stroke-width="2.5"/>
+                        <text x="70" y="54" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">SysDes</text>
+
+                        <!-- Node 2: DSA (Moss) -->
+                        <circle cx="150" cy="35" r="18" fill="#14171D" stroke="#4B7A6F" stroke-width="2.5"/>
+                        <text x="150" y="39" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">DSA</text>
+
+                        <!-- Node 3: Behavioral (Brass) -->
+                        <circle cx="250" cy="35" r="18" fill="#14171D" stroke="#B9862E" stroke-width="2.5"/>
+                        <text x="250" y="39" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">Behav</text>
+
+                        <!-- Node 4: Communication (Moss) -->
+                        <circle cx="330" cy="50" r="18" fill="#14171D" stroke="#4B7A6F" stroke-width="2.5"/>
+                        <text x="330" y="54" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">Comm</text>
+
+                        <!-- Node 5: Git Hygiene (Neutral) -->
+                        <circle cx="130" cy="120" r="18" fill="#14171D" stroke="#8B909B" stroke-width="2.5"/>
+                        <text x="130" y="124" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">Git</text>
+
+                        <!-- Node 6: SQL (Moss) -->
+                        <circle cx="270" cy="120" r="18" fill="#14171D" stroke="#4B7A6F" stroke-width="2.5"/>
+                        <text x="270" y="124" text-anchor="middle" font-size="9" fill="#E7E4DA" font-family="JetBrains Mono">SQL</text>
+                    </svg>
+                    <p class="text-xs text-onInk-dim mt-2 font-mono">Placeholder — skill taxonomy isn't modeled yet.</p>
+                </div>
+            </div>
+
+            <!-- GitHub & LinkedIn Integration Signals Card -->
+            <div class="bg-ink-raised border border-slate-800 p-6 rounded-3xl text-onInk">
+                <div class="pb-3 border-b border-slate-800">
+                    <h3 class="text-base font-bold text-onInk">GitHub & LinkedIn</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-onInk-dim">GitHub Profile</p>
+                            <p class="text-sm font-bold text-onInk mt-0.5">{{ user.github_username|default:"Not connected" }}</p>
+                        </div>
+                        <div>
+                            {% if user.github_repos_flagged > 0 %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-brass/20 text-brass border border-brass/30">
+                                    {{ user.github_repos_flagged }} repo{{ user.github_repos_flagged|pluralize }} flagged
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-moss/20 text-moss border border-moss/30">
+                                    All clean
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-ink border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-onInk-dim">LinkedIn Profile</p>
+                            <p class="text-sm font-bold text-onInk mt-0.5">Completeness</p>
+                        </div>
+                        <div>
+                            {% if user.linkedin_completeness_pct >= 80 %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-moss/20 text-moss border border-moss/30">
+                                    {{ user.linkedin_completeness_pct }}% complete
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-brass/20 text-brass border border-brass/30">
+                                    {{ user.linkedin_completeness_pct }}% complete
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Active Interview Sessions Table (HTMX Container) -->
+    <div class="bg-ink-raised border border-slate-800 p-6 rounded-3xl text-onInk">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+                <h2 class="text-lg font-bold text-onInk tracking-tight">Interview Sessions & Downstream Transcripts</h2>
+                <p class="text-xs text-onInk-dim mt-0.5">Live Brain voice recordings, rubric grades, mistake callouts, and coaching telemetry.</p>
+            </div>
+            <button hx-get="{% url 'dashboard:session_list_partial' %}" hx-target="#session-table-container" hx-swap="innerHTML" class="text-xs font-medium text-onInk-dim hover:text-onInk transition px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-ink">
+                ↻ Refresh
+            </button>
+        </div>
+
+        <div id="session-table-container" class="mt-4">
+            {% include "dashboard/partials/session_table.html" %}
+        </div>
+    </div>
+
+    <!-- Session Detail Modal / Slide-over Container -->
+    <div id="session-detail-container"></div>
+
+</div>
+{% endblock %}

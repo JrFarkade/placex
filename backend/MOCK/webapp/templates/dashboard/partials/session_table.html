@@ -1,0 +1,80 @@
+{% if sessions %}
+<div class="overflow-x-auto">
+    <table class="w-full text-left text-sm text-onInk-dim">
+        <thead class="text-xs text-onInk-dim bg-ink border-b border-slate-800">
+            <tr>
+                <th scope="col" class="px-4 py-3 rounded-l-xl">Target company</th>
+                <th scope="col" class="px-4 py-3">Role / Level</th>
+                <th scope="col" class="px-4 py-3">Status</th>
+                <th scope="col" class="px-4 py-3">Score</th>
+                <th scope="col" class="px-4 py-3">Recommendation</th>
+                <th scope="col" class="px-4 py-3">Created</th>
+                <th scope="col" class="px-4 py-3 text-right rounded-r-xl">Action</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800/60">
+            {% for s in sessions %}
+            <tr class="hover:bg-ink transition">
+                <td class="px-4 py-3.5 font-semibold text-onInk flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-ink border border-slate-800 flex items-center justify-center font-mono text-xs text-onInk">
+                        {{ s.company_name|slice:":2"|upper }}
+                    </div>
+                    {{ s.company_name }}
+                </td>
+                <td class="px-4 py-3.5 text-xs text-onInk-dim">{{ s.role_title }}</td>
+                <td class="px-4 py-3.5">
+                    {% if s.status == 'evaluated' %}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-moss/20 text-moss border border-moss/30">
+                            ● Scored
+                        </span>
+                    {% elif s.status == 'completed' %}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-ink-raised text-onInk-dim border border-slate-800">
+                            ● Completed
+                        </span>
+                    {% elif s.status == 'active' %}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-brass/20 text-brass border border-brass/30 animate-pulse">
+                            ● Live
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-ink-raised text-onInk-dim border border-slate-800">
+                            ● Scheduled
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3.5 font-mono font-semibold">
+                    {% if s.overall_score %}
+                        <span class="text-brass">{{ s.overall_score }} / 10</span>
+                    {% else %}
+                        <span class="text-onInk-dim">--</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3.5 text-xs">
+                    {% if s.hire_recommendation %}
+                        <span class="font-medium text-onInk">{{ s.hire_recommendation }}</span>
+                    {% else %}
+                        <span class="text-onInk-dim">Pending evaluation</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3.5 text-xs text-onInk-dim">{{ s.created_at|date:"M d, H:i" }}</td>
+                <td class="px-4 py-3.5 text-right">
+                    <button hx-get="{% url 'dashboard:session_detail_partial' s.id %}" 
+                            hx-target="#session-detail-container" 
+                            hx-swap="innerHTML"
+                            class="px-3 py-1.5 rounded-lg bg-ink-raised hover:bg-ink text-xs font-medium text-onInk transition border border-slate-800">
+                        View Report
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-12 px-4 border border-dashed border-slate-800 rounded-2xl">
+    <svg class="mx-auto h-12 w-12 text-onInk-dim mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+    </svg>
+    <h3 class="text-sm font-semibold text-onInk">No interview sessions recorded yet</h3>
+    <p class="text-xs text-onInk-dim mt-1 max-w-sm mx-auto">Launch a new interview round above or run the Live Brain bot.py loop to evaluate candidates.</p>
+</div>
+{% endif %}

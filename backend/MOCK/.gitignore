@@ -1,0 +1,29 @@
+# Environment & Secret credentials
+.env
+.env.*
+*.env
+placex_files/.env
+credentials.json
+token.json
+
+# Hook audit logs (local only)
+.agents/scripts/hook_invocations.log
+*.log
+
+# Temporary session data & cache directories
+.tmp/
+*/.tmp/
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+
+# WebApp local SQLite & temp files
+db.sqlite3
+*.sqlite3
+
+# OS metadata
+.DS_Store
+Thumbs.db

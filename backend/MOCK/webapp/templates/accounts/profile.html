@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Candidate Profile — PlaceX{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-white tracking-tight">Candidate Profile & Evaluation Context</h1>
+                <p class="text-sm text-slate-400 mt-1">This metadata conditions the Prep Brain to generate customized question banks for target companies.</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    Active Candidate
+                </span>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'accounts:profile' %}" class="space-y-6 mt-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Target Role Title</label>
+                    <input type="text" name="target_role" value="{{ user.target_role }}" 
+                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Target Seniority Level</label>
+                    <input type="text" name="target_level" value="{{ user.target_level }}" 
+                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Tech Stack & Specializations</label>
+                    <input type="text" name="tech_stack" value="{{ user.tech_stack }}" 
+                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">GitHub Handle / URL</label>
+                    <input type="text" name="github_username" value="{{ user.github_username|default:'' }}" placeholder="e.g. octocat" 
+                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">LinkedIn Profile URL</label>
+                    <input type="url" name="linkedin_profile_url" value="{{ user.linkedin_profile_url|default:'' }}" placeholder="https://linkedin.com/in/..." 
+                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Candidate Summary / Bio</label>
+                    <textarea name="bio" rows="3" 
+                              class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">{{ user.bio|default:'' }}</textarea>
+                </div>
+            </div>
+
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition shadow-md shadow-brand-500/20">
+                    Save Profile Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

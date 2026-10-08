@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-ink text-onInk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PlaceX — Real-Time Technical Interview Platform{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"IBM Plex Sans"', 'sans-serif'],
+                        serif: ['"Lora"', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        paper: {
+                            DEFAULT: '#F3EFE6',
+                            raised: '#FBF9F4',
+                        },
+                        ink: {
+                            DEFAULT: '#14171D',
+                            raised: '#1C2029',
+                        },
+                        brass: '#B9862E',
+                        moss: '#4B7A6F',
+                        onInk: {
+                            DEFAULT: '#E7E4DA',
+                            dim: '#8B909B',
+                        },
+                        onPaper: {
+                            DEFAULT: '#2A271F',
+                            dim: '#6B6558',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- HTMX 2.x CDN -->
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    
+    <style>
+        .glass-panel {
+            background: rgba(20, 23, 29, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-brand {
+            box-shadow: 0 0 25px -5px rgba(185, 134, 46, 0.25);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-full flex flex-col md:flex-row font-sans antialiased selection:bg-brass selection:text-ink bg-ink text-onInk" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <!-- Persistent Left Sidebar (Collapses to Top Bar on Mobile/Tablet) -->
+    <aside class="w-full md:w-64 bg-ink-raised border-b md:border-b-0 md:border-r border-slate-800 flex flex-col justify-between shrink-0">
+        <div>
+            <!-- Branding Header -->
+            <div class="p-5 flex items-center space-x-3 border-b border-slate-800/80">
+                <div class="w-9 h-9 rounded-xl bg-brass flex items-center justify-center shadow-lg shadow-brass/20">
+                    <span class="text-ink font-extrabold text-lg tracking-tight font-mono">PX</span>
+                </div>
+                <div>
+                    <a href="{% url 'dashboard:index' %}" class="text-lg font-bold tracking-tight text-onInk flex items-center gap-2">
+                        PlaceX
+                    </a>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-brass/15 text-brass border border-brass/30 font-mono font-medium inline-block">Live Brain v1</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard:index' %}" class="flex items-center gap-2.5 text-sm font-medium text-onInk-dim hover:text-onInk transition px-3 py-2 rounded-xl hover:bg-ink">
+                        Dashboard
+                    </a>
+                    <a href="{% url 'accounts:profile' %}" class="flex items-center gap-2.5 text-sm font-medium text-onInk-dim hover:text-onInk transition px-3 py-2 rounded-xl hover:bg-ink">
+                        Profile
+                    </a>
+                    <div class="pt-3 mt-3 border-t border-slate-800/80">
+                        <div class="px-3 py-2 flex items-center justify-between">
+                            <span class="text-xs font-mono text-onInk-dim bg-ink px-2.5 py-1 rounded-md border border-slate-800 truncate max-w-[120px]">
+                                {{ user.username }}
+                            </span>
+                            <a href="{% url 'accounts:logout' %}" class="text-xs font-medium text-rose-400 hover:text-rose-300 transition">Log out</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="pt-2">
+                        <a href="{% url 'accounts:login' %}" class="block text-center text-sm font-semibold px-4 py-2.5 rounded-xl bg-brass hover:bg-brass/90 text-ink transition shadow-sm">
+                            Sign In
+                        </a>
+                    </div>
+                {% endif %}
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer Status Strip -->
+        <div class="p-4 border-t border-slate-800/80 text-xs text-onInk-dim space-y-2">
+            <div class="flex items-center justify-between">
+                <span class="inline-flex items-center gap-1.5 text-emerald-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> MySQL / OAuth Ready
+                </span>
+                <a href="/admin/" class="hover:text-onInk transition">Admin</a>
+            </div>
+            <p class="text-[11px] text-onInk-dim/70">&copy; 2026 PlaceX Platform</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper Beside Sidebar -->
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Notification Toast Messages -->
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+                {% for message in messages %}
+                    <div class="p-3 rounded-lg border text-sm flex items-center justify-between mb-2 {% if message.tags == 'error' %}bg-rose-500/10 border-rose-500/30 text-rose-300{% elif message.tags == 'success' %}bg-emerald-500/10 border-emerald-500/30 text-emerald-300{% else %}bg-ink-raised border-slate-700 text-onInk-dim{% endif %}">
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()" class="text-onInk-dim hover:text-onInk text-xs ml-4">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Main Content Area -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

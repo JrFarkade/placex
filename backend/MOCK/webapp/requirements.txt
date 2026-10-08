@@ -1,0 +1,9 @@
+# PlaceX Webapp Subsystem — Dependencies
+Django>=5.0,<7.0
+django-allauth[socialaccount]>=65.0
+django-htmx>=1.17
+pymysql>=1.1.0
+cryptography>=42.0
+python-dotenv>=1.0
+requests>=2.31
+asgiref>=3.8

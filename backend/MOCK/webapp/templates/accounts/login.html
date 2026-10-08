@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block title %}Sign In — PlaceX Candidate Portal{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-paper border border-onPaper/10 rounded-2xl p-8 shadow-xl">
+        
+        <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brass/15 border border-brass/25 text-brass mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight text-onPaper">PlaceX Candidate Portal</h2>
+            <p class="mt-2 text-sm text-onPaper-dim">Sign in with your developer profile to access technical rounds and telemetry</p>
+        </div>
+
+        <!-- OAuth 2.0 Sign-In Actions -->
+        <div class="space-y-3 pt-2">
+            <!-- GitHub OAuth Button -->
+            <a href="{% provider_login_url 'github' %}" 
+               class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-transparent rounded-xl text-sm font-semibold text-white bg-ink hover:bg-ink-raised transition shadow-sm group">
+                <svg class="w-5 h-5 fill-current text-white group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+                Continue with GitHub
+            </a>
+
+            <!-- LinkedIn OAuth Button -->
+            <a href="{% provider_login_url 'linkedin_oauth2' %}" 
+               class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-transparent rounded-xl text-sm font-semibold text-white bg-[#0A66C2] hover:bg-[#0A66C2]/90 transition shadow-sm group">
+                <svg class="w-5 h-5 fill-current text-white group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.35a1.63 1.63 0 0 0-1.64 1.63c0 .9.74 1.63 1.64 1.63a1.63 1.63 0 0 0 1.63-1.63c0-.9-.73-1.63-1.63-1.63z"/>
+                </svg>
+                Continue with LinkedIn
+            </a>
+        </div>
+
+        <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-onPaper/15"></div>
+            <span class="flex-shrink mx-4 text-xs text-onPaper-dim">Or use your PlaceX account</span>
+            <div class="flex-grow border-t border-onPaper/15"></div>
+        </div>
+
+        <!-- Local Form Fallback -->
+        <form class="space-y-4" method="POST" action="{% url 'accounts:login' %}">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-xs font-medium text-onPaper-dim mb-1">Username / Email</label>
+                <input id="username" name="username" type="text" required 
+                       class="w-full px-3.5 py-2.5 bg-paper-raised border border-onPaper/15 rounded-xl text-onPaper placeholder-onPaper-dim text-sm focus:outline-none focus:ring-2 focus:ring-brass focus:border-transparent transition">
+            </div>
+
+            <div>
+                <label for="password" class="block text-xs font-medium text-onPaper-dim mb-1">Password</label>
+                <input id="password" name="password" type="password" required 
+                       class="w-full px-3.5 py-2.5 bg-paper-raised border border-onPaper/15 rounded-xl text-onPaper placeholder-onPaper-dim text-sm focus:outline-none focus:ring-2 focus:ring-brass focus:border-transparent transition">
+            </div>
+
+            <button type="submit" 
+                    class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-ink bg-brass hover:bg-brass/90 transition shadow-sm">
+                Sign In
+            </button>
+        </form>
+
+        {% if show_dev_setup_note %}
+        <div class="p-3.5 rounded-xl bg-ink/10 border border-ink/20 text-xs text-onPaper-dim space-y-1">
+            <div class="font-medium text-onPaper flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                OAuth Setup Note
+            </div>
+            <p>To enable real GitHub/LinkedIn sign-in, follow the registration steps in <code class="text-brass font-mono">directives/webapp/oauth_registration_guide.md</code>.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
