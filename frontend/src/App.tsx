@@ -15,6 +15,54 @@ import { Login } from './pages/Login';
 import { BarChart3, Compass } from 'lucide-react';
 import axios from 'axios';
 
+interface ErrorBoundaryProps {
+  name: string;
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class TabErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.warn(`TabErrorBoundary caught in [${this.props.name}]:`, error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 text-center bg-white rounded-3xl border border-red-200 shadow-xs max-w-xl mx-auto my-12 space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 border border-red-200 flex items-center justify-center mx-auto text-xl font-black">
+            !
+          </div>
+          <h3 className="text-base font-black text-[#202321]">{this.props.name} Temporary Display Notice</h3>
+          <p className="text-xs text-[#666B67] leading-relaxed">
+            {this.state.error?.message || 'A minor interface error occurred while rendering this module.'}
+          </p>
+          <button
+            onClick={() => this.setState({ hasError: false, error: null })}
+            className="px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs transition-all shadow-xs"
+          >
+            Refresh Module
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export const App: React.FC = () => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('placex_token'));
   const [user, setUser] = useState<any>(
@@ -160,39 +208,57 @@ export const App: React.FC = () => {
         <main className={`flex-1 ${isInterviewMode ? 'p-0 overflow-hidden' : 'p-8 overflow-y-auto'}`}>
           {/* Keep-Alive Modules: In-memory state preserved across navigation */}
           <div className={activeFeature === 'dashboard' ? 'block' : 'hidden'}>
-            <Dashboard token={token} user={user} setActiveFeature={setActiveFeature} />
+            <TabErrorBoundary name="Dashboard">
+              <Dashboard token={token} user={user} setActiveFeature={setActiveFeature} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'profile' ? 'block' : 'hidden'}>
-            <StudentProfile token={token} user={user} />
+            <TabErrorBoundary name="Student Profile">
+              <StudentProfile token={token} user={user} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'agent' ? 'block' : 'hidden'}>
-            <HostAgentWorkspace token={token} setActiveFeature={setActiveFeature} />
+            <TabErrorBoundary name="Host Agent Workspace">
+              <HostAgentWorkspace token={token} setActiveFeature={setActiveFeature} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'resume' ? 'block' : 'hidden'}>
-            <ResumeAnalyzer token={token} setActiveFeature={setActiveFeature} />
+            <TabErrorBoundary name="Resume Analyzer">
+              <ResumeAnalyzer token={token} setActiveFeature={setActiveFeature} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'coding' ? 'block' : 'hidden'}>
-            <CodingSandbox token={token} />
+            <TabErrorBoundary name="Coding Sandbox">
+              <CodingSandbox token={token} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'interview' ? 'block' : 'hidden'}>
-            <InterviewSimulator token={token} onExit={() => setActiveFeature('dashboard')} />
+            <TabErrorBoundary name="Interview Simulator">
+              <InterviewSimulator token={token} onExit={() => setActiveFeature('dashboard')} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'roadmap' ? 'block' : 'hidden'}>
-            <RoadmapView token={token} />
+            <TabErrorBoundary name="Career Roadmap">
+              <RoadmapView token={token} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'knowledge' ? 'block' : 'hidden'}>
-            <QuizModule token={token} />
+            <TabErrorBoundary name="Knowledge Base">
+              <QuizModule token={token} />
+            </TabErrorBoundary>
           </div>
 
           <div className={activeFeature === 'analytics' ? 'block' : 'hidden'}>
-            <AnalyticsModule token={token} setActiveFeature={setActiveFeature} />
+            <TabErrorBoundary name="Analytics Intelligence">
+              <AnalyticsModule token={token} setActiveFeature={setActiveFeature} />
+            </TabErrorBoundary>
           </div>
         </main>
       </div>

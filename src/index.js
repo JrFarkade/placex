@@ -722,41 +722,127 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
       }
 
       if (url.pathname === '/api/v1/roadmap/branches') {
-        return jsonResponse([
-          {
-            id: 'sde_core',
-            title: 'Software Development Engineer (SDE)',
-            description: 'Structured roadmap covering DSA, System Design, and CS Fundamentals',
-            progress: 72,
-            weeks: [
-              { week_number: 1, title: 'Data Structures & Algorithmic Complexity', status: 'completed' },
-              { week_number: 2, title: 'Trees, Graphs & Dynamic Programming', status: 'in_progress' },
-              { week_number: 3, title: 'System Architecture & Microservices', status: 'upcoming' },
-              { week_number: 4, title: 'Mock Interviews & Behavioral Preparation', status: 'upcoming' }
-            ]
+        return jsonResponse({
+          branches: [
+            'None / Not Selected',
+            'Data Science',
+            'Computer Science / Software Development',
+            'Cybersecurity',
+            'Cloud & DevOps'
+          ],
+          levels: ['Beginner', 'Intermediate', 'Advanced'],
+          default_branch: 'Computer Science / Software Development',
+          default_level: 'Beginner'
+        });
+      }
+
+      if (url.pathname === '/api/v1/roadmap/path') {
+        const branch = url.searchParams.get('branch') || 'Computer Science / Software Development';
+        const level = url.searchParams.get('level') || 'Beginner';
+        const weekTitles = [
+          'Algorithmic Complexity & Asymptotic Analysis',
+          'Arrays, Strings & Two Pointers Pattern',
+          'Hashing, Hash Maps & Set Operations',
+          'Recursion & Divide and Conquer Strategies',
+          'Linked Lists & Fast/Slow Pointer Pattern',
+          'Stacks, Queues & Monotonic Deque',
+          'Binary Search & Search Space Reduction',
+          'Trees, Traversals & Binary Search Trees',
+          'Heaps & Priority Queues Patterns',
+          'Graphs: BFS, DFS & Topological Sort',
+          'Shortest Paths: Dijkstra & Bellman-Ford',
+          'Dynamic Programming: 1D Memoization',
+          'Dynamic Programming: 2D & Knapsack Variants',
+          'Greedy Algorithms & Interval Scheduling',
+          'Tries & Advanced String Matching',
+          'Bit Manipulation & Low-Level Operations',
+          'System Design: Client-Server & Scalability',
+          'Database Design: SQL vs NoSQL & Indexing',
+          'Caching: Redis, CDN & Eviction Policies',
+          'Message Brokers: Kafka & Async Decoupling',
+          'Microservices Architecture & API Gateways',
+          'Distributed Systems: Consensus & Consistency',
+          'Object-Oriented Design & LLD Patterns',
+          'Final Placement Mock Simulations & Behavioral'
+        ];
+        const weeks = weekTitles.map((title, i) => {
+          const weekNum = i + 1;
+          const status = weekNum <= 4 ? 'Completed' : weekNum === 5 ? 'In Progress' : 'Not Started';
+          return {
+            week: weekNum,
+            title: title,
+            status: status,
+            topics: [`${title} Fundamentals`, 'Core Implementation', 'Real-world Edge Cases', 'Interview Questions'],
+            learning_goals: [`Master core theory behind ${title}`, 'Solve 5-8 verified interview problems', 'Build production-ready code'],
+            prerequisites: weekNum === 1 ? 'None' : `Week ${weekNum - 1}`,
+            completion_criteria: `Complete coding exercises & achieve 80%+ quiz score on ${title}`,
+            estimated_hours: 12
+          };
+        });
+        return jsonResponse({
+          branch,
+          level,
+          total_weeks: 24,
+          completed_count: 4,
+          in_progress_count: 1,
+          progress_pct: 16.7,
+          weeks,
+          readiness: {
+            readiness_score: 82,
+            readiness_level: 'Tier 1 Placement Ready'
           }
-        ]);
+        });
+      }
+
+      if (url.pathname === '/api/v1/roadmap/toggle-week') {
+        return jsonResponse({ status: 'ok', message: 'Week status updated successfully' });
       }
 
       // ==========================================
       // 7. DASHBOARD & NOTIFICATIONS
       // ==========================================
-      if (url.pathname === '/api/v1/dashboard/activity' || url.pathname === '/api/v1/dashboard/recent-activity') {
-        return jsonResponse([
-          { id: 1, title: 'Completed Technical Mock Interview', timestamp: '2 hours ago', type: 'interview' },
-          { id: 2, title: 'Solved 3 Algorithmic Problems', timestamp: 'Yesterday', type: 'coding' },
-          { id: 3, title: 'Optimized ATS Resume to 84 Score', timestamp: '3 days ago', type: 'resume' }
-        ]);
+      if (url.pathname === '/api/v1/dashboard/activity') {
+        const days = [
+          { day_abbr: 'MON', day_full: 'Monday', date: '2026-10-02', day_number: 2, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 3, login_count: 1 },
+          { day_abbr: 'TUE', day_full: 'Tuesday', date: '2026-10-03', day_number: 3, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 2, login_count: 1 },
+          { day_abbr: 'WED', day_full: 'Wednesday', date: '2026-10-04', day_number: 4, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 4, login_count: 1 },
+          { day_abbr: 'THU', day_full: 'Thursday', date: '2026-10-05', day_number: 5, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 1, login_count: 1 },
+          { day_abbr: 'FRI', day_full: 'Friday', date: '2026-10-06', day_number: 6, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 2, login_count: 1 },
+          { day_abbr: 'SAT', day_full: 'Saturday', date: '2026-10-07', day_number: 7, is_active: false, has_learning: false, is_today: true, is_upcoming: false, is_missed: false, status: 'today', actions_count: 0, login_count: 1 },
+          { day_abbr: 'SUN', day_full: 'Sunday', date: '2026-10-08', day_number: 8, is_active: false, has_learning: false, is_today: false, is_upcoming: true, is_missed: false, status: 'upcoming', actions_count: 0, login_count: 0 }
+        ];
+        return jsonResponse({
+          current_streak: 5,
+          longest_streak: 14,
+          active_days_this_week: 5,
+          total_active_days: 28,
+          seven_day_tracker: days,
+          motivational_message: 'Keep your momentum going! Complete a task today to advance your placement preparation.',
+          calendar: []
+        });
+      }
+
+      if (url.pathname === '/api/v1/dashboard/recent-activity') {
+        return jsonResponse({
+          activities: [
+            { id: '1', module: 'interview', title: 'Completed Technical Mock Interview', description: 'Scored 85/100 on Google SDE session', timestamp: '2 hours ago', status: 'Completed', score: 85, action_label: 'View Report', target_feature: 'interview' },
+            { id: '2', module: 'coding', title: 'Solved 3 Algorithmic Problems', description: 'Optimized BFS & DFS solutions with 100% test pass', timestamp: 'Yesterday', status: 'Accepted', score: 100, action_label: 'Solve More', target_feature: 'coding' },
+            { id: '3', module: 'resume', title: 'Optimized ATS Resume to 87 Score', description: 'Updated technical skills and action verbs for Tier 1 matching', timestamp: '3 days ago', status: 'Analyzed', score: 87, action_label: 'View ATS', target_feature: 'resume' }
+          ]
+        });
       }
 
       if (url.pathname === '/api/v1/dashboard/goals') {
         if (request.method === 'POST') {
           return jsonResponse({ id: Date.now(), title: 'Target Goal', completed: false });
         }
-        return jsonResponse([
-          { id: 1, title: 'Complete 5 Mock Interviews', completed: false, current: 3, target: 5 },
-          { id: 2, title: 'Reach 85+ Placement Readiness', completed: false, current: 82, target: 85 }
-        ]);
+        return jsonResponse({
+          goals: [
+            { id: '1', goal_type: 'interview', title: 'Complete 5 Mock Interviews', target_count: 5, current_count: 3, is_completed: false, status_text: '3/5 Done' },
+            { id: '2', goal_type: 'coding', title: 'Solve 10 Coding Challenges', target_count: 10, current_count: 8, is_completed: false, status_text: '8/10 Solved' },
+            { id: '3', goal_type: 'quiz', title: 'Complete 3 CS Fundamentals Quizzes', target_count: 3, current_count: 3, is_completed: true, status_text: 'Completed' }
+          ]
+        });
       }
 
       if (url.pathname.startsWith('/api/v1/dashboard/goals/')) {
@@ -764,20 +850,179 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
       }
 
       if (url.pathname === '/api/v1/dashboard/todays-focus') {
-        return jsonResponse([
-          { id: 1, task: 'Practice Distributed Systems Interview', priority: 'high' },
-          { id: 2, task: 'Solve Dynamic Programming Problem', priority: 'medium' }
-        ]);
+        return jsonResponse({
+          focus: {
+            title: 'Practice Distributed Systems Mock Interview',
+            reason: 'Focusing on distributed caching and microservices architecture will boost your Tier 1 placement readiness.',
+            estimated_duration: '25 mins',
+            action_label: 'Start Practice',
+            target_feature: 'interview',
+            is_completed: false,
+            category: 'interview'
+          }
+        });
       }
 
       if (url.pathname === '/api/v1/dashboard/skills') {
         return jsonResponse({
-          categories: ['DSA', 'System Design', 'Core CS', 'Behavioral', 'Resume'],
-          scores: [85, 80, 88, 84, 82]
+          skills: [
+            { skill_name: 'Data Structures & Algorithms', status: 'Proficient', activity_count: '24 solved', level: 'Advanced', target_feature: 'coding' },
+            { skill_name: 'System Design & APIs', status: 'In Progress', activity_count: '6 concepts', level: 'Intermediate', target_feature: 'roadmap' },
+            { skill_name: 'Operating Systems & Networks', status: 'Mastered', activity_count: '15 quizzes', level: 'Advanced', target_feature: 'knowledge' },
+            { skill_name: 'Technical Mock Interview', status: 'Calibrated', activity_count: '4 sessions', level: 'Ready', target_feature: 'interview' }
+          ]
         });
       }
 
       if (url.pathname === '/api/v1/dashboard/activity/ping') {
+        return jsonResponse({ status: 'ok' });
+      }
+
+      // ==========================================
+      // 7.5. STUDENT ANALYTICS INTELLIGENCE
+      // ==========================================
+      if (url.pathname === '/api/v1/analytics/overview') {
+        const daysPeriod = parseInt(url.searchParams.get('days') || '30', 10);
+        const chartData = [];
+        const now = new Date();
+        for (let i = daysPeriod - 1; i >= 0; i--) {
+          const d = new Date(now.getTime() - i * 86400000);
+          const codingCount = (i % 3 === 0) ? 2 : (i % 2 === 0) ? 1 : 0;
+          const quizCount = (i % 4 === 0) ? 1 : 0;
+          const interviewCount = (i % 7 === 0) ? 1 : 0;
+          chartData.push({
+            date: d.toISOString().slice(0, 10),
+            display_date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            coding: codingCount,
+            quiz: quizCount,
+            interview: interviewCount,
+            resume: 0,
+            total: codingCount + quizCount + interviewCount
+          });
+        }
+        return jsonResponse({
+          days_period: daysPeriod,
+          summary_cards: {
+            current_login_streak: 5,
+            longest_login_streak: 14,
+            active_days_in_period: 18,
+            total_active_days: 28,
+            goals_completed_count: 3,
+            coding_solved_count: 24,
+            coding_attempted_count: 31,
+            quiz_attempted_count: 12,
+            interview_completed_count: 4,
+            resume_uploaded_count: 2
+          },
+          activity_chart_data: chartData,
+          weekly_goals: [
+            { id: 1, goal_type: 'coding', title: 'Solve 5 LeetCode Mediums', target_count: 5, current_count: 4, is_completed: false, status_text: '4/5 Solved' },
+            { id: 2, goal_type: 'quiz', title: 'Complete 3 CS Fundamentals Quizzes', target_count: 3, current_count: 3, is_completed: true, status_text: 'Completed' },
+            { id: 3, goal_type: 'interview', title: 'Mock Interview on System Design', target_count: 1, current_count: 1, is_completed: true, status_text: 'Completed' }
+          ],
+          recent_activities: [
+            { id: 1, module: 'interview', title: 'Completed Technical Mock Interview', timestamp: '2 hours ago', type: 'interview' },
+            { id: 2, module: 'coding', title: "Solved 'Merge Intervals' in Python", timestamp: 'Yesterday', type: 'coding' },
+            { id: 3, module: 'quiz', title: 'Scored 92% in OS & Memory Management Quiz', timestamp: '2 days ago', type: 'quiz' }
+          ],
+          todays_focus: {
+            title: 'Practice Distributed Systems Mock Interview',
+            reason: 'Based on your recent progress, focusing on system architecture will boost your interview readiness.',
+            target_feature: 'interview',
+            action_label: 'Start Practice'
+          }
+        });
+      }
+
+      if (url.pathname === '/api/v1/analytics/learning') {
+        const heatmap = [];
+        const now = new Date();
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date(now.getTime() - i * 86400000);
+          const count = (i % 2 === 0) ? (i % 5 + 1) : 0;
+          const level = count >= 4 ? 4 : count >= 3 ? 3 : count >= 2 ? 2 : count >= 1 ? 1 : 0;
+          heatmap.push({
+            date: d.toISOString().slice(0, 10),
+            display_date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            count,
+            level,
+            is_today: i === 0,
+            categories: { coding: count > 1 ? count - 1 : count, quiz: 0, interview: 0 }
+          });
+        }
+        return jsonResponse({
+          current_streak: 5,
+          active_days_this_week: 5,
+          motivational_message: 'Keep your momentum going! You are in the top 10% of consistent students this week.',
+          seven_day_tracker: [
+            { date: '2026-10-02', day_abbr: 'MON', day_number: 2, is_active: true, is_missed: false, status: 'completed' },
+            { date: '2026-10-03', day_abbr: 'TUE', day_number: 3, is_active: true, is_missed: false, status: 'completed' },
+            { date: '2026-10-04', day_abbr: 'WED', day_number: 4, is_active: true, is_missed: false, status: 'completed' },
+            { date: '2026-10-05', day_abbr: 'THU', day_number: 5, is_active: true, is_missed: false, status: 'completed' },
+            { date: '2026-10-06', day_abbr: 'FRI', day_number: 6, is_active: true, is_missed: false, status: 'completed' },
+            { date: '2026-10-07', day_abbr: 'SAT', day_number: 7, is_active: false, is_missed: false, status: 'today' },
+            { date: '2026-10-08', day_abbr: 'SUN', day_number: 8, is_active: false, is_missed: false, status: 'upcoming' }
+          ],
+          heatmap,
+          milestones: [
+            { id: 1, title: '5-Day Streak', description: 'Practiced 5 consecutive days', is_earned: true, earned_text: 'Earned' },
+            { id: 2, title: 'Algorithm Prodigy', description: 'Solved 20+ coding challenges', is_earned: true, earned_text: 'Earned' },
+            { id: 3, title: 'Mock Simulation Ready', description: 'Completed 5 mock interview sessions', is_earned: false, earned_text: 'In Progress' }
+          ]
+        });
+      }
+
+      if (url.pathname === '/api/v1/analytics/skills') {
+        return jsonResponse({
+          strengths: [
+            { title: 'Data Structures & Algorithms', description: 'Optimal time and space complexity in Tree and Graph questions.' },
+            { title: 'Core Computer Science', description: 'High quiz accuracy in Operating Systems and Networking.' }
+          ],
+          weaknesses: [
+            { title: 'System Design Architecture', description: 'Practice distributed caching and microservice patterns.', target_feature: 'roadmap' }
+          ],
+          radar_data: [
+            { subject: 'DSA', score: 88, fullMark: 100 },
+            { subject: 'System Design', score: 75, fullMark: 100 },
+            { subject: 'Core CS', score: 85, fullMark: 100 },
+            { subject: 'Behavioral', score: 90, fullMark: 100 },
+            { subject: 'Resume Quality', score: 87, fullMark: 100 }
+          ]
+        });
+      }
+
+      if (url.pathname === '/api/v1/analytics/placement') {
+        return jsonResponse({
+          readiness: {
+            readiness_score: 82,
+            readiness_level: 'Tier 1 Placement Ready',
+            score_breakdown: {
+              'Resume Quality': '87/100',
+              'Coding Prowess': '84/100',
+              'Interview Viva': '80/100',
+              'Consistency': '85/100'
+            }
+          },
+          resume_history: [
+            { id: 1, filename: 'Resume_Candidate.pdf', version: 1, uploaded_at: 'Oct 06, 2026', ats_score: 87 }
+          ],
+          avg_competencies: [
+            { competency: 'Problem Solving', score: 85, has_data: true },
+            { competency: 'System Design', score: 78, has_data: true },
+            { competency: 'Communication', score: 90, has_data: true },
+            { competency: 'Behavioral Leadership', score: 84, has_data: true }
+          ]
+        });
+      }
+
+      if (url.pathname === '/api/v1/analytics/goals') {
+        if (request.method === 'POST') {
+          return jsonResponse({ id: Date.now(), is_completed: false, status_text: 'In Progress' });
+        }
+        return jsonResponse([]);
+      }
+
+      if (url.pathname.startsWith('/api/v1/analytics/goals/')) {
         return jsonResponse({ status: 'ok' });
       }
 

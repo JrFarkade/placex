@@ -320,10 +320,10 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
               </div>
               <div>
                 <div className="text-3xl font-black text-[#202321]">
-                  {overviewData.summary_cards.goals_completed_count} <span className="text-sm font-bold text-[#666B67]">/ {overviewData.weekly_goals.length}</span>
+                  {overviewData.summary_cards?.goals_completed_count ?? 0} <span className="text-sm font-bold text-[#666B67]">/ {(overviewData.weekly_goals || []).length}</span>
                 </div>
                 <p className="text-xs font-semibold text-[#666B67] mt-1">
-                  Quizzes done: <strong className="text-[#202321]">{overviewData.summary_cards.quiz_attempted_count}</strong>
+                  Quizzes done: <strong className="text-[#202321]">{overviewData.summary_cards?.quiz_attempted_count ?? 0}</strong>
                 </p>
               </div>
             </div>
@@ -348,7 +348,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
 
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={overviewData.activity_chart_data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <AreaChart data={overviewData.activity_chart_data || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
@@ -388,7 +388,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
               </div>
 
               <div className="space-y-4">
-                {overviewData.weekly_goals.map((goal: any) => {
+                {(overviewData.weekly_goals || []).map((goal: any) => {
                   const pct = Math.min(100, Math.round((goal.current_count / goal.target_count) * 100));
                   return (
                     <div key={goal.id} className="p-4 rounded-2xl border border-[#EAE7DF] bg-[#FAF9F5] space-y-3">
@@ -431,7 +431,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
                   );
                 })}
 
-                {overviewData.weekly_goals.length === 0 && (
+                {(overviewData.weekly_goals || []).length === 0 && (
                   <div className="text-center py-8 text-xs font-semibold text-[#666B67]">
                     No active goals for this week. Click "Add Goal" to set one!
                   </div>
@@ -447,7 +447,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
               </div>
 
               <div className="space-y-3">
-                {overviewData.recent_activities.map((act: any) => (
+                {(overviewData.recent_activities || []).map((act: any) => (
                   <div key={act.id} className="p-3.5 rounded-2xl border border-[#EAE7DF] hover:border-[#10B981]/50 bg-white transition-all flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="p-2.5 rounded-xl bg-[#F7F4EE] shrink-0">
@@ -516,7 +516,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
 
             {/* 7-DAY CARDS (Mon to Sun) */}
             <div className="grid grid-cols-7 gap-2 md:gap-4">
-              {learningData.seven_day_tracker.map((day: any) => {
+              {(learningData.seven_day_tracker || []).map((day: any) => {
                 let cardStyle = "bg-[#F7F4EE] border-[#EAE7DF] text-[#666B67]";
                 if (day.status === 'completed') {
                   cardStyle = "bg-emerald-500 text-white border-emerald-600 shadow-sm";
@@ -569,7 +569,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
 
             {/* Heatmap Grid */}
             <div className="flex flex-wrap gap-2 pt-2">
-              {learningData.heatmap.map((cell: any) => {
+              {(learningData.heatmap || []).map((cell: any) => {
                 let bgHex = "#EAE7DF";
                 if (cell.level === 1) bgHex = "#D1FAE5";
                 else if (cell.level === 2) bgHex = "#6EE7B7";
@@ -604,7 +604,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {learningData.milestones.map((m: any) => (
+              {(learningData.milestones || []).map((m: any) => (
                 <div
                   key={m.id}
                   className={`p-5 rounded-2xl border transition-all ${
@@ -753,7 +753,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
               </div>
 
               <div className="space-y-4">
-                {skillsData.strengths.map((s: any, idx: number) => (
+                {(skillsData.strengths || []).map((s: any, idx: number) => (
                   <div key={idx} className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-1">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
@@ -766,7 +766,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
                   </div>
                 ))}
 
-                {skillsData.weaknesses.map((w: any, idx: number) => (
+                {(skillsData.weaknesses || []).map((w: any, idx: number) => (
                   <div key={idx} className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-black text-amber-900 flex items-center gap-1.5">
@@ -854,7 +854,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
               </div>
 
               <div className="space-y-3">
-                {placementData.resume_history.map((r: any) => (
+                {(placementData.resume_history || []).map((r: any) => (
                   <div key={r.id} className="p-4 rounded-2xl border border-[#EAE7DF] bg-[#FAF9F5] flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="p-2.5 rounded-xl bg-amber-50 text-amber-600 border border-amber-200">
@@ -872,7 +872,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
                   </div>
                 ))}
 
-                {placementData.resume_history.length === 0 && (
+                {(placementData.resume_history || []).length === 0 && (
                   <div className="text-center py-10 space-y-2 text-xs text-[#666B67]">
                     <FileText className="w-8 h-8 text-[#9CA3AF] mx-auto" />
                     <p className="font-bold">No resume uploaded yet.</p>
@@ -900,7 +900,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
 
               {/* Competency score bars */}
               <div className="space-y-3">
-                {placementData.avg_competencies.map((c: any) => (
+                {(placementData.avg_competencies || []).map((c: any) => (
                   <div key={c.competency} className="space-y-1">
                     <div className="flex justify-between text-xs font-bold text-[#202321]">
                       <span>{c.competency}</span>

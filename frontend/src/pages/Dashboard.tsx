@@ -225,7 +225,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
       // Activity streak & 7-Day tracker
       axios.get('/api/v1/dashboard/activity', { headers })
         .then(res => {
-          if (res.data) setStreakData(res.data);
+          if (res.data && Array.isArray(res.data.seven_day_tracker)) {
+            setStreakData(res.data);
+          }
         })
         .catch(() => {});
 
@@ -614,7 +616,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
         {/* 7-DAY VISUAL TRACKER CARDS (Monday - Sunday) */}
         <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF8F5] border border-[#EAE7DF]">
           <div className="grid grid-cols-7 gap-2 sm:gap-3.5">
-            {streakData.seven_day_tracker.map((day) => {
+            {(streakData?.seven_day_tracker || []).map((day) => {
               const isComp = day.status === 'completed';
               const isTod = day.status === 'today';
               const isUpc = day.status === 'upcoming';
@@ -721,7 +723,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
           <div className="overflow-x-auto pb-1">
             <div className="min-w-[620px]">
               <div className="grid grid-flow-col grid-rows-7 gap-1 justify-start">
-                {streakData.calendar.map((day, idx) => (
+                {(streakData?.calendar || []).map((day, idx) => (
                   <div
                     key={idx}
                     title={`${day.date}: ${day.count} activity event(s)`}
