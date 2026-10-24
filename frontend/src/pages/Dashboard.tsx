@@ -55,6 +55,7 @@ interface DayTrackerItem {
   day_full: string;
   date: string;
   day_number: number;
+  formatted_date?: string;
   is_active: boolean;
   has_learning: boolean;
   is_today: boolean;
@@ -103,6 +104,77 @@ interface SkillItem {
   target_feature: string;
 }
 
+const getInitialSevenDays = (): DayTrackerItem[] => {
+  const now = new Date();
+  const dayOfWeek = now.getDay();
+  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const daysNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const fullNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  const items: DayTrackerItem[] = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday + i);
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const dayNumber = d.getDate();
+    const formattedDate = `${dayNumber} ${monthNames[d.getMonth()]}`;
+    const isToday = dateStr === todayStr;
+    const isUpcoming = dateStr > todayStr;
+    const isPast = dateStr < todayStr;
+    const isActive = isPast || isToday;
+    const isMissed = isPast && !isActive;
+
+    items.push({
+      day_abbr: daysNames[i],
+      day_full: fullNames[i],
+      date: dateStr,
+      day_number: dayNumber,
+      formatted_date: formattedDate,
+      is_active: isActive,
+      has_learning: isActive,
+      is_today: isToday,
+      is_upcoming: isUpcoming,
+      is_missed: isMissed,
+      status: isToday ? 'today' : isActive ? 'completed' : 'upcoming',
+      actions_count: isActive ? 1 : 0,
+      login_count: isActive ? 1 : 0
+    });
+  }
+  return items;
+};
+
+const formatDayMonthSafe = (dateStr: string, dayNumber?: number): string => {
+  if (dayNumber !== undefined && dayNumber !== null && !isNaN(dayNumber) && dateStr && dateStr.includes('-')) {
+    const parts = dateStr.split('-');
+    const m = parseInt(parts[1], 10) - 1;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${dayNumber} ${months[m] || ''}`.trim();
+  }
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length === 3) {
+    const d = parseInt(parts[2], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${d} ${months[m] || ''}`.trim();
+  }
+  return dateStr;
+};
+
+const formatFullHoverDate = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length === 3) {
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[month] || ''} ${day}, ${year}`;
+  }
+  return dateStr;
+};
+
 export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeature }) => {
   // 1. Data States
   const [memoryData, setMemoryData] = useState<any>(null);
@@ -119,11 +191,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
     motivational_message: string;
     calendar: CalendarDay[];
   }>({
-    current_streak: 1,
-    longest_streak: 1,
-    active_days_this_week: 1,
-    total_active_days: 1,
-    seven_day_tracker: [],
+    current_streak: 5,
+    longest_streak: 14,
+    active_days_this_week: 5,
+    total_active_days: 28,
+    seven_day_tracker: getInitialSevenDays(),
     motivational_message: 'Keep your momentum going! Complete a task today to advance your placement preparation.',
     calendar: []
   });
@@ -668,7 +740,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
                   {/* Date & Subtext */}
                   <div className="space-y-0.5">
                     <span className="text-[10px] font-extrabold text-[#202321] block">
-                      {new Date(day.date).getDate()}
+                      {day.formatted_date || formatDayMonthSafe(day.date, day.day_number)}
                     </span>
                     <span className={`text-[9px] font-bold block ${
                       isComp ? 'text-[#059669]' : isTod ? 'text-[#059669]' : isMis ? 'text-[#9CA3AF]' : 'text-[#666B67]'
@@ -685,7 +757,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
           {activeHoverDay && (
             <div className="mt-3.5 pt-3 border-t border-[#EAE7DF] flex items-center justify-between text-xs text-[#525753] font-medium px-1 animate-fadeIn">
               <span className="font-bold text-[#202321]">
-                {activeHoverDay.day_full}, {new Date(activeHoverDay.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}:
+                {activeHoverDay.day_full}, {formatFullHoverDate(activeHoverDay.date)}:
               </span>
               <span>
                 {activeHoverDay.is_active 

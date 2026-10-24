@@ -530,6 +530,9 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
                   <div key={day.date} className={`p-3 md:p-4 rounded-2xl border text-center space-y-2 transition-all ${cardStyle}`}>
                     <div className="text-[11px] font-extrabold uppercase tracking-wider">{day.day_abbr}</div>
                     <div className="text-lg md:text-xl font-black">{day.day_number}</div>
+                    <div className="text-[10px] font-bold opacity-75">
+                      {day.formatted_date ? day.formatted_date.split(' ')[1] : (day.date && day.date.includes('-') ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(day.date.split('-')[1], 10) - 1] : '')}
+                    </div>
                     <div className="flex justify-center">
                       {day.is_active ? (
                         <Flame className={`w-5 h-5 ${day.status === 'completed' ? 'fill-white text-white' : 'fill-amber-600 text-amber-600'}`} />

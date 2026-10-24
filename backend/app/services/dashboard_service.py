@@ -143,6 +143,7 @@ class DashboardService:
                 "day_full": full_names[i],
                 "date": d.isoformat(),
                 "day_number": d.day,
+                "formatted_date": f"{d.day} {d.strftime('%b')}",
                 "is_active": is_active,
                 "has_learning": has_learning,
                 "is_today": is_today,

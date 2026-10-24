@@ -57,6 +57,111 @@ export default {
         return null;
       }
 
+      // Dynamic 7-day tracker and 60-day calendar matching backend DashboardService
+      function generateDashboardActivity(refDate = new Date()) {
+        const now = new Date(refDate);
+        const dayOfWeek = now.getUTCDay(); // 0 is Sunday, 1 is Monday ... 6 is Saturday
+        const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+
+        const monday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diffToMonday));
+        const todayStr = now.toISOString().slice(0, 10);
+
+        const daysNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const fullNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const sevenDays = [];
+        let daysActiveThisWeek = 0;
+
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + i));
+          const dateStr = d.toISOString().slice(0, 10);
+          const dayNumber = d.getUTCDate();
+          const monthStr = monthNames[d.getUTCMonth()];
+          const formattedDate = `${dayNumber} ${monthStr}`;
+
+          const isToday = dateStr === todayStr;
+          const isUpcoming = dateStr > todayStr;
+          const isPast = dateStr < todayStr;
+          
+          const isActive = isPast || isToday;
+          const isMissed = false;
+
+          if (isActive) {
+            daysActiveThisWeek++;
+          }
+
+          let status = 'upcoming';
+          if (isActive && !isToday) {
+            status = 'completed';
+          } else if (isToday) {
+            status = 'today';
+          } else if (isMissed) {
+            status = 'missed';
+          }
+
+          sevenDays.push({
+            day_abbr: daysNames[i],
+            day_full: fullNames[i],
+            date: dateStr,
+            day_number: dayNumber,
+            formatted_date: formattedDate,
+            is_active: isActive,
+            has_learning: isActive,
+            is_today: isToday,
+            is_upcoming: isUpcoming,
+            is_missed: isMissed,
+            status: status,
+            actions_count: isActive ? (i === 6 ? 1 : 2 + (i % 3)) : 0,
+            login_count: isActive ? 1 : 0
+          });
+        }
+
+        const calendarDays = [];
+        const startMonday = new Date(Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() - 56));
+        const endSunday = new Date(Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + 6));
+        
+        let curr = new Date(startMonday);
+        while (curr <= endSunday) {
+          const currStr = curr.toISOString().slice(0, 10);
+          const isPast = currStr < todayStr;
+          const isToday = currStr === todayStr;
+          const isFuture = currStr > todayStr;
+
+          let cnt = 0;
+          if (isPast || isToday) {
+            const dayDiff = Math.floor((now - curr) / 86400000);
+            cnt = (dayDiff % 2 === 0) ? ((dayDiff % 5) + 1) : ((dayDiff % 3 === 0) ? 2 : 0);
+          }
+          
+          let level = 0;
+          if (cnt === 1) level = 1;
+          else if (cnt <= 3 && cnt > 1) level = 2;
+          else if (cnt <= 6 && cnt > 3) level = 3;
+          else if (cnt > 6) level = 4;
+
+          calendarDays.push({
+            date: currStr,
+            count: cnt,
+            level: level,
+            is_today: isToday,
+            is_future: isFuture
+          });
+
+          curr = new Date(Date.UTC(curr.getUTCFullYear(), curr.getUTCMonth(), curr.getUTCDate() + 1));
+        }
+
+        return {
+          current_streak: 5,
+          longest_streak: 14,
+          active_days_this_week: daysActiveThisWeek,
+          total_active_days: 28,
+          seven_day_tracker: sevenDays,
+          motivational_message: 'Keep your momentum going! Complete a task today to advance your placement preparation.',
+          calendar: calendarDays
+        };
+      }
+
       // ==========================================
       // 0. Optional Live Backend Proxy (with Fallback)
       // ==========================================
@@ -237,9 +342,11 @@ export default {
       }
 
       if (url.pathname === '/api/v1/auth/github/repos') {
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const yestStr = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
         return jsonResponse([
-          { name: 'placex', stars: 8, language: 'TypeScript', updated_at: '2026-10-08' },
-          { name: 'interview-prep-engine', stars: 4, language: 'Python', updated_at: '2026-10-07' }
+          { name: 'placex', stars: 8, language: 'TypeScript', updated_at: todayStr },
+          { name: 'interview-prep-engine', stars: 4, language: 'Python', updated_at: yestStr }
         ]);
       }
 
@@ -802,24 +909,8 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
       // 7. DASHBOARD & NOTIFICATIONS
       // ==========================================
       if (url.pathname === '/api/v1/dashboard/activity') {
-        const days = [
-          { day_abbr: 'MON', day_full: 'Monday', date: '2026-10-02', day_number: 2, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 3, login_count: 1 },
-          { day_abbr: 'TUE', day_full: 'Tuesday', date: '2026-10-03', day_number: 3, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 2, login_count: 1 },
-          { day_abbr: 'WED', day_full: 'Wednesday', date: '2026-10-04', day_number: 4, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 4, login_count: 1 },
-          { day_abbr: 'THU', day_full: 'Thursday', date: '2026-10-05', day_number: 5, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 1, login_count: 1 },
-          { day_abbr: 'FRI', day_full: 'Friday', date: '2026-10-06', day_number: 6, is_active: true, has_learning: true, is_today: false, is_upcoming: false, is_missed: false, status: 'completed', actions_count: 2, login_count: 1 },
-          { day_abbr: 'SAT', day_full: 'Saturday', date: '2026-10-07', day_number: 7, is_active: false, has_learning: false, is_today: true, is_upcoming: false, is_missed: false, status: 'today', actions_count: 0, login_count: 1 },
-          { day_abbr: 'SUN', day_full: 'Sunday', date: '2026-10-08', day_number: 8, is_active: false, has_learning: false, is_today: false, is_upcoming: true, is_missed: false, status: 'upcoming', actions_count: 0, login_count: 0 }
-        ];
-        return jsonResponse({
-          current_streak: 5,
-          longest_streak: 14,
-          active_days_this_week: 5,
-          total_active_days: 28,
-          seven_day_tracker: days,
-          motivational_message: 'Keep your momentum going! Complete a task today to advance your placement preparation.',
-          calendar: []
-        });
+        const activity = generateDashboardActivity();
+        return jsonResponse(activity);
       }
 
       if (url.pathname === '/api/v1/dashboard/recent-activity') {
@@ -950,19 +1041,12 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
             categories: { coding: count > 1 ? count - 1 : count, quiz: 0, interview: 0 }
           });
         }
+        const activity = generateDashboardActivity();
         return jsonResponse({
-          current_streak: 5,
-          active_days_this_week: 5,
+          current_streak: activity.current_streak,
+          active_days_this_week: activity.active_days_this_week,
           motivational_message: 'Keep your momentum going! You are in the top 10% of consistent students this week.',
-          seven_day_tracker: [
-            { date: '2026-10-02', day_abbr: 'MON', day_number: 2, is_active: true, is_missed: false, status: 'completed' },
-            { date: '2026-10-03', day_abbr: 'TUE', day_number: 3, is_active: true, is_missed: false, status: 'completed' },
-            { date: '2026-10-04', day_abbr: 'WED', day_number: 4, is_active: true, is_missed: false, status: 'completed' },
-            { date: '2026-10-05', day_abbr: 'THU', day_number: 5, is_active: true, is_missed: false, status: 'completed' },
-            { date: '2026-10-06', day_abbr: 'FRI', day_number: 6, is_active: true, is_missed: false, status: 'completed' },
-            { date: '2026-10-07', day_abbr: 'SAT', day_number: 7, is_active: false, is_missed: false, status: 'today' },
-            { date: '2026-10-08', day_abbr: 'SUN', day_number: 8, is_active: false, is_missed: false, status: 'upcoming' }
-          ],
+          seven_day_tracker: activity.seven_day_tracker,
           heatmap,
           milestones: [
             { id: 1, title: '5-Day Streak', description: 'Practiced 5 consecutive days', is_earned: true, earned_text: 'Earned' },
@@ -1054,8 +1138,23 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
       // ==========================================
       if (env.ASSETS && ['GET', 'HEAD'].includes(request.method)) {
         try {
-          return await env.ASSETS.fetch(request);
+          const assetResp = await env.ASSETS.fetch(request);
+          if (assetResp.status !== 404) {
+            return assetResp;
+          }
+          // SPA fallback for frontend client-side routes
+          if (!url.pathname.startsWith('/api')) {
+            const indexReq = new Request(new URL('/index.html', request.url), request);
+            return await env.ASSETS.fetch(indexReq);
+          }
+          return assetResp;
         } catch (assetErr) {
+          if (!url.pathname.startsWith('/api')) {
+            try {
+              const indexReq = new Request(new URL('/index.html', request.url), request);
+              return await env.ASSETS.fetch(indexReq);
+            } catch (_) {}
+          }
           return jsonResponse({ detail: 'Static asset not found' }, 404);
         }
       }
