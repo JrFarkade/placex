@@ -215,12 +215,9 @@ export const QuizModule: React.FC<QuizModuleProps> = ({ token }) => {
     };
 
     try {
-      let res;
-      try {
-        res = await axios.post('http://localhost:8000/quiz/submit', payload);
-      } catch (e) {
-        res = await axios.post('/api/v1/quiz/submit', payload);
-      }
+      const res = await axios.post('/api/v1/quiz/submit', payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       sessionStorage.removeItem('placex_active_quiz');
       setResultData(res.data);

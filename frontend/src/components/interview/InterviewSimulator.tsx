@@ -682,7 +682,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
               <div className="flex-1 relative bg-[#0A0D14] overflow-hidden">
                 <iframe
                   ref={iframeRef}
-                  src={sessionData.live_brain?.webrtc_url || "http://localhost:7860/client/"}
+                  src={sessionData.live_brain?.webrtc_url || "/api/v1/interview/avatar"}
                   title="PlaceX Live AI Avatar WebRTC"
                   allow="camera; microphone; autoplay; display-capture; clipboard-read; clipboard-write"
                   className="w-full h-full border-0 absolute inset-0 bg-[#0A0D14]"
