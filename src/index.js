@@ -479,6 +479,7 @@ Give a concise, encouraging, and technically insightful answer (1-2 short paragr
         if (geminiReply) reply = geminiReply;
 
         return jsonResponse({
+          reply: reply,
           response: reply,
           conversation_id: convId,
           suggested_actions: [
