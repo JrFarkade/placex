@@ -15,6 +15,18 @@ const agentTasksStore = [
 ];
 const agentConversationMap = new Map();
 
+// Student Profile State for Edge Runtime (defaults to 'Not set' / null until explicitly selected)
+const studentProfileState = {
+  university: 'Engineering Institute',
+  branch: 'Computer Science & Engineering',
+  graduation_year: 2026,
+  target_role: null,
+  target_company: null,
+  target_tier: 'Tier 1 / FAANG',
+  target_companies: ['Google', 'Microsoft', 'Amazon'],
+  readiness_score: null
+};
+
 // Canonical PlaceX Host Agent Core System Prompt (from localhost backend)
 const HOST_AGENT_SYSTEM_PROMPT = `You are the Host Agent of PlaceX, an AI-powered career operating system.
 You are the central intelligence layer helping the student navigate, understand, and improve their career preparation inside PlaceX.
@@ -379,15 +391,25 @@ export default {
       }
 
       if (url.pathname === '/api/v1/auth/profile') {
+        if (request.method === 'POST') {
+          let body = {};
+          try { body = await request.json(); } catch (e) {}
+          if (body.target_role !== undefined) {
+            studentProfileState.target_role = body.target_role && body.target_role.trim() ? body.target_role.trim() : null;
+          }
+          if (body.target_company !== undefined) {
+            studentProfileState.target_company = body.target_company && body.target_company.trim() ? body.target_company.trim() : null;
+          }
+          const act = getDashboardActivity();
+          return jsonResponse({
+            ...studentProfileState,
+            current_streak: act.current_streak,
+            longest_streak: act.longest_streak
+          });
+        }
         const act = getDashboardActivity();
         return jsonResponse({
-          university: 'Engineering Institute',
-          branch: 'Computer Science & Engineering',
-          graduation_year: 2026,
-          target_role: 'Software Development Engineer',
-          target_tier: 'Tier 1 / FAANG',
-          target_companies: ['Google', 'Microsoft', 'Amazon'],
-          readiness_score: 82,
+          ...studentProfileState,
           current_streak: act.current_streak,
           longest_streak: act.longest_streak
         });
@@ -646,10 +668,10 @@ export default {
             current_focus: 'Campus Placement & Technical Interview Prep'
           },
           long_term: {
-            target_role: 'Software Development Engineer',
-            target_company: 'Google / Microsoft',
+            target_role: studentProfileState.target_role,
+            target_company: studentProfileState.target_company,
             skills: ['Python', 'System Design', 'Data Structures & Algorithms', 'FastAPI', 'React'],
-            readiness_score: 82,
+            readiness_score: studentProfileState.readiness_score,
             current_streak: act.current_streak
           }
         });

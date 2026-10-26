@@ -173,6 +173,23 @@ export const App: React.FC = () => {
     return <Login onLoginSuccess={handleLoginSuccess} />;
   }
 
+  const handleUpdateTargetRole = async (newRole: string | null) => {
+    try {
+      await axios.post('/api/v1/auth/profile', {
+        target_role: newRole || ""
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUserProfile((prev: any) => ({
+        ...prev,
+        target_role: newRole
+      }));
+      window.dispatchEvent(new CustomEvent('placex:profile-updated'));
+    } catch (err) {
+      console.error("Failed updating target role", err);
+    }
+  };
+
   const handleUpdateTargetCompany = async (newCompany: string | null) => {
     try {
       await axios.post('/api/v1/auth/profile', {
@@ -208,6 +225,7 @@ export const App: React.FC = () => {
             targetRole={userProfile?.target_role || null}
             targetCompany={userProfile?.target_company || null}
             readinessScore={userProfile?.readiness_score || null}
+            onUpdateTargetRole={handleUpdateTargetRole}
             onUpdateTargetCompany={handleUpdateTargetCompany}
             onLogout={handleLogout}
             onToggleAgent={() => setIsAgentDrawerOpen(!isAgentDrawerOpen)}

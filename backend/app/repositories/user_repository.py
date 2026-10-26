@@ -163,13 +163,28 @@ class UserRepository:
 
     @staticmethod
     def update_profile(db: Session, user_id: int, profile_in: ProfileCreate) -> StudentProfile:
+        from sqlalchemy.orm.attributes import flag_modified
         profile = db.query(StudentProfile).filter(StudentProfile.user_id == user_id).first()
         if not profile:
             profile = StudentProfile(user_id=user_id)
             db.add(profile)
         
-        for field, value in profile_in.dict(exclude_unset=True).items():
+        data = profile_in.dict(exclude_unset=True)
+        for field, value in data.items():
+            if field in ("target_role", "target_company") and value == "":
+                value = None
             setattr(profile, field, value)
+        
+        # Keep StudentMemory long_term_memory in sync
+        memory = db.query(StudentMemory).filter(StudentMemory.user_id == user_id).first()
+        if memory and memory.long_term_memory is not None:
+            ltm = dict(memory.long_term_memory)
+            if "target_role" in data:
+                ltm["target_role"] = profile.target_role
+            if "target_company" in data:
+                ltm["target_company"] = profile.target_company
+            memory.long_term_memory = ltm
+            flag_modified(memory, "long_term_memory")
         
         db.commit()
         db.refresh(profile)

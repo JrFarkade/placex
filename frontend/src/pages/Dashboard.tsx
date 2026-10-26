@@ -362,17 +362,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
 
   // Save Target Role & Company
   const handleSavePreferences = async () => {
-    if (!selectedRole.trim()) return;
     setUpdatingRole(true);
     try {
       await axios.post(
-        '/api/v1/roadmap/goal',
+        '/api/v1/auth/profile',
         { 
-          target_role: selectedRole.trim(),
+          target_role: selectedRole.trim() || null,
           target_company: selectedCompany.trim() || null
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      if (selectedRole.trim()) {
+        await axios.post(
+          '/api/v1/roadmap/goal',
+          { 
+            target_role: selectedRole.trim(),
+            target_company: selectedCompany.trim() || null
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        ).catch(() => {});
+      }
       await fetchDashboardData();
       window.dispatchEvent(new CustomEvent('placex:profile-updated'));
       setIsEditingRole(false);
@@ -507,7 +516,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
 
                 <button
                   onClick={() => {
-                    setSelectedRole(targetRole || 'Software Engineer');
+                    setSelectedRole(targetRole || '');
                     setSelectedCompany(targetCompany || '');
                     setIsEditingRole(true);
                   }}
@@ -524,8 +533,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ token, user, setActiveFeat
                   onChange={(e) => setSelectedRole(e.target.value)}
                   className="bg-[#FAF8F5] border border-[#EAE7DF] rounded-xl px-3 py-1.5 text-xs font-bold text-[#202321] focus:outline-none focus:border-[#059669]"
                 >
-                  <option value="Software Engineer">Software Engineer</option>
+                  <option value="">Not set</option>
                   <option value="Data Analyst">Data Analyst</option>
+                  <option value="AI Engineer">AI Engineer</option>
+                  <option value="Software Developer">Software Developer</option>
+                  <option value="Full Stack Developer">Full Stack Developer</option>
+                  <option value="Software Engineer">Software Engineer</option>
                   <option value="Machine Learning Engineer">Machine Learning Engineer</option>
                   <option value="Product Analyst">Product Analyst</option>
                   <option value="Cyber Security Analyst">Cyber Security Analyst</option>

@@ -11,6 +11,7 @@ interface NavbarProps {
   targetRole?: string | null;
   targetCompany?: string | null;
   readinessScore?: number | null;
+  onUpdateTargetRole?: (newRole: string | null) => Promise<void>;
   onUpdateTargetCompany?: (newCompany: string | null) => Promise<void>;
   onLogout?: () => void;
   onToggleAgent?: () => void;
@@ -35,12 +36,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   targetRole = null,
   targetCompany = null, 
   readinessScore = null, 
+  onUpdateTargetRole,
   onUpdateTargetCompany,
   onLogout,
   onToggleAgent,
   isAgentOpen = false,
   setActiveFeature
 }) => {
+  // Target Role editing state
+  const [isEditingRole, setIsEditingRole] = useState(false);
+  const [roleInput, setRoleInput] = useState(targetRole || '');
+  const [isSavingRole, setIsSavingRole] = useState(false);
+
   // Target Company editing state
   const [isEditingCompany, setIsEditingCompany] = useState(false);
   const [companyInput, setCompanyInput] = useState(targetCompany || '');
@@ -53,7 +60,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isLoadingNotifs, setIsLoadingNotifs] = useState(false);
 
   const notifRef = useRef<HTMLDivElement>(null);
+  const roleModalRef = useRef<HTMLDivElement>(null);
   const companyModalRef = useRef<HTMLDivElement>(null);
+
+  // Sync role input if prop updates
+  useEffect(() => {
+    setRoleInput(targetRole || '');
+  }, [targetRole]);
 
   // Sync company input if prop updates
   useEffect(() => {
@@ -98,6 +111,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
         setIsNotifOpen(false);
       }
+      if (roleModalRef.current && !roleModalRef.current.contains(event.target as Node)) {
+        setIsEditingRole(false);
+      }
       if (companyModalRef.current && !companyModalRef.current.contains(event.target as Node)) {
         setIsEditingCompany(false);
       }
@@ -105,6 +121,34 @@ export const Navbar: React.FC<NavbarProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleSaveRole = async () => {
+    if (!onUpdateTargetRole) return;
+    setIsSavingRole(true);
+    try {
+      const trimmed = roleInput.trim();
+      await onUpdateTargetRole(trimmed.length > 0 ? trimmed : null);
+      setIsEditingRole(false);
+    } catch (err) {
+      console.error('Failed saving target role', err);
+    } finally {
+      setIsSavingRole(false);
+    }
+  };
+
+  const handleClearRole = async () => {
+    if (!onUpdateTargetRole) return;
+    setIsSavingRole(true);
+    try {
+      setRoleInput('');
+      await onUpdateTargetRole(null);
+      setIsEditingRole(false);
+    } catch (err) {
+      console.error('Failed clearing target role', err);
+    } finally {
+      setIsSavingRole(false);
+    }
+  };
 
   const handleSaveCompany = async () => {
     if (!onUpdateTargetCompany) return;
@@ -208,11 +252,91 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Target Goal, Target Company & Placement Readiness Badges */}
       <div className="flex items-center gap-3">
-        {/* Target Role Badge */}
-        <div className="flex items-center gap-2 bg-[#E6F4EA] border border-[#BBF7D0] px-3.5 py-2 rounded-full text-xs font-bold text-[#064E3B]">
-          <Target className="w-4 h-4 text-[#059669]" />
-          <span className="text-[#525753] font-medium">Target Role:</span>
-          <span className="font-extrabold text-[#047857]">{targetRole || 'Not set'}</span>
+        {/* Target Role Badge (Editable & Interactive) */}
+        <div className="relative" ref={roleModalRef}>
+          <button
+            onClick={() => setIsEditingRole(!isEditingRole)}
+            className="flex items-center gap-2 bg-[#E6F4EA] hover:bg-[#DCFCE7] border border-[#BBF7D0] px-3.5 py-2 rounded-full text-xs font-bold text-[#064E3B] transition-all cursor-pointer"
+            title="Click to change target role"
+          >
+            <Target className="w-4 h-4 text-[#059669]" />
+            <span className="text-[#525753] font-medium">Target Role:</span>
+            <span className="font-extrabold text-[#047857]">{targetRole || 'Not set'}</span>
+            <Edit2 className="w-3 h-3 text-[#059669]/70 ml-1" />
+          </button>
+
+          {/* Target Role Edit Popover */}
+          {isEditingRole && (
+            <div className="absolute top-12 left-0 w-80 bg-white rounded-2xl shadow-xl border border-[#EAE7DF] p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="text-xs font-black text-[#202321] mb-2 flex items-center justify-between">
+                <span>Set Target Role</span>
+                <button 
+                  onClick={() => setIsEditingRole(false)}
+                  className="p-1 text-[#949A95] hover:text-[#202321] rounded-lg cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <p className="text-[11px] text-[#666B67] mb-2.5 leading-relaxed">
+                Specify your target career track or select a common role below.
+              </p>
+              <input
+                type="text"
+                value={roleInput}
+                onChange={(e) => setRoleInput(e.target.value)}
+                placeholder="e.g. Data Analyst, AI Engineer, Software Developer"
+                className="w-full bg-[#FAF8F5] border border-[#EAE7DF] rounded-xl px-3 py-2 text-xs font-bold text-[#202321] focus:outline-none focus:border-[#059669] mb-2.5"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveRole();
+                  if (e.key === 'Escape') setIsEditingRole(false);
+                }}
+              />
+              {/* Quick suggestion pills */}
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {['Data Analyst', 'AI Engineer', 'Software Developer', 'Full Stack Developer'].map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => setRoleInput(suggestion)}
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-lg transition-all cursor-pointer ${
+                      roleInput === suggestion
+                        ? 'bg-[#059669] text-white shadow-xs'
+                        : 'bg-[#FAF8F5] text-[#525753] hover:bg-[#E6F4EA] hover:text-[#064E3B] border border-[#EAE7DF]'
+                    }`}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  onClick={handleClearRole}
+                  disabled={isSavingRole}
+                  className="px-3 py-1.5 text-[11px] font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all cursor-pointer"
+                >
+                  Clear
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsEditingRole(false)}
+                    disabled={isSavingRole}
+                    className="px-3 py-1.5 text-[11px] font-bold text-[#666B67] hover:bg-[#FAF8F5] rounded-xl transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveRole}
+                    disabled={isSavingRole}
+                    className="px-3 py-1.5 text-[11px] font-black text-white bg-[#059669] hover:bg-[#047857] rounded-xl transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>{isSavingRole ? 'Saving...' : 'Save'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Target Company Badge (Separate & Editable) */}
