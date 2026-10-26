@@ -122,6 +122,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
   const monacoRef = useRef<any>(null);
   const decorationsRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const executionSeqRef = useRef<number>(0);
 
   const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -445,6 +446,7 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
   // 1. EXECUTE CODE ENGINE (Sends source code and stdin to execution engine)
   const executeCodeWithStdin = async (codeToRun: string, currentStdin: string) => {
+    const currentSeq = ++executionSeqRef.current;
     setExecuting(true);
     setOutputStatus('running');
     setIsWaitingForInput(false);
@@ -471,6 +473,9 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
         ...authHeader,
         signal: abortControllerRef.current.signal
       });
+
+      // Ignore if a newer execution run has already begun
+      if (currentSeq !== executionSeqRef.current) return;
 
       const data = res.data;
       const status = data.status || 'Accepted';
@@ -559,16 +564,19 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
         }, authHeader).catch(() => {});
       }
     } catch (err: any) {
+      if (currentSeq !== executionSeqRef.current) return;
       if (axios.isCancel(err)) {
         setOutputStatus('stopped');
         setStderr('Execution stopped by user.');
       } else {
         setOutputStatus('error');
-        setStderr(err.response?.data?.detail || 'Execution error occurred on server.');
+        setStderr(err.response?.data?.stderr || err.response?.data?.detail || 'Execution error occurred on server.');
       }
     } finally {
-      setExecuting(false);
-      abortControllerRef.current = null;
+      if (currentSeq === executionSeqRef.current) {
+        setExecuting(false);
+        abortControllerRef.current = null;
+      }
     }
   };
 
@@ -687,8 +695,21 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
 
   // 5. APPLY FIX (Visually & Immediately Updates Monaco Model instance and sessionStorage)
   const handleApplyFix = () => {
-    if (!aiDebugResult || !aiDebugResult.corrected_code) return;
-    const newCode = aiDebugResult.corrected_code;
+    if (!aiDebugResult || !aiDebugResult.corrected_code) {
+      setAiDebugError('No corrected code was provided by the Host Agent to apply.');
+      return;
+    }
+
+    let newCode = aiDebugResult.corrected_code;
+    // Strip markdown code fences if present in the proposed fix
+    if (newCode.startsWith('```')) {
+      newCode = newCode.replace(/^```[a-zA-Z0-9_-]*\n?/, '');
+    }
+    if (newCode.endsWith('```')) {
+      newCode = newCode.replace(/\n?```$/, '');
+    }
+    newCode = newCode.trim();
+
     const currentCode = editorRef.current ? editorRef.current.getValue() : sourceCode;
 
     // Store previous code version for Undo Fix capability
@@ -717,11 +738,17 @@ export const CodingSandbox: React.FC<CodingSandboxProps> = ({ token }) => {
       }));
     } catch (e) {}
 
+    // Update the active file in files array and mark unsaved
     setFiles(prev => prev.map(f => f.id === activeFileId ? { ...f, content: newCode, isSaved: false } : f));
 
+    // Reset error display state so the editor is clean and ready for the next run
     setFixApplied(true);
     clearErrorHighlight();
     setErrorLine(null);
+    setErrorType('');
+    setOutputStatus('idle');
+    setStdout('');
+    setStderr('');
 
     // Record fix applied in Host Agent
     axios.post('/api/v1/agent/events', {
