@@ -143,7 +143,7 @@ export default {
       const url = new URL(request.url);
 
       // Google OAuth Credentials
-      const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID;
+      const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID || env.VITE_GOOGLE_CLIENT_ID;
       const GOOGLE_CLIENT_SECRET = env.GOOGLE_CLIENT_SECRET;
       const GOOGLE_REDIRECT_URI = env.GOOGLE_REDIRECT_URI || `${url.origin}/api/v1/auth/google/callback`;
 
