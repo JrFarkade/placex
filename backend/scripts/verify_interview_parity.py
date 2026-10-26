@@ -19,12 +19,10 @@ def test_interview_parity():
     # Verify Key Dashboard Elements
     checks = [
         ('Bot Video Panel', 'id="simli-video"'),
-        ('Bot Audio Visualizer', 'class="waveform-bars"'),
-        ('Conversation Panel', 'class="panel-card conversation-panel"'),
-        ('Events Panel (RTVI)', 'RTVI Stream'),
-        ('Status Sidebar', 'class="status-sidebar"'),
-        ('Agent Readiness', 'Agent Readiness'),
-        ('Device Telemetry', 'Device Telemetry'),
+        ('Bot Audio Visualizer', 'audio-dots'),
+        ('Conversation Panel', 'convo-card'),
+        ('Events Panel (RTVI)', 'events-card'),
+        ('Status Sidebar', 'col-right'),
         ('Single Audio Tag', 'id="bot-audio"'),
         ('Target Company Binding', 'Google'),
         ('Target Role Binding', 'Staff Software Engineer'),

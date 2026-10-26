@@ -556,7 +556,7 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
               <span class="time" id="init-time">7:35:00 PM</span>
             </div>
             <div class="msg-body" id="convo-first-q">
-              Initializing live interview session for ${safeCompany}...
+              Initializing live interview session for ${safeCompany} (${safeRole})...
             </div>
           </div>
         </div>
@@ -607,6 +607,10 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
         <div class="session-meta-row">
           <span class="label">Transport</span>
           <div class="val-box"><span>SmallWebRTC</span></div>
+        </div>
+        <div class="session-meta-row">
+          <span class="label">Target Role</span>
+          <div class="val-box"><span>${safeRole}</span></div>
         </div>
         <div class="session-meta-row">
           <span class="label">Session ID</span>
