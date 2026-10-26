@@ -639,6 +639,8 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
     let isMuted = false;
     let pulseInterval = null;
     let lastSpokenText = "";
+    let isWebRTCReady = false;
+    let pendingQuestionText = null;
 
     const videoEl = document.getElementById('simli-video');
     const videoPlaceholder = document.getElementById('video-placeholder');
@@ -724,6 +726,14 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
     async function playQuestion(text) {
       if (!text || isMuted) return;
       if (lastSpokenText === text && isSpeaking) return;
+
+      // Gate: if WebRTC or WebSocket is not ready yet, queue the question and speak only when ready
+      if (!isWebRTCReady && (!webSocket || webSocket.readyState !== WebSocket.OPEN)) {
+        pendingQuestionText = text;
+        logEvent('webrtc', 'Avatar initializing — queuing speech until connection is ready');
+        return;
+      }
+
       lastSpokenText = text;
 
       // Update question text in conversation panel
@@ -808,7 +818,14 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
 
         if (!sessionData.available || !sessionData.session_token) {
           logEvent('webrtc', 'Simli session token unavailable — audio mode active');
+          isWebRTCReady = true;
+          emitParent('RTVI_READY');
           emitParent('RTVI_CONNECTED');
+          if (pendingQuestionText) {
+            const q = pendingQuestionText;
+            pendingQuestionText = null;
+            playQuestion(q);
+          }
           return;
         }
 
@@ -833,7 +850,14 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
         peerConnection.onconnectionstatechange = () => {
           if (peerConnection.connectionState === 'connected') {
             logEvent('webrtc', 'SmallWebRTC P2P connection established');
+            isWebRTCReady = true;
+            emitParent('RTVI_READY');
             emitParent('RTVI_CONNECTED');
+            if (pendingQuestionText) {
+              const q = pendingQuestionText;
+              pendingQuestionText = null;
+              playQuestion(q);
+            }
           }
         };
 
@@ -857,19 +881,40 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
             if (answer && answer.sdp) {
               await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
               logEvent('webrtc', 'Remote SDP answer applied');
+              isWebRTCReady = true;
+              emitParent('RTVI_READY');
               emitParent('RTVI_CONNECTED');
+              if (pendingQuestionText) {
+                const q = pendingQuestionText;
+                pendingQuestionText = null;
+                playQuestion(q);
+              }
             }
           } catch (e) {}
         };
 
         webSocket.onerror = (e) => {
           logEvent('webrtc', 'WebRTC signaling notice, fallback active');
+          isWebRTCReady = true;
+          emitParent('RTVI_READY');
           emitParent('RTVI_CONNECTED');
+          if (pendingQuestionText) {
+            const q = pendingQuestionText;
+            pendingQuestionText = null;
+            playQuestion(q);
+          }
         };
 
       } catch (err) {
         logEvent('webrtc', 'WebRTC gateway notice: ' + err.message);
+        isWebRTCReady = true;
+        emitParent('RTVI_READY');
         emitParent('RTVI_CONNECTED');
+        if (pendingQuestionText) {
+          const q = pendingQuestionText;
+          pendingQuestionText = null;
+          playQuestion(q);
+        }
       }
     }
 

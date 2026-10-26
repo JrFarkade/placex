@@ -123,11 +123,15 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   // Media Devices state (Camera + Mic)
   const [cameraActive, setCameraActive] = useState(false);
   const [permissionError, setPermissionError] = useState<string | null>(null);
+  const [micAudioLevel, setMicAudioLevel] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const lastSpokenTextRef = useRef<string>('');
   const lastSpokenTimeRef = useRef<number>(0);
+  const recognitionRef = useRef<any>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
   const companyRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
   const focusRef = useRef<HTMLDivElement>(null);
@@ -275,27 +279,72 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     }
   };
 
-  // Automatically speak the interview question and activate speech pipeline in Live Stage
+  // Initialize Web Speech Recognition for candidate microphone transcription
   useEffect(() => {
-    if (stage === 'live' && sessionData?.questions?.[currentQIndex]) {
-      const qText = sessionData.questions[currentQIndex];
-      const timer = setTimeout(() => {
-        setConnectionStatus('connected');
-        playQuestionAudio(qText);
-      }, 700);
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
 
-      return () => {
-        clearTimeout(timer);
-        if (audioPlayerRef.current) {
-          audioPlayerRef.current.pause();
-          audioPlayerRef.current = null;
+      recognition.onresult = (event: any) => {
+        let interim = '';
+        let final = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            final += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
         }
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
+        const full = (final + interim).trim();
+        if (full) {
+          setAnswerText(full);
         }
       };
+
+      recognition.onerror = (e: any) => {
+        if (e.error !== 'no-speech') {
+          console.warn('[SpeechRecognition] error:', e.error);
+        }
+      };
+
+      recognitionRef.current = recognition;
     }
-  }, [stage, currentQIndex, isSpeakerMuted]);
+
+    return () => {
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+    };
+  }, []);
+
+  // Synchronize candidate microphone listening with interview turns:
+  // When AI finishes speaking (botVoiceState becomes 'listening'), activate speech recognition
+  useEffect(() => {
+    if (!recognitionRef.current || isMicMuted) return;
+
+    if (stage === 'live' && botVoiceState === 'listening') {
+      try {
+        recognitionRef.current.start();
+      } catch (e) {
+        // Recognition may already be listening
+      }
+    } else {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
+    }
+  }, [stage, botVoiceState, isMicMuted]);
+
+  // Automatically speak the interview question strictly after connection readiness has been confirmed
+  useEffect(() => {
+    if (stage === 'live' && connectionStatus === 'connected' && sessionData?.questions?.[currentQIndex]) {
+      const qText = sessionData.questions[currentQIndex];
+      playQuestionAudio(qText);
+    }
+  }, [stage, connectionStatus, currentQIndex, isSpeakerMuted]);
 
   // Request browser webcam & microphone streams
   const startMedia = async () => {
@@ -305,10 +354,34 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
         video: { width: { ideal: 640 }, height: { ideal: 360 } }, 
         audio: true 
       });
+      mediaStreamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
       setCameraActive(true);
+
+      // Create AudioContext analyzer to react to candidate microphone input
+      try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        audioContextRef.current = audioCtx;
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+        const source = audioCtx.createMediaStreamSource(stream);
+        source.connect(analyser);
+
+        const dataArr = new Uint8Array(analyser.frequencyBinCount);
+        const pollVolume = () => {
+          if (!stream.active) return;
+          analyser.getByteFrequencyData(dataArr);
+          let sum = 0;
+          for (let i = 0; i < dataArr.length; i++) sum += dataArr[i];
+          const avg = sum / dataArr.length;
+          setMicAudioLevel(Math.min(100, Math.round((avg / 128) * 100)));
+          requestAnimationFrame(pollVolume);
+        };
+        pollVolume();
+      } catch (e) {}
+
     } catch (err: any) {
       console.warn("Media device request error:", err);
       setPermissionError("Webcam/Mic permission was denied. You can continue testing with real-time speech and geometric telemetry.");
@@ -317,12 +390,22 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   };
 
   const stopMedia = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach((track) => track.stop());
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
+    }
+    if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(() => {});
+      audioContextRef.current = null;
+    }
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch (e) {}
+    }
     setCameraActive(false);
+    setMicAudioLevel(0);
   };
 
   // Helper to toggle Focus Area selection
@@ -818,7 +901,16 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
                 </div>
 
                 <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-black/60 text-slate-300 backdrop-blur-sm">
-                  {isMicMuted ? <MicOff className="w-2.5 h-2.5 text-red-400" /> : <Mic className="w-2.5 h-2.5 text-emerald-400" />}
+                  {isMicMuted ? (
+                    <MicOff className="w-2.5 h-2.5 text-red-400" />
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <Mic className={`w-2.5 h-2.5 ${micAudioLevel > 15 ? 'text-emerald-400' : 'text-slate-400'}`} />
+                      {micAudioLevel > 15 && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
@@ -1036,12 +1128,20 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
               className={`p-2.5 rounded-xl border transition flex items-center gap-2 cursor-pointer ${
                 isMicMuted
                   ? 'bg-red-950/80 border-red-700 text-red-400'
+                  : micAudioLevel > 15
+                  ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                   : 'bg-[#17202D] border-[#263346] text-slate-200 hover:text-white'
               }`}
               title={isMicMuted ? "Unmute microphone" : "Mute microphone"}
             >
-              {isMicMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-emerald-400" />}
-              <span className="text-xs font-bold hidden sm:inline">{isMicMuted ? 'Muted' : 'Mic Active'}</span>
+              {isMicMuted ? (
+                <MicOff className="w-4 h-4" />
+              ) : (
+                <Mic className={`w-4 h-4 ${micAudioLevel > 15 ? 'text-emerald-400 animate-pulse' : 'text-emerald-400'}`} />
+              )}
+              <span className="text-xs font-bold hidden sm:inline">
+                {isMicMuted ? 'Muted' : micAudioLevel > 15 ? 'Speaking...' : 'Mic Active'}
+              </span>
             </button>
 
             <button
