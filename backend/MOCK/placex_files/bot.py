@@ -96,6 +96,8 @@ transport_params = {
         audio_out_enabled=True,
         video_in_enabled=True,
         video_out_enabled=True,
+        video_out_width=512,
+        video_out_height=512,
     ),
 }
 if DailyParams is not None:
@@ -634,7 +636,7 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
     user_aggregator, assistant_aggregator = LLMContextAggregatorPair(
         context,
         user_params=LLMUserAggregatorParams(
-            vad_analyzer=SileroVADAnalyzer(params=VADParams(stop_secs=0.35, start_secs=0.2)),
+            vad_analyzer=SileroVADAnalyzer(params=VADParams(stop_secs=0.35, start_secs=0.45)),
         ),
     )
 
@@ -691,6 +693,13 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
                             )
                         )
                         self._video_task = self.create_task(self._consume_and_process_video())
+                        self._video_task.add_done_callback(
+                            lambda t: logger.warning(
+                                f"[ResilientSimliVideoService] _video_task completed/terminated | "
+                                f"cancelled={t.cancelled()} | "
+                                f"exception={t.exception() if not t.cancelled() else None}"
+                            )
+                        )
                         logger.info("[Simli] avatar connection successfully established.")
                         return
                     except Exception as e:
@@ -714,6 +723,30 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
                             await asyncio.sleep(2)
                         else:
                             logger.warning("[Simli] avatar unavailable after 3 attempts, continuing audio-only.")
+
+            async def _consume_and_process_video(self):
+                """Consume video frames from Simli and push them downstream to WebRTC."""
+                logger.info("[ResilientSimliVideoService] _consume_and_process_video task started.")
+                try:
+                    video_iterator = self._simli_client.getVideoStreamIterator(targetFormat="rgb24")
+                    target_w = 512
+                    target_h = 512
+                    async for video_frame in video_iterator:
+                        try:
+                            pil_img = video_frame.to_rgb().to_image()
+                            if pil_img.size != (target_w, target_h):
+                                pil_img = pil_img.resize((target_w, target_h))
+                            convertedFrame = OutputImageRawFrame(
+                                image=pil_img.tobytes(),
+                                size=(target_w, target_h),
+                                format="RGB",
+                            )
+                            convertedFrame.pts = video_frame.pts
+                            await self.push_frame(convertedFrame)
+                        except Exception as frame_e:
+                            logger.trace(f"[Simli] Frame conversion error: {frame_e}")
+                except Exception as e:
+                    logger.warning(f"[Simli] _consume_and_process_video encountered error: {e}")
 
             async def _consume_and_process_audio(self):
                 """Consume audio frames from Simli and push them downstream."""

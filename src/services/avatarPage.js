@@ -1,4 +1,4 @@
-// PlaceX Live AI Interviewer Connected Dashboard (Bot Video, Bot Audio, Conversation, Status, Events)
+// PlaceX Live AI Mock Interview Console (100% Visual Parity with Localhost Pipecat Client)
 export function getAvatarHtml(company = "Target Company", role = "Software Engineer") {
   const safeCompany = company.replace(/"/g, '&quot;');
   const safeRole = role.replace(/"/g, '&quot;');
@@ -8,12 +8,12 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlaceX AI Interviewer Console</title>
+  <title>PlaceX Live Interview</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #090D16;
-      color: #F8FAFC;
+      background: #090D15;
+      color: #E2E8F0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       height: 100vh;
       width: 100vw;
@@ -22,521 +22,610 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       flex-direction: column;
     }
 
-    /* Top Sub-Bar */
-    .top-subbar {
-      height: 38px;
-      background: #0D121F;
-      border-bottom: 1px solid #1E2538;
+    /* 1. TOP HEADER (PlaceX Live Interview + Controls) */
+    .runner-header {
+      height: 44px;
+      background: #0D111A;
+      border-bottom: 1px solid #192231;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #94A3B8;
       flex-shrink: 0;
+      user-select: none;
     }
-    .top-subbar .left {
+    .runner-header .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-    .top-subbar .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #34D399;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-mono: monospace;
-    }
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #34D399;
-      box-shadow: 0 0 6px #34D399;
-    }
-    .badge-dot.connecting {
-      background: #F59E0B;
-      box-shadow: 0 0 6px #F59E0B;
-    }
-
-    /* Main Grid Layout */
-    .dashboard-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 12px;
-      padding: 12px;
-      overflow: hidden;
-      min-height: 0;
-    }
-
-    /* Left / Center Panels Stack */
-    .main-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-      min-height: 0;
-      padding-right: 2px;
-    }
-
-    /* Media Panels Row (Compact Bot Video + Bot Audio) */
-    .media-row {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 12px;
-      min-height: 220px;
-    }
-
-    /* Reusable Panel Card Styling */
-    .panel-card {
-      background: #0E1422;
-      border: 1px solid #1E273A;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    }
-    .panel-header {
-      height: 34px;
-      background: #12192A;
-      border-bottom: 1px solid #1E273A;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 12px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #CBD5E1;
-      flex-shrink: 0;
-    }
-    .panel-header .indicator {
-      font-size: 10px;
-      font-family: monospace;
-      color: #34D399;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .panel-content {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Compact Bot Video Container */
-    .bot-video-container {
-      width: 100%;
-      height: 100%;
-      min-height: 180px;
-      background: #070A12;
+    .brand-logo {
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .brand-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.01em;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .transport-pill {
+      background: #141B26;
+      border: 1px solid #233044;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .icon-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      background: #16202E;
+      color: #F8FAFC;
+      border-color: #233044;
+    }
+    .disconnect-btn {
+      background: #991B1B;
+      border: 1px solid #B91C1C;
+      color: #FEE2E2;
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .disconnect-btn:hover {
+      background: #DC2626;
+      color: #FFFFFF;
+    }
+
+    /* 2. MAIN 3-COLUMN GRID */
+    .runner-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 180px;
+      gap: 8px;
+      padding: 8px;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* Column 1: Bot Video, Bot Audio, Events */
+    .col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .card {
+      background: #0E131E;
+      border: 1px solid #1A2433;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .card-header {
+      height: 28px;
+      background: #111827;
+      border-bottom: 1px solid #1A2433;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      flex-shrink: 0;
+    }
+
+    /* Bot Video Container: Perfect 16:9 / 4:3 with zero weird cropping */
+    .bot-video-card {
+      flex: 1.25;
+      min-height: 190px;
       position: relative;
+    }
+    .bot-video-viewport {
+      flex: 1;
+      position: relative;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
     #simli-video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      background: #000000;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.4s ease;
     }
     #simli-video.active {
       opacity: 1;
     }
-
-    /* Fallback Orb inside Bot Video Panel */
-    .compact-orb-wrap {
+    .video-placeholder {
       position: absolute;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-      transition: opacity 0.4s ease;
+      gap: 8px;
+      color: #64748B;
+      background: #07090F;
+      transition: opacity 0.3s ease;
     }
-    .compact-orb-wrap.hidden {
+    .video-placeholder.hidden {
       opacity: 0;
       pointer-events: none;
     }
-    .compact-orb {
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #34D399, #059669 60%, #064E3B 100%);
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+    .video-placeholder svg {
+      width: 26px;
+      height: 26px;
+      opacity: 0.7;
+    }
+    .video-placeholder span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748B;
+    }
+
+    /* Bot Audio Container: 8 Pulsing Blue Dots */
+    .bot-audio-card {
+      height: 96px;
+      flex-shrink: 0;
+    }
+    .audio-dots-wrap {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 7px;
+      background: #0A0D15;
     }
-    .compact-orb-core {
-      width: 44px;
-      height: 44px;
+    .audio-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: #0A0E18;
+      background: #3B82F6;
+      box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+      transition: all 0.18s ease;
+      opacity: 0.6;
+    }
+    .audio-dot.pulse {
+      background: #60A5FA;
+      box-shadow: 0 0 12px #60A5FA;
+      transform: scale(1.4);
+      opacity: 1;
+    }
+
+    /* Events Panel: Collapsible Bar */
+    .events-card {
+      height: 72px;
+      flex-shrink: 0;
+    }
+    .events-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.45;
+      color: #94A3B8;
+      background: #080B12;
+    }
+    .event-line {
+      display: flex;
+      gap: 8px;
+    }
+    .event-line .time { color: #64748B; }
+    .event-line .tag { color: #38BDF8; font-weight: 700; }
+    .event-line .msg { color: #CBD5E1; }
+
+    /* Column 2: Conversation + Input */
+    .col-center {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .convo-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .tab-bar {
+      height: 32px;
+      background: #111827;
+      border-bottom: 1px solid #1A2433;
       display: flex;
       align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.6);
+      gap: 4px;
+      padding: 0 8px;
+      flex-shrink: 0;
     }
-    .compact-orb-text {
-      margin-top: 8px;
+    .tab-btn {
+      padding: 5px 10px;
       font-size: 11px;
       font-weight: 600;
       color: #94A3B8;
-    }
-
-    /* Bot Audio Visualizer Panel */
-    .audio-visualizer-wrap {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      background: #0B101C;
-    }
-    .waveform-bars {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      height: 46px;
-    }
-    .bar {
-      width: 5px;
-      background: #334155;
-      border-radius: 3px;
-      height: 8px;
-      transition: height 0.15s ease, background-color 0.2s ease;
-    }
-    .bar.speaking {
-      background: #34D399;
-      animation: waveBar 1.2s ease-in-out infinite alternate;
-    }
-    .bar:nth-child(1) { animation-delay: 0.1s; }
-    .bar:nth-child(2) { animation-delay: 0.3s; }
-    .bar:nth-child(3) { animation-delay: 0.5s; }
-    .bar:nth-child(4) { animation-delay: 0.2s; }
-    .bar:nth-child(5) { animation-delay: 0.4s; }
-    .bar:nth-child(6) { animation-delay: 0.25s; }
-    .bar:nth-child(7) { animation-delay: 0.15s; }
-
-    @keyframes waveBar {
-      0% { height: 8px; }
-      100% { height: 40px; }
-    }
-
-    .audio-meta {
-      margin-top: 12px;
-      font-size: 11px;
-      color: #94A3B8;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .audio-meta span.active {
-      color: #34D399;
-      font-weight: 700;
-    }
-
-    /* Conversation Panel */
-    .conversation-panel {
-      min-height: 160px;
-      max-height: 220px;
-    }
-    .convo-list {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      overflow-y: auto;
-      height: 100%;
-    }
-    .chat-bubble {
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .chat-bubble.bot {
-      background: #141C2C;
-      border: 1px solid #243046;
-      color: #F1F5F9;
-      align-self: flex-start;
-      max-width: 90%;
-    }
-    .chat-bubble.bot .speaker {
-      font-size: 10px;
-      font-weight: 800;
-      color: #34D399;
-      text-transform: uppercase;
-      font-family: monospace;
-      margin-bottom: 3px;
-    }
-    .chat-bubble.user {
-      background: #1A2538;
-      border: 1px solid #2F3E58;
-      color: #E2E8F0;
-      align-self: flex-end;
-      max-width: 85%;
-    }
-
-    /* Events Panel */
-    .events-panel {
-      min-height: 130px;
-      max-height: 180px;
-    }
-    .events-list {
-      padding: 8px 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 10px;
-      overflow-y: auto;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      background: #080C14;
-    }
-    .event-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #64748B;
-    }
-    .event-row .time { color: #475569; }
-    .event-row .tag {
-      padding: 1px 5px;
+      background: transparent;
+      border: 0;
       border-radius: 4px;
-      font-weight: 700;
-      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    .event-row.info .tag { background: #1E293B; color: #94A3B8; }
-    .event-row.speech .tag { background: rgba(16, 185, 129, 0.15); color: #34D399; }
-    .event-row.webrtc .tag { background: rgba(59, 130, 246, 0.15); color: #60A5FA; }
-
-    /* Right Status Sidebar */
-    .status-sidebar {
+    .tab-btn.active {
+      color: #F8FAFC;
+      background: #1A2433;
+    }
+    .convo-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      overflow-y: auto;
+      background: #0A0D15;
     }
-    .status-group {
-      background: #0E1422;
-      border: 1px solid #1E273A;
-      border-radius: 12px;
-      padding: 12px;
+    .msg-block {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 2px;
     }
-    .status-title {
+    .msg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .msg-header.user { color: #38BDF8; }
+    .msg-header.bot { color: #34D399; }
+    .msg-header .time { color: #64748B; font-weight: 400; text-transform: none; }
+    .msg-body {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #F1F5F9;
+      background: #101623;
+      border: 1px solid #1F2A3C;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-top: 3px;
+    }
+    .convo-input-row {
+      height: 40px;
+      background: #0E131E;
+      border-top: 1px solid #1A2433;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .convo-input {
+      flex: 1;
+      height: 28px;
+      background: #141B26;
+      border: 1px solid #233044;
+      border-radius: 6px;
+      padding: 0 10px;
+      color: #F8FAFC;
       font-size: 11px;
+      outline: none;
+    }
+    .convo-input::placeholder { color: #64748B; }
+    .convo-send-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Column 3: Status Sidebar */
+    .col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 10px;
+      background: #0B0F18;
+      border: 1px solid #1A2433;
+      border-radius: 8px;
+      font-size: 11px;
+      overflow-y: auto;
+    }
+    .status-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .status-heading {
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      color: #64748B;
+      margin-bottom: 2px;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       color: #94A3B8;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #1A2234;
+      font-size: 11px;
     }
-    .status-metric {
+    .status-row .ready {
+      color: #22C55E;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .device-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .device-btn {
+      height: 30px;
+      background: #111722;
+      border: 1px solid #1F2A3B;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #CBD5E1;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .device-btn.muted {
+      background: rgba(185, 28, 28, 0.15);
+      border-color: #991B1B;
+      color: #EF4444;
+    }
+    .session-meta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    .session-meta-row .label {
+      font-size: 10px;
+      color: #64748B;
+    }
+    .session-meta-row .val-box {
+      background: #111722;
+      border: 1px solid #1F2A3B;
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 10px;
+      color: #CBD5E1;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 11px;
     }
-    .status-metric .label { color: #64748B; font-weight: 600; }
-    .status-metric .val { color: #E2E8F0; font-family: monospace; font-weight: 700; }
-    .status-metric .val.online { color: #34D399; }
-    .status-metric .val.speaking { color: #10B981; }
-
-    .device-pill {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 10px;
-      border-radius: 8px;
-      background: #131A2B;
-      font-size: 11px;
-    }
-    .device-pill span.name { color: #CBD5E1; font-weight: 600; }
-    .device-pill span.state { color: #34D399; font-weight: 700; font-size: 10px; font-family: monospace; }
   </style>
 </head>
 <body>
-  <!-- Top Sub-Bar -->
-  <div class="top-subbar">
-    <div class="left">
-      <div class="badge">
-        <span class="badge-dot" id="header-dot"></span>
-        <span id="header-status">Client Connected</span>
+
+  <!-- Top Runner Header -->
+  <header class="runner-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 18V6l8 8 8-8v12"/>
+        </svg>
       </div>
-      <span>Target: <strong style="color: #F8FAFC;">${safeCompany}</strong> · ${safeRole}</span>
+      <span class="brand-title">PlaceX Live Interview</span>
     </div>
-    <div>
-      <span style="font-family: monospace;">Transport: <strong style="color: #34D399;">WebRTC (P2P)</strong></span>
+
+    <div class="header-actions">
+      <div class="transport-pill">
+        <span>SmallWebRTC</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+
+      <button class="icon-btn" title="Toggle theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+
+      <button class="icon-btn" title="Audio controls">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </button>
+
+      <button class="icon-btn" title="Layout options">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+
+      <button class="disconnect-btn" id="disconnect-btn">Disconnect</button>
     </div>
-  </div>
+  </header>
 
-  <!-- Main Connected-Interview Dashboard Grid -->
-  <div class="dashboard-grid">
-    <!-- Left Main Column -->
-    <div class="main-stack">
-      <!-- Media Row: Compact Bot Video + Bot Audio -->
-      <div class="media-row">
-        <!-- Compact Bot Video Panel -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <span>Bot video</span>
-            <div class="indicator">
-              <span class="badge-dot" id="video-dot"></span>
-              <span id="video-status-txt">Ready</span>
-            </div>
-          </div>
-          <div class="panel-content bot-video-container">
-            <video id="simli-video" autoplay playsinline muted></video>
-            <div id="orb-placeholder" class="compact-orb-wrap">
-              <div class="compact-orb">
-                <div class="compact-orb-core">
-                  <div style="width: 8px; height: 8px; background: #34D399; border-radius: 50%; box-shadow: 0 0 8px #34D399;"></div>
-                </div>
-              </div>
-              <div class="compact-orb-text" id="avatar-label">AI Interviewer Avatar</div>
-            </div>
-          </div>
+  <!-- Main 3-Column Body -->
+  <main class="runner-body">
+
+    <!-- Left Column: Video, Audio, Events -->
+    <section class="col-left">
+      <!-- Bot Video Card -->
+      <div class="card bot-video-card">
+        <div class="card-header">
+          <span>BOT VIDEO</span>
         </div>
-
-        <!-- Separate Bot Audio Panel -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <span>Bot audio</span>
-            <div class="indicator" id="audio-status-txt">
-              <span>Idle</span>
-            </div>
-          </div>
-          <div class="panel-content audio-visualizer-wrap">
-            <div class="waveform-bars">
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-            </div>
-            <div class="audio-meta">
-              <span id="audio-speaker-label">Voice: ElevenLabs Sarah</span>
-              <span>•</span>
-              <span id="audio-state-badge" class="active">Listening</span>
-            </div>
+        <div class="bot-video-viewport">
+          <video id="simli-video" playsinline autoplay muted></video>
+          <div class="video-placeholder" id="video-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 3-3V7a2 2 0 0 0-2-2H7m-4 0v14a2 2 0 0 0 2 2h14"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            <span>No video</span>
           </div>
         </div>
       </div>
 
-      <!-- Conversation Panel -->
-      <div class="panel-card conversation-panel">
-        <div class="panel-header">
-          <span>Conversation</span>
-          <span style="font-size: 10px; color: #64748B; font-family: monospace;" id="msg-counter">1 entry</span>
+      <!-- Bot Audio Card -->
+      <div class="card bot-audio-card">
+        <div class="card-header">
+          <span>BOT AUDIO</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         </div>
-        <div class="panel-content convo-list" id="convo-container">
-          <div class="chat-bubble bot">
-            <div class="speaker">AI Interviewer</div>
-            <div id="convo-bot-q">Initializing technical interview session...</div>
-          </div>
+        <div class="audio-dots-wrap" id="audio-dots">
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
+          <span class="audio-dot"></span>
         </div>
       </div>
 
-      <!-- Events Panel -->
-      <div class="panel-card events-panel">
-        <div class="panel-header">
-          <span>Events</span>
-          <span style="font-size: 10px; color: #64748B; font-family: monospace;">RTVI Stream</span>
+      <!-- Events Card -->
+      <div class="card events-card">
+        <div class="card-header">
+          <span>EVENTS</span>
+          <span style="font-size: 9px; color: #64748B;">Filter...</span>
         </div>
-        <div class="panel-content events-list" id="events-container">
-          <div class="event-row info">
+        <div class="events-scroll" id="events-log">
+          <div class="event-line">
             <span class="time">00:00:01</span>
-            <span class="tag">client</span>
-            <span>Client initialized in interview session</span>
+            <span class="tag">[webrtc]</span>
+            <span class="msg">SmallWebRTC client initialized</span>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Center Column: Conversation -->
+    <section class="col-center">
+      <div class="card convo-card">
+        <div class="tab-bar">
+          <button class="tab-btn active">Conversation</button>
+          <button class="tab-btn">Metrics</button>
+          <button class="tab-btn">
+            <span>karaoke</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+
+        <div class="convo-messages" id="convo-messages">
+          <div class="msg-block">
+            <div class="msg-header bot">
+              <span>AI Interviewer</span>
+              <span class="time" id="init-time">7:35:00 PM</span>
+            </div>
+            <div class="msg-body" id="convo-first-q">
+              Initializing live interview session for ${safeCompany}...
+            </div>
+          </div>
+        </div>
+
+        <div class="convo-input-row">
+          <input type="text" class="convo-input" id="chat-input" placeholder="Type message..." />
+          <button class="convo-send-btn" id="chat-send" title="Send message">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
 
     <!-- Right Column: Status Sidebar -->
-    <div class="status-sidebar">
-      <div class="status-group">
-        <div class="status-title">Agent Readiness</div>
-        <div class="status-metric">
-          <span class="label">Client State</span>
-          <span class="val online" id="stat-client-state">Connected</span>
+    <aside class="col-right">
+      <div class="status-section">
+        <div class="status-heading">STATUS</div>
+        <div class="status-row">
+          <span>Client</span>
+          <span class="ready" id="status-client">READY</span>
         </div>
-        <div class="status-metric">
-          <span class="label">Agent State</span>
-          <span class="val" id="stat-agent-state" style="color: #60A5FA;">Listening</span>
-        </div>
-        <div class="status-metric">
-          <span class="label">Audio Pipeline</span>
-          <span class="val online">ElevenLabs Active</span>
-        </div>
-        <div class="status-metric">
-          <span class="label">Video Transport</span>
-          <span class="val" id="stat-webrtc-state">Negotiating...</span>
+        <div class="status-row">
+          <span>Agent</span>
+          <span class="ready" id="status-agent">READY</span>
         </div>
       </div>
 
-      <div class="status-group">
-        <div class="status-title">Device Telemetry</div>
-        <div class="device-pill">
-          <span class="name">Bot Video Track</span>
-          <span class="state" id="dev-video-state">Standby</span>
-        </div>
-        <div class="device-pill">
-          <span class="name">Bot Audio Channel</span>
-          <span class="state" id="dev-audio-state">Active</span>
-        </div>
-        <div class="device-pill">
-          <span class="name">Latency (RTT)</span>
-          <span class="state" style="color: #94A3B8;">~32ms</span>
+      <div class="status-section">
+        <div class="status-heading">DEVICES</div>
+        <div class="device-buttons">
+          <button class="device-btn" title="Microphone">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            <span style="letter-spacing: 2px; color: #22C55E; font-size: 8px;">•••••</span>
+          </button>
+
+          <button class="device-btn muted" title="Camera muted">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 3-3V7a2 2 0 0 0-2-2H7m-4 0v14a2 2 0 0 0 2 2h14"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+          </button>
+
+          <button class="device-btn" title="Share Screen">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </button>
         </div>
       </div>
 
-      <div class="status-group">
-        <div class="status-title">Session Context</div>
-        <div class="status-metric">
-          <span class="label">Target</span>
-          <span class="val" style="color: #CBD5E1;">${safeCompany}</span>
+      <div class="status-section">
+        <div class="status-heading">SESSION</div>
+        <div class="session-meta-row">
+          <span class="label">Transport</span>
+          <div class="val-box"><span>SmallWebRTC</span></div>
         </div>
-        <div class="status-metric">
-          <span class="label">Role</span>
-          <span class="val" style="color: #CBD5E1;">${safeRole}</span>
+        <div class="session-meta-row">
+          <span class="label">Session ID</span>
+          <div class="val-box">
+            <span id="session-id-txt">1</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          </div>
         </div>
-        <div class="status-metric">
-          <span class="label">Voice Model</span>
-          <span class="val" style="color: #34D399;">Sarah (Flash v2.5)</span>
+        <div class="session-meta-row">
+          <span class="label">Participant ID</span>
+          <div class="val-box">
+            <span>usr_cand</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </aside>
+  </main>
 
-  <!-- Single Audio Element to Guarantee 1x Playback Instance -->
   <audio id="bot-audio" preload="auto"></audio>
 
   <script>
@@ -544,80 +633,101 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
     let webSocket = null;
     let isSpeaking = false;
     let isMuted = false;
-    let currentSpeechText = null;
+    let pulseInterval = null;
+    let lastSpokenText = "";
 
     const videoEl = document.getElementById('simli-video');
+    const videoPlaceholder = document.getElementById('video-placeholder');
     const audioEl = document.getElementById('bot-audio');
-    const orbPlaceholder = document.getElementById('orb-placeholder');
-    const convoContainer = document.getElementById('convo-container');
-    const convoBotQ = document.getElementById('convo-bot-q');
-    const eventsContainer = document.getElementById('events-container');
-    const audioBars = document.querySelectorAll('.waveform-bars .bar');
-    const statAgentState = document.getElementById('stat-agent-state');
-    const statWebRTCState = document.getElementById('stat-webrtc-state');
-    const devVideoState = document.getElementById('dev-video-state');
-    const audioStateBadge = document.getElementById('audio-state-badge');
-    const audioStatusTxt = document.getElementById('audio-status-txt');
+    const audioDots = document.querySelectorAll('.audio-dot');
+    const eventsLog = document.getElementById('events-log');
+    const convoMessages = document.getElementById('convo-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const disconnectBtn = document.getElementById('disconnect-btn');
 
-    function getTimestamp() {
-      const now = new Date();
-      return now.toTimeString().split(' ')[0];
+    function getFormattedTime() {
+      const d = new Date();
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
 
-    function addEventLog(tag, msg, type = 'info') {
-      if (!eventsContainer) return;
+    const initTimeEl = document.getElementById('init-time');
+    if (initTimeEl) initTimeEl.textContent = getFormattedTime();
+
+    function logEvent(tag, msg) {
+      if (!eventsLog) return;
       const row = document.createElement('div');
-      row.className = 'event-row ' + type;
-      row.innerHTML = '<span class="time">' + getTimestamp() + '</span><span class="tag">' + tag + '</span><span>' + msg + '</span>';
-      eventsContainer.appendChild(row);
-      eventsContainer.scrollTop = eventsContainer.scrollHeight;
+      row.className = 'event-line';
+      row.innerHTML = '<span class="time">' + getFormattedTime() + '</span><span class="tag">[' + tag + ']</span><span class="msg">' + msg + '</span>';
+      eventsLog.appendChild(row);
+      eventsLog.scrollTop = eventsLog.scrollHeight;
     }
 
-    function emitEvent(type, data) {
+    function emitParent(type, data) {
       try {
         if (window.parent && window.parent !== window) {
-          window.parent.postMessage({ type: type, data: data }, '*');
+          window.parent.postMessage({ type, data }, '*');
         }
       } catch (e) {}
     }
 
-    // Set Audio State (Speaking vs Listening)
+    // Dot Waveform Animation
     function setAudioSpeaking(speaking) {
       isSpeaking = speaking;
       if (speaking) {
-        audioBars.forEach(b => b.classList.add('speaking'));
-        if (statAgentState) { statAgentState.textContent = 'Speaking'; statAgentState.style.color = '#10B981'; }
-        if (audioStateBadge) { audioStateBadge.textContent = 'Speaking'; audioStateBadge.style.color = '#10B981'; }
-        if (audioStatusTxt) audioStatusTxt.innerHTML = '<span style="color: #10B981; font-weight: 700;">Active</span>';
-        addEventLog('speech', 'Bot started speaking response', 'speech');
-        emitEvent('RTVI_BOT_SPEAKING');
+        if (!pulseInterval) {
+          let step = 0;
+          pulseInterval = setInterval(() => {
+            audioDots.forEach((dot, idx) => {
+              if (idx === step % audioDots.length || idx === (step + 1) % audioDots.length) {
+                dot.classList.add('pulse');
+              } else {
+                dot.classList.remove('pulse');
+              }
+            });
+            step++;
+          }, 120);
+        }
+        logEvent('speech', 'Bot started speaking');
+        emitParent('RTVI_BOT_SPEAKING');
       } else {
-        audioBars.forEach(b => b.classList.remove('speaking'));
-        if (statAgentState) { statAgentState.textContent = 'Listening'; statAgentState.style.color = '#60A5FA'; }
-        if (audioStateBadge) { audioStateBadge.textContent = 'Listening'; audioStateBadge.style.color = '#34D399'; }
-        if (audioStatusTxt) audioStatusTxt.innerHTML = '<span>Idle</span>';
-        addEventLog('speech', 'Bot finished speaking — ready for input', 'speech');
-        emitEvent('RTVI_BOT_IDLE');
+        if (pulseInterval) {
+          clearInterval(pulseInterval);
+          pulseInterval = null;
+        }
+        audioDots.forEach(d => d.classList.remove('pulse'));
+        logEvent('speech', 'Bot finished speaking — ready for input');
+        emitParent('RTVI_BOT_IDLE');
       }
     }
 
-    // 1. Play Single-Instance ElevenLabs TTS Audio
-    async function playInterviewerAudio(text) {
+    // Add chat message bubble
+    function addChatMessage(speaker, text) {
+      if (!convoMessages || !text) return;
+      const block = document.createElement('div');
+      block.className = 'msg-block';
+      const isUser = speaker.toLowerCase() === 'user';
+      block.innerHTML = '<div class="msg-header ' + (isUser ? 'user' : 'bot') + '">' +
+        '<span>' + (isUser ? 'user' : 'AI Interviewer') + '</span>' +
+        '<span class="time">' + getFormattedTime() + '</span>' +
+        '</div>' +
+        '<div class="msg-body">' + text + '</div>';
+      convoMessages.appendChild(block);
+      convoMessages.scrollTop = convoMessages.scrollHeight;
+    }
+
+    // Play TTS Audio and stream PCM chunks to Simli for lip-sync & movement
+    async function playQuestion(text) {
       if (!text || isMuted) return;
+      if (lastSpokenText === text && isSpeaking) return;
+      lastSpokenText = text;
 
-      // Deduplicate rapid consecutive triggers of identical question text
-      if (isSpeaking && currentSpeechText === text) {
-        return;
-      }
-      currentSpeechText = text;
-
-      // Update Conversation Panel
-      if (convoBotQ) convoBotQ.textContent = text;
-
-      // Stop any prior playback to prevent overlaps
-      if (audioEl) {
-        audioEl.pause();
-        audioEl.currentTime = 0;
+      // Update question text in conversation panel
+      const firstQ = document.getElementById('convo-first-q');
+      if (firstQ && firstQ.textContent.includes('Initializing')) {
+        firstQ.textContent = text;
+      } else {
+        addChatMessage('AI Interviewer', text);
       }
 
       setAudioSpeaking(true);
@@ -629,31 +739,53 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
           body: JSON.stringify({ text })
         });
 
-        if (!res.ok) {
-          throw new Error('TTS returned status ' + res.status);
+        if (!res.ok) throw new Error('TTS status ' + res.status);
+
+        const arrayBuf = await res.arrayBuffer();
+
+        // 1. Send PCM chunks to Simli WebSocket for facial expressions & mouth lip-sync
+        try {
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+          const audioBuf = await audioCtx.decodeAudioData(arrayBuf.slice(0));
+          const channelData = audioBuf.getChannelData(0);
+
+          const int16 = new Int16Array(channelData.length);
+          for (let i = 0; i < channelData.length; i++) {
+            const s = Math.max(-1, Math.min(1, channelData[i]));
+            int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+          }
+
+          if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+            const bytes = new Uint8Array(int16.buffer);
+            const chunkSize = 6000;
+            for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+              const chunk = bytes.slice(offset, offset + chunkSize);
+              webSocket.send(chunk);
+            }
+            logEvent('simli', 'Streamed ' + bytes.length + ' bytes PCM to Simli avatar');
+          }
+        } catch (simliErr) {
+          console.warn('[Simli PCM error]', simliErr);
         }
 
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        audioEl.src = url;
-
+        // 2. Play audio stream locally through bot-audio
+        const blob = new Blob([arrayBuf], { type: 'audio/mpeg' });
+        const blobUrl = URL.createObjectURL(blob);
+        audioEl.src = blobUrl;
         audioEl.onended = () => {
           setAudioSpeaking(false);
-          URL.revokeObjectURL(url);
+          URL.revokeObjectURL(blobUrl);
         };
         audioEl.onerror = () => {
           setAudioSpeaking(false);
-          URL.revokeObjectURL(url);
+          URL.revokeObjectURL(blobUrl);
         };
-
         await audioEl.play();
+
       } catch (err) {
-        console.warn('[Avatar Console] ElevenLabs stream error, falling back to Web Speech:', err);
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
+        logEvent('error', 'Audio playback error: ' + err.message);
+        if ('speechSynthesis' in window && !isMuted) {
           const utt = new SpeechSynthesisUtterance(text);
-          utt.rate = 1.0;
-          utt.pitch = 1.05;
           utt.onend = () => setAudioSpeaking(false);
           utt.onerror = () => setAudioSpeaking(false);
           window.speechSynthesis.speak(utt);
@@ -663,20 +795,16 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       }
     }
 
-    // 2. Real-Time Simli WebRTC Connection (Compact Bot Video Panel)
+    // Connect to Simli WebRTC Video Stream
     async function initWebRTC() {
-      addEventLog('webrtc', 'Requesting Simli WebRTC session token...', 'webrtc');
-      if (statWebRTCState) statWebRTCState.textContent = 'Connecting...';
-
+      logEvent('webrtc', 'Connecting to Simli WebRTC gateway...');
       try {
         const sessionRes = await fetch('/api/v1/interview/simli-session');
         const sessionData = await sessionRes.json();
 
         if (!sessionData.available || !sessionData.session_token) {
-          addEventLog('webrtc', 'Simli session token unavailable, audio mode active', 'info');
-          if (statWebRTCState) statWebRTCState.textContent = 'Audio-Only';
-          if (devVideoState) devVideoState.textContent = 'Audio Only';
-          emitEvent('RTVI_CONNECTED');
+          logEvent('webrtc', 'Simli session token unavailable — audio mode active');
+          emitParent('RTVI_CONNECTED');
           return;
         }
 
@@ -693,21 +821,15 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
             videoEl.srcObject = event.streams[0];
             videoEl.play().catch(() => {});
             videoEl.classList.add('active');
-            if (orbPlaceholder) orbPlaceholder.classList.add('hidden');
-            if (statWebRTCState) statWebRTCState.textContent = 'P2P Connected';
-            if (devVideoState) devVideoState.textContent = '720p Active';
-            addEventLog('webrtc', 'Remote video track attached to Bot Video panel', 'webrtc');
+            if (videoPlaceholder) videoPlaceholder.classList.add('hidden');
+            logEvent('webrtc', 'Remote avatar video track attached (512x512)');
           }
         };
 
         peerConnection.onconnectionstatechange = () => {
           if (peerConnection.connectionState === 'connected') {
-            if (statWebRTCState) statWebRTCState.textContent = 'P2P Connected';
-            addEventLog('webrtc', 'WebRTC peer connection established', 'webrtc');
-            emitEvent('RTVI_CONNECTED');
-          } else if (peerConnection.connectionState === 'failed') {
-            if (statWebRTCState) statWebRTCState.textContent = 'Audio Passthrough';
-            addEventLog('webrtc', 'Peer connection fallback to audio pipeline', 'info');
+            logEvent('webrtc', 'SmallWebRTC P2P connection established');
+            emitParent('RTVI_CONNECTED');
           }
         };
 
@@ -718,7 +840,7 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
         webSocket = new WebSocket(wsUrl);
 
         webSocket.onopen = () => {
-          addEventLog('webrtc', 'WebSocket signaling channel open, sending offer', 'webrtc');
+          logEvent('webrtc', 'WebSocket open, sending SDP offer');
           webSocket.send(JSON.stringify({
             sdp: peerConnection.localDescription.sdp,
             type: peerConnection.localDescription.type
@@ -730,40 +852,38 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
             const answer = JSON.parse(msg.data);
             if (answer && answer.sdp) {
               await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-              addEventLog('webrtc', 'Remote SDP answer applied successfully', 'webrtc');
-              emitEvent('RTVI_CONNECTED');
+              logEvent('webrtc', 'Remote SDP answer applied');
+              emitParent('RTVI_CONNECTED');
             }
           } catch (e) {}
         };
 
-        webSocket.onerror = (err) => {
-          addEventLog('webrtc', 'Signaling channel error, continuing in audio mode', 'info');
-          emitEvent('RTVI_CONNECTED');
+        webSocket.onerror = (e) => {
+          logEvent('webrtc', 'WebRTC signaling notice, fallback active');
+          emitParent('RTVI_CONNECTED');
         };
 
       } catch (err) {
-        addEventLog('webrtc', 'WebRTC initialization error: ' + err.message, 'info');
-        emitEvent('RTVI_CONNECTED');
+        logEvent('webrtc', 'WebRTC gateway notice: ' + err.message);
+        emitParent('RTVI_CONNECTED');
       }
     }
 
-    // 3. Message Coordination with Parent Window
-    window.addEventListener('message', function(ev) {
+    // Message handler from parent window
+    window.addEventListener('message', (ev) => {
       if (!ev.data || typeof ev.data !== 'object') return;
       const type = ev.data.type;
 
       switch (type) {
         case 'PLACEX_SPEAK':
-          if (ev.data.text) {
-            playInterviewerAudio(ev.data.text);
-          }
+          if (ev.data.text) playQuestion(ev.data.text);
           break;
 
         case 'PLACEX_CONNECT':
           if (!peerConnection || peerConnection.connectionState !== 'connected') {
             initWebRTC();
           } else {
-            emitEvent('RTVI_CONNECTED');
+            emitParent('RTVI_CONNECTED');
           }
           break;
 
@@ -786,13 +906,36 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
             try { webSocket.close(); } catch (e) {}
             webSocket = null;
           }
-          emitEvent('RTVI_DISCONNECTED');
+          emitParent('RTVI_DISCONNECTED');
           break;
       }
     });
 
-    window.addEventListener('load', function() {
-      emitEvent('RTVI_READY');
+    // Chat input submit
+    if (chatSend && chatInput) {
+      chatSend.addEventListener('click', () => {
+        const val = chatInput.value.trim();
+        if (val) {
+          addChatMessage('user', val);
+          chatInput.value = '';
+          emitParent('RTVI_USER_SPEAKING');
+        }
+      });
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          chatSend.click();
+        }
+      });
+    }
+
+    if (disconnectBtn) {
+      disconnectBtn.addEventListener('click', () => {
+        emitParent('RTVI_DISCONNECTED');
+      });
+    }
+
+    window.addEventListener('load', () => {
+      emitParent('RTVI_READY');
       setTimeout(initWebRTC, 200);
     });
   </script>
