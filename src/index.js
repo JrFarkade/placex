@@ -44,7 +44,8 @@ export default {
       async function callGemini(prompt) {
         const apiKey = env.GEMINI_API_KEY;
         if (!apiKey) return null;
-        const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
+        const preferredModel = env.GEMINI_MODEL || 'gemini-flash-lite-latest';
+        const models = [preferredModel, 'gemini-flash-lite-latest', 'gemini-flash-latest'];
         for (const model of models) {
           try {
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
