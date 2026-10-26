@@ -726,8 +726,10 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
 
             async def _consume_and_process_video(self):
                 """Consume video frames from Simli and push them downstream to WebRTC."""
-                logger.info("[ResilientSimliVideoService] _consume_and_process_video task started.")
+                logger.info("[ResilientSimliVideoService] _consume_and_process_video task started (waiting for resampler).")
                 try:
+                    await self._pipecat_resampler_event.wait()
+                    logger.info("[ResilientSimliVideoService] resampler ready — consuming video frames from Simli.")
                     video_iterator = self._simli_client.getVideoStreamIterator(targetFormat="rgb24")
                     target_w = 512
                     target_h = 512
@@ -779,13 +781,17 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
                 is_tts_audio = isinstance(frame, TTSAudioRawFrame)
                 has_client = getattr(self, "_simli_client", None) is not None
                 has_conn = has_client and getattr(self._simli_client, "Connection", None) is not None
-                is_connected = bool(self._initialized and has_client and has_conn)
+                is_running = getattr(getattr(getattr(self, "_simli_client", None), "run", None), "run", False)
+                audio_task_alive = getattr(self, "_audio_task", None) is not None and not self._audio_task.done()
+
+                # Simli is genuinely connected only if client, connection, run loop, and audio consumer task are all active
+                is_connected = bool(self._initialized and has_client and has_conn and is_running and audio_task_alive)
 
                 if is_tts_audio:
                     logger.debug(
                         f"[ResilientSimliVideoService] TTSAudioRawFrame received | "
-                        f"_initialized={self._initialized} | has_client={has_client} | "
-                        f"has_conn={has_conn} | is_connected_branch={is_connected}"
+                        f"_initialized={self._initialized} | is_running={is_running} | "
+                        f"audio_task_alive={audio_task_alive} | is_connected_branch={is_connected}"
                     )
                 elif isinstance(frame, (InterruptionFrame, UserStartedSpeakingFrame)):
                     logger.debug(
@@ -801,9 +807,9 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
 
                 if not is_connected:
                     self._initialized = False
-                    await super(SimliVideoService, self).process_frame(frame, direction)
+                    # Audio-only fallback: push audio frame directly downstream to ensure candidate hears interviewer
                     if is_tts_audio:
-                        logger.debug("[ResilientSimliVideoService] fallback branch -> calling push_frame(frame)")
+                        logger.debug("[ResilientSimliVideoService] fallback branch -> pushing TTS audio directly downstream")
                     await self.push_frame(frame, direction)
                     return
 
@@ -850,6 +856,11 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
     @transport.event_handler("on_client_disconnected")
     async def on_client_disconnected(transport, client):
         logger.info("Candidate disconnected — finalizing Live Brain session")
+        if simli is not None:
+            try:
+                await simli._stop_connection()
+            except Exception:
+                pass
         await task.cancel()
         collector.trigger_scoring()
 
@@ -857,6 +868,11 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
     try:
         await runner.run(task)
     finally:
+        if simli is not None:
+            try:
+                await simli._stop_connection()
+            except Exception:
+                pass
         # Guarantee scoring triggers on session completion / graceful exit
         collector.trigger_scoring()
 

@@ -213,13 +213,25 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
 
     setBotVoiceState('speaking');
 
-    // 1. Send coordination message to iframe avatar (which hosts the single bot audio player)
-    if (iframeRef.current?.contentWindow) {
+    // Differentiate between Cloudflare avatar iframe (/api/v1/interview/avatar) and localhost Pipecat WebRTC runner (port 7860)
+    const isLocalhostPipecat = Boolean(
+      sessionData?.live_brain?.webrtc_url &&
+      sessionData.live_brain.webrtc_url.includes('7860')
+    );
+
+    // 1. If running Cloudflare avatar iframe, route speech via postMessage to avatarPage.js
+    if (!isLocalhostPipecat && iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_SPEAK', text }, '*');
       return;
     }
 
-    // 2. Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback ONLY if iframe is absent
+    // 2. On localhost Pipecat, automatic speech generation is handled natively by bot.py via WebRTC.
+    // If this is an automatic turn trigger (!force), do not double-play in parent window to avoid echo.
+    if (isLocalhostPipecat && !force) {
+      return;
+    }
+
+    // 3. Explicit user replay or fallback: Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback
     try {
       if (audioPlayerRef.current) {
         audioPlayerRef.current.pause();
