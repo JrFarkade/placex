@@ -140,23 +140,113 @@ export default {
           };
         }
 
-        // Resilient cascade: try models
-        for (const model of uniqueModels) {
-          try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(requestBody)
-            });
-            if (resp.ok) {
-              const data = await resp.json();
-              const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (text && text.trim()) return text.trim();
+        // Tier 1: Direct Google Gemini Native REST API
+        if (apiKey) {
+          for (const model of uniqueModels) {
+            try {
+              const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+              });
+              if (resp.ok) {
+                const data = await resp.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text && text.trim()) return text.trim();
+              } else {
+                const errBody = await resp.text();
+                console.warn(`[callGemini] Google Native ${model} returned HTTP ${resp.status}:`, errBody.slice(0, 200));
+              }
+            } catch (err) {
+              console.warn(`[callGemini] Google Native ${model} exception:`, err.message);
             }
-          } catch (err) {
-            // try next model
+          }
+
+          // Tier 2: Google Gemini OpenAI-Compatible Endpoint
+          try {
+            const openaiMessages = [];
+            if (systemInstruction) {
+              openaiMessages.push({ role: 'system', content: String(systemInstruction) });
+            }
+            if (Array.isArray(history)) {
+              for (const h of history.slice(-6)) {
+                openaiMessages.push({
+                  role: (h.role === 'model' || h.role === 'agent') ? 'assistant' : 'user',
+                  content: String(h.text || h.content || h.message || '')
+                });
+              }
+            }
+            openaiMessages.push({ role: 'user', content: String(prompt) });
+
+            const oaiResp = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+              },
+              body: JSON.stringify({
+                model: preferredModel,
+                messages: openaiMessages,
+                temperature: 0.35,
+                max_tokens: maxTokens
+              })
+            });
+            if (oaiResp.ok) {
+              const oaiData = await oaiResp.json();
+              const reply = oaiData.choices?.[0]?.message?.content;
+              if (reply && reply.trim()) return reply.trim();
+            } else {
+              const oaiErr = await oaiResp.text();
+              console.warn('[callGemini] Google OpenAI endpoint returned HTTP', oaiResp.status, oaiErr.slice(0, 200));
+            }
+          } catch (oaiEx) {
+            console.warn('[callGemini] Google OpenAI endpoint exception:', oaiEx.message);
           }
         }
+
+        // Tier 3: Cloudflare Workers AI Global Edge Inference (Bypasses Google regional geo-blocking)
+        if (env.AI) {
+          try {
+            const cfMessages = [];
+            if (systemInstruction) {
+              cfMessages.push({ role: 'system', content: String(systemInstruction) });
+            }
+            if (Array.isArray(history)) {
+              for (const h of history.slice(-6)) {
+                cfMessages.push({
+                  role: (h.role === 'model' || h.role === 'agent') ? 'assistant' : 'user',
+                  content: String(h.text || h.content || h.message || '')
+                });
+              }
+            }
+            cfMessages.push({ role: 'user', content: String(prompt) });
+
+            const cfModels = [
+              '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+              '@cf/meta/llama-3.1-8b-instruct'
+            ];
+
+            for (const cfModel of cfModels) {
+              try {
+                const aiOutput = await env.AI.run(cfModel, {
+                  messages: cfMessages,
+                  max_tokens: maxTokens,
+                  temperature: 0.35
+                });
+                const replyText = typeof aiOutput === 'string' ? aiOutput : aiOutput?.response;
+                if (replyText && replyText.trim()) {
+                  console.log(`[callGemini] Cloudflare Workers AI successfully generated response via ${cfModel}`);
+                  return replyText.trim();
+                }
+              } catch (cfModelErr) {
+                console.warn(`[callGemini] Workers AI model ${cfModel} error:`, cfModelErr.message);
+              }
+            }
+          } catch (cfEx) {
+            console.error('[callGemini] Cloudflare Workers AI exception:', cfEx.message);
+          }
+        }
+
         return null;
       }
 
@@ -631,7 +721,15 @@ Give a sharp, authentic, and encouraging mentor response. Answer their question 
           if (geminiReply) {
             reply = geminiReply;
           } else {
-            reply = "Hey! I'm your PlaceX Host Agent. I'm actively tracking your progress across coding challenges, mock interviews, ATS resume diagnostics, and computer science fundamentals. What specific concept or challenge are you working on today?";
+            return jsonResponse({
+              status: 'error',
+              message: "Host Agent intelligence is momentarily unavailable. Please check your network connection or try asking again shortly.",
+              reply: "Host Agent intelligence is momentarily unavailable. Please check your network connection or try asking again shortly.",
+              response: "Host Agent intelligence is momentarily unavailable. Please check your network connection or try asking again shortly.",
+              conversation_id: convId,
+              current_context: activeModule,
+              suggested_actions: []
+            }, 503);
           }
         }
 
@@ -1044,7 +1142,7 @@ Respond with a clean JSON object with keys:
       }
 
       // ==========================================
-      // ROADMAP WEEK EXPLANATION (GEMINI POWERED)
+      // ROADMAP WEEK EXPLANATION (DYNAMIC AI POWERED)
       // ==========================================
       if (url.pathname === '/api/v1/agent/explain/roadmap-week') {
         let body = {};
@@ -1053,26 +1151,99 @@ Respond with a clean JSON object with keys:
         const level = body.level || 'Beginner';
         const weekNum = body.week_number || body.week_num || 1;
         const weekTitle = body.week_title || 'Core Engineering Foundations';
-        const userQuestion = body.user_question || '';
+        const userQuestion = (body.user_question || '').trim();
+        const prerequisites = body.prerequisites || 'Standard foundation';
+        const completionCriteria = body.completion_criteria || 'Implement practical exercises';
 
-        const prompt = `You are the PlaceX Main Host Agent and Career Mentor.
-The student is studying their Career Roadmap on PlaceX:
-- Track: ${branch} (${level})
-- Week: Week ${weekNum}: ${weekTitle}
-Student's question: "${userQuestion || 'What should I focus on this week and how do I succeed?'}"
+        let prompt = `You are the PlaceX Main Host Agent and Career Mentor.
+The student is studying their 24-week Career Roadmap on PlaceX:
+- Career Track / Branch: ${branch}
+- Expertise Level: ${level}
+- Week Number: Week ${weekNum}
+- Week Topic / Title: ${weekTitle}
+- Prerequisites: ${prerequisites}
+- Verification Completion Criteria: ${completionCriteria}
+`;
 
-Give a sharp, encouraging, practical mentor response advising on key topics, common interview pitfalls, and practical coding exercises for this week.`;
+        if (userQuestion) {
+          prompt += `
+The student has asked this specific question about Week ${weekNum}:
+"${userQuestion}"
 
-        const geminiReply = await callGemini(prompt, HOST_AGENT_SYSTEM_PROMPT, null, 1000);
-        const reply = geminiReply || `For Week ${weekNum} (${weekTitle}), focus on building deep conceptual clarity on the foundational data structures and standard algorithmic tradeoffs. Implement each concept from scratch and verify with unit tests.`;
+Provide a direct, practical, and highly specific answer for this week and topic.
+Respond in clean JSON format with keys:
+{
+  "status": "success",
+  "branch": "${branch}",
+  "level": "${level}",
+  "week_number": ${weekNum},
+  "week_title": "${weekTitle}",
+  "answer": "<Direct, highly practical answer to the student's question for this week>",
+  "explanation": "<Concise breakdown of this week and how the question relates to it>",
+  "key_concepts": ["<Concept 1>", "<Concept 2>", "<Concept 3>"],
+  "practical_exercises": ["<Exercise 1>", "<Exercise 2>"],
+  "common_mistakes": ["<Mistake 1>", "<Mistake 2>"],
+  "resources": ["<Resource 1>", "<Resource 2>"]
+}
+`;
+        } else {
+          prompt += `
+Break down this week dynamically for the student so they thoroughly understand what to do, why it matters, and how to master it.
+Respond in clean JSON format with keys:
+{
+  "status": "success",
+  "branch": "${branch}",
+  "level": "${level}",
+  "week_number": ${weekNum},
+  "week_title": "${weekTitle}",
+  "explanation": "<Engaging 2-3 paragraph breakdown of what this week means and why it matters>",
+  "key_concepts": ["<Step 1 concept>", "<Step 2 concept>", "<Step 3 concept>", "<Step 4 concept>"],
+  "practical_exercises": ["<Concrete coding or practical exercise 1>", "<Concrete coding or practical exercise 2>", "<Concrete coding or practical exercise 3>"],
+  "common_mistakes": ["<Frequent pitfall 1>", "<Frequent pitfall 2>"],
+  "verification_goal": "<Clear criteria for when the student is ready to move to next week>",
+  "future_connection": "<How this week serves as foundation for upcoming weeks>",
+  "resources": ["<Official documentation or tutorial 1>", "<Reputable tutorial 2>"]
+}
+`;
+        }
 
+        const geminiRes = await callGemini(prompt, HOST_AGENT_SYSTEM_PROMPT, null, 2500);
+        const parsed = parseJsonFromText(geminiRes);
+
+        if (parsed) {
+          parsed.status = 'success';
+          parsed.week_number = weekNum;
+          parsed.week_title = weekTitle;
+          const replyContent = parsed.answer || parsed.explanation || '';
+          parsed.reply = replyContent;
+          parsed.answer = replyContent;
+          parsed.explanation = parsed.explanation || replyContent;
+          return jsonResponse(parsed);
+        }
+
+        if (geminiRes) {
+          const cleanText = geminiRes.replace(/```json|```/g, '').trim();
+          return jsonResponse({
+            status: 'success',
+            branch,
+            level,
+            week_number: weekNum,
+            week_title: weekTitle,
+            answer: cleanText,
+            reply: cleanText,
+            explanation: cleanText,
+            key_concepts: [weekTitle],
+            practical_exercises: ['Implement exercises in Coding Sandbox'],
+            common_mistakes: ['Skipping foundational concepts'],
+            resources: ['Official Track Documentation']
+          });
+        }
+
+        // Real AI service failed: return honest error instead of generic fake text
         return jsonResponse({
-          status: 'success',
-          week_number: weekNum,
-          week_title: weekTitle,
-          reply: reply,
-          explanation: reply
-        });
+          status: 'error',
+          message: "Host Agent couldn't generate the learning guidance right now. Please try again."
+        }, 503);
       }
 
       // ==========================================
