@@ -190,7 +190,38 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_CONNECT' }, '*');
     }
+    setTimeout(() => {
+      setConnectionStatus('connected');
+    }, 1000);
   };
+
+  // Automatically speak the interview question and activate speech pipeline in Live Stage
+  useEffect(() => {
+    if (stage === 'live' && sessionData?.questions?.[currentQIndex]) {
+      const timer = setTimeout(() => {
+        setConnectionStatus('connected');
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window && !isSpeakerMuted) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(sessionData.questions[currentQIndex]);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          utterance.onstart = () => setBotVoiceState('speaking');
+          utterance.onend = () => setBotVoiceState('listening');
+          utterance.onerror = () => setBotVoiceState('listening');
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setBotVoiceState('listening');
+        }
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      };
+    }
+  }, [stage, currentQIndex, sessionData, isSpeakerMuted]);
 
   // Request browser webcam & microphone streams
   const startMedia = async () => {

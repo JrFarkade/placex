@@ -173,6 +173,21 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
     <div class="role-title">PlaceX Live Interview Engine</div>
     <div class="subtext">Real-time Speech Evaluation · Audio Synthesis Active</div>
   </div>
+  <script>
+    function notifyConnected() {
+      try {
+        window.parent.postMessage({ type: 'RTVI_CONNECTED' }, '*');
+      } catch (e) {}
+    }
+    window.addEventListener('load', function() {
+      setTimeout(notifyConnected, 600);
+    });
+    window.addEventListener('message', function(ev) {
+      if (ev.data && (ev.data.type === 'PLACEX_CONNECT' || ev.data.type === 'PING')) {
+        notifyConnected();
+      }
+    });
+  </script>
 </body>
 </html>`;
 }
