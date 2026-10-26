@@ -126,6 +126,8 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const lastSpokenTextRef = useRef<string>('');
+  const lastSpokenTimeRef = useRef<number>(0);
   const companyRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
   const focusRef = useRef<HTMLDivElement>(null);
@@ -162,6 +164,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     const handleMessage = (ev: MessageEvent) => {
       if (!ev.data || typeof ev.data !== 'object') return;
       switch (ev.data.type) {
+        case 'RTVI_READY':
         case 'RTVI_CONNECTED':
           setConnectionStatus('connected');
           break;
@@ -196,17 +199,27 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     }, 1000);
   };
 
-  // High-fidelity speech playback using ElevenLabs Sarah voice with resilient fallback
-  const playQuestionAudio = async (text: string) => {
+  // High-fidelity speech playback using ElevenLabs Sarah voice routed through avatar audio player
+  const playQuestionAudio = async (text: string, force: boolean = false) => {
     if (!text || isSpeakerMuted) return;
+
+    // Deduplicate rapid consecutive triggers of identical question text
+    const now = Date.now();
+    if (!force && lastSpokenTextRef.current === text && now - lastSpokenTimeRef.current < 4000) {
+      return;
+    }
+    lastSpokenTextRef.current = text;
+    lastSpokenTimeRef.current = now;
+
     setBotVoiceState('speaking');
 
-    // 1. Send coordination message to iframe avatar
+    // 1. Send coordination message to iframe avatar (which hosts the single bot audio player)
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_SPEAK', text }, '*');
+      return;
     }
 
-    // 2. Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback
+    // 2. Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback ONLY if iframe is absent
     try {
       if (audioPlayerRef.current) {
         audioPlayerRef.current.pause();
@@ -270,7 +283,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
         }
       };
     }
-  }, [stage, currentQIndex, sessionData, isSpeakerMuted]);
+  }, [stage, currentQIndex, isSpeakerMuted]);
 
   // Request browser webcam & microphone streams
   const startMedia = async () => {
@@ -394,6 +407,8 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     setEvalResult(null);
     setFinalReport(null);
     setTurnStartTime(Date.now());
+    lastSpokenTextRef.current = '';
+    lastSpokenTimeRef.current = 0;
 
     await startMedia();
 
@@ -448,6 +463,8 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
       setAnswerText('');
       setEvalResult(null);
       setTurnStartTime(Date.now());
+      lastSpokenTextRef.current = '';
+      lastSpokenTimeRef.current = 0;
     } else {
       try {
         const res = await axios.post(
@@ -814,7 +831,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
                   </span>
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => playQuestionAudio(sessionData.questions[currentQIndex])}
+                      onClick={() => playQuestionAudio(sessionData.questions[currentQIndex], true)}
                       className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/80 text-emerald-300 text-xs font-bold transition cursor-pointer shadow-xs"
                       title="Listen to AI Interviewer speak this question"
                     >
