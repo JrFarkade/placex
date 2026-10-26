@@ -1,5 +1,8 @@
-// PlaceX Live AI Interviewer Interactive Avatar Stream
+// PlaceX Live AI Interviewer Real-Time WebRTC Avatar & Audio Pipeline
 export function getAvatarHtml(company = "Target Company", role = "Software Engineer") {
+  const safeCompany = company.replace(/"/g, '&quot;');
+  const safeRole = role.replace(/"/g, '&quot;');
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +16,7 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       color: #F8FAFC;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       height: 100vh;
+      width: 100vw;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -29,14 +33,45 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 100% 100%, 32px 32px, 32px 32px;
       pointer-events: none;
+      z-index: 1;
     }
-    .avatar-container {
+    
+    /* Simli Live WebRTC Video Stream */
+    .video-viewport {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      background: #0A0D14;
+    }
+    #simli-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+    #simli-video.active {
+      opacity: 1;
+    }
+
+    /* Ambient Neural Core Layer (shown while negotiating or during audio synthesis) */
+    .avatar-neural-layer {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 10;
+      z-index: 3;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .avatar-neural-layer.video-ready {
+      opacity: 0;
+      pointer-events: none;
     }
     .pulse-ring {
       position: absolute;
@@ -75,7 +110,7 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: rgba(10, 13, 20, 0.8);
+      background: rgba(10, 13, 20, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -106,50 +141,82 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       100% { transform: scaleY(1.2); opacity: 1; }
     }
 
-    .meta-box {
-      margin-top: 24px;
+    /* Live HUD Overlay at bottom */
+    .hud-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
       z-index: 10;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
+      background: rgba(10, 15, 25, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 20px;
       border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #34D399;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     .badge-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #34D399;
       box-shadow: 0 0 8px #34D399;
       animation: blink 1.5s ease-in-out infinite;
     }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .role-title {
-      font-size: 14px;
+    .badge-dot.connecting {
+      background: #F59E0B;
+      box-shadow: 0 0 8px #F59E0B;
+    }
+    .badge-dot.speaking {
+      background: #10B981;
+      box-shadow: 0 0 12px #10B981;
+      animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .status-text {
+      font-size: 12px;
       font-weight: 700;
       color: #E2E8F0;
+      letter-spacing: 0.02em;
     }
     .subtext {
       font-size: 11px;
       color: #94A3B8;
-      margin-top: 2px;
+    }
+    .retry-btn {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34D399;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .retry-btn:hover {
+      background: rgba(16, 185, 129, 0.35);
     }
   </style>
 </head>
 <body>
   <div class="grid-bg"></div>
-  <div class="avatar-container">
+
+  <!-- Primary Video Viewport for Simli WebRTC -->
+  <div class="video-viewport">
+    <video id="simli-video" autoplay playsinline muted></video>
+  </div>
+
+  <!-- Audio playback element for ElevenLabs Voice -->
+  <audio id="speech-audio" preload="auto"></audio>
+
+  <!-- Ambient Neural Layer (Displayed when video is negotiating or initializing) -->
+  <div id="neural-layer" class="avatar-neural-layer">
     <div class="pulse-ring"></div>
     <div class="pulse-ring"></div>
     <div class="pulse-ring"></div>
@@ -165,27 +232,267 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
       </div>
     </div>
   </div>
-  <div class="meta-box">
-    <div class="badge">
-      <span class="badge-dot"></span>
-      <span>AI Technical Interviewer Active</span>
-    </div>
-    <div class="role-title">PlaceX Live Interview Engine</div>
-    <div class="subtext">Real-time Speech Evaluation · Audio Synthesis Active</div>
+
+  <!-- Live Status HUD Overlay -->
+  <div class="hud-overlay">
+    <span id="status-dot" class="badge-dot connecting"></span>
+    <span id="status-label" class="status-text">Initializing AI Interviewer...</span>
+    <span class="subtext">|</span>
+    <span class="subtext">${safeCompany} · ${safeRole}</span>
+    <button id="retry-btn" class="retry-btn" style="display:none;" onclick="initWebRTC()">Retry</button>
   </div>
+
   <script>
-    function notifyConnected() {
-      try {
-        window.parent.postMessage({ type: 'RTVI_CONNECTED' }, '*');
-      } catch (e) {}
-    }
-    window.addEventListener('load', function() {
-      setTimeout(notifyConnected, 600);
-    });
-    window.addEventListener('message', function(ev) {
-      if (ev.data && (ev.data.type === 'PLACEX_CONNECT' || ev.data.type === 'PING')) {
-        notifyConnected();
+    let peerConnection = null;
+    let webSocket = null;
+    let currentAudio = null;
+    let isSpeaking = false;
+    let isSpeakerMuted = false;
+
+    const videoEl = document.getElementById('simli-video');
+    const audioEl = document.getElementById('speech-audio');
+    const neuralLayer = document.getElementById('neural-layer');
+    const statusDot = document.getElementById('status-dot');
+    const statusLabel = document.getElementById('status-label');
+    const retryBtn = document.getElementById('retry-btn');
+
+    function updateStatus(state, labelText) {
+      if (statusLabel) statusLabel.textContent = labelText;
+      if (statusDot) {
+        statusDot.className = 'badge-dot ' + state;
       }
+    }
+
+    function emitEvent(type, data) {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: type, data: data }, '*');
+        }
+      } catch (e) {
+        console.warn('[Avatar] postMessage error:', e);
+      }
+    }
+
+    // 1. Establish Real-Time WebRTC Video Stream to Simli Avatar
+    async function initWebRTC() {
+      if (retryBtn) retryBtn.style.display = 'none';
+      updateStatus('connecting', 'Negotiating WebRTC Avatar Stream...');
+
+      try {
+        const sessionRes = await fetch('/api/v1/interview/simli-session');
+        const sessionData = await sessionRes.json();
+
+        if (!sessionData.available || !sessionData.session_token) {
+          console.warn('[Avatar] Simli session unavailable:', sessionData.error);
+          updateStatus('', 'AI Interviewer Ready (Audio Active)');
+          emitEvent('RTVI_CONNECTED');
+          return;
+        }
+
+        const iceServers = sessionData.ice_servers && sessionData.ice_servers.length > 0 
+          ? sessionData.ice_servers 
+          : [{ urls: 'stun:stun.cloudflare.com:3478' }, { urls: 'stun:stun.l.google.com:19302' }];
+
+        peerConnection = new RTCPeerConnection({ iceServers });
+
+        peerConnection.addTransceiver('audio', { direction: 'recvonly' });
+        peerConnection.addTransceiver('video', { direction: 'recvonly' });
+
+        peerConnection.ontrack = (event) => {
+          if (event.track.kind === 'video' && event.streams[0]) {
+            videoEl.srcObject = event.streams[0];
+            videoEl.play().catch(() => {});
+            videoEl.classList.add('active');
+            if (neuralLayer) neuralLayer.classList.add('video-ready');
+            updateStatus('', 'AI Interviewer Active');
+          }
+        };
+
+        peerConnection.onconnectionstatechange = () => {
+          if (peerConnection.connectionState === 'connected') {
+            updateStatus('', 'AI Interviewer Active');
+            emitEvent('RTVI_CONNECTED');
+          } else if (peerConnection.connectionState === 'failed') {
+            updateStatus('connecting', 'Reconnecting Media Stream...');
+            if (retryBtn) retryBtn.style.display = 'inline-block';
+          }
+        };
+
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        const wsUrl = 'wss://api.simli.ai/compose/webrtc/p2p?enableSFU=true&session_token=' + encodeURIComponent(sessionData.session_token);
+        webSocket = new WebSocket(wsUrl);
+
+        webSocket.onopen = () => {
+          webSocket.send(JSON.stringify({
+            sdp: peerConnection.localDescription.sdp,
+            type: peerConnection.localDescription.type
+          }));
+        };
+
+        webSocket.onmessage = async (msg) => {
+          try {
+            const answer = JSON.parse(msg.data);
+            if (answer && answer.sdp) {
+              await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+              updateStatus('', 'AI Interviewer Active');
+              emitEvent('RTVI_CONNECTED');
+            }
+          } catch (e) {
+            console.warn('[Avatar] WebSocket message parsing error:', e);
+          }
+        };
+
+        webSocket.onerror = (err) => {
+          console.warn('[Avatar] Simli WebSocket error:', err);
+          updateStatus('', 'AI Interviewer Ready (Audio Active)');
+          emitEvent('RTVI_CONNECTED');
+        };
+
+      } catch (err) {
+        console.warn('[Avatar] WebRTC initialization error:', err);
+        updateStatus('', 'AI Interviewer Ready (Audio Active)');
+        emitEvent('RTVI_CONNECTED');
+        if (retryBtn) retryBtn.style.display = 'inline-block';
+      }
+    }
+
+    // 2. Play Authentic ElevenLabs Female Voice Audio Stream
+    async function speakText(text) {
+      if (!text || isSpeakerMuted) return;
+
+      try {
+        updateStatus('speaking', 'Interviewer Speaking...');
+        emitEvent('RTVI_BOT_SPEAKING');
+
+        // Cancel previous audio
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
+        }
+
+        const res = await fetch('/api/v1/interview/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text })
+        });
+
+        if (!res.ok) {
+          // If ElevenLabs endpoint fails or returns error, fallback to browser speech synthesis
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.05;
+            utterance.onstart = () => {
+              updateStatus('speaking', 'Interviewer Speaking...');
+              emitEvent('RTVI_BOT_SPEAKING');
+            };
+            utterance.onend = () => {
+              updateStatus('', 'AI Interviewer Listening');
+              emitEvent('RTVI_BOT_IDLE');
+            };
+            utterance.onerror = () => {
+              updateStatus('', 'AI Interviewer Listening');
+              emitEvent('RTVI_BOT_IDLE');
+            };
+            window.speechSynthesis.speak(utterance);
+          }
+          return;
+        }
+
+        const blob = await res.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        currentAudio = new Audio(audioUrl);
+
+        currentAudio.onplay = () => {
+          isSpeaking = true;
+          updateStatus('speaking', 'Interviewer Speaking...');
+          emitEvent('RTVI_BOT_SPEAKING');
+        };
+
+        currentAudio.onended = () => {
+          isSpeaking = false;
+          URL.revokeObjectURL(audioUrl);
+          updateStatus('', 'AI Interviewer Listening');
+          emitEvent('RTVI_BOT_IDLE');
+        };
+
+        currentAudio.onerror = () => {
+          isSpeaking = false;
+          URL.revokeObjectURL(audioUrl);
+          updateStatus('', 'AI Interviewer Listening');
+          emitEvent('RTVI_BOT_IDLE');
+        };
+
+        await currentAudio.play();
+      } catch (err) {
+        console.warn('[Avatar] Speech synthesis error:', err);
+        updateStatus('', 'AI Interviewer Listening');
+        emitEvent('RTVI_BOT_IDLE');
+      }
+    }
+
+    function stopSpeech() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      updateStatus('', 'AI Interviewer Listening');
+      emitEvent('RTVI_BOT_IDLE');
+    }
+
+    // 3. Listen to Parent Window Coordination Messages
+    window.addEventListener('message', function(ev) {
+      if (!ev.data || typeof ev.data !== 'object') return;
+      const type = ev.data.type;
+
+      switch (type) {
+        case 'PLACEX_CONNECT':
+          if (!peerConnection || peerConnection.connectionState !== 'connected') {
+            initWebRTC();
+          } else {
+            emitEvent('RTVI_CONNECTED');
+          }
+          break;
+
+        case 'PLACEX_SPEAK':
+          if (ev.data.text) {
+            speakText(ev.data.text);
+          }
+          break;
+
+        case 'PLACEX_STOP_SPEECH':
+          stopSpeech();
+          break;
+
+        case 'PLACEX_MUTE_SPEAKER':
+          isSpeakerMuted = !!ev.data.muted;
+          if (isSpeakerMuted) stopSpeech();
+          break;
+
+        case 'PLACEX_DISCONNECT':
+          stopSpeech();
+          if (peerConnection) {
+            try { peerConnection.close(); } catch (e) {}
+            peerConnection = null;
+          }
+          if (webSocket) {
+            try { webSocket.close(); } catch (e) {}
+            webSocket = null;
+          }
+          emitEvent('RTVI_DISCONNECTED');
+          break;
+      }
+    });
+
+    // Auto-initialize WebRTC stream on document load
+    window.addEventListener('load', function() {
+      setTimeout(initWebRTC, 300);
     });
   </script>
 </body>

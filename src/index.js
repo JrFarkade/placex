@@ -505,6 +505,86 @@ export default {
       // ==========================================
       // 3. AI MOCK INTERVIEW SUBSYSTEM (PREP BRAIN)
       // ==========================================
+      if (url.pathname === '/api/v1/interview/simli-session') {
+        const simliKey = env.SIMLI_API_KEY;
+        const faceId = env.SIMLI_FACE_ID || 'cace3ef7-a4c4-425d-a8cf-a5358eb0c427';
+        if (!simliKey) {
+          return jsonResponse({ available: false, error: 'SIMLI_API_KEY not configured in environment' }, 200);
+        }
+        try {
+          const [tokRes, iceRes] = await Promise.all([
+            fetch('https://api.simli.ai/compose/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'x-simli-api-key': simliKey },
+              body: JSON.stringify({ faceId, handleSilence: true, maxSessionLength: 600, maxIdleTime: 30 })
+            }),
+            fetch('https://api.simli.ai/compose/ice', {
+              headers: { 'x-simli-api-key': simliKey }
+            })
+          ]);
+          if (!tokRes.ok) {
+            const errTxt = await tokRes.text();
+            return jsonResponse({ available: false, error: `Simli token error: ${errTxt}` }, 200);
+          }
+          const tokData = await tokRes.json();
+          const iceData = iceRes.ok ? await iceRes.json() : [];
+          return jsonResponse({
+            available: true,
+            session_token: tokData.session_token,
+            ice_servers: iceData,
+            face_id: faceId
+          });
+        } catch (e) {
+          return jsonResponse({ available: false, error: e.message }, 200);
+        }
+      }
+
+      if (url.pathname === '/api/v1/interview/tts') {
+        let body = {};
+        try { body = await request.json(); } catch (e) {}
+        const text = (body.text || '').trim();
+        if (!text) {
+          return jsonResponse({ error: 'Text required for TTS' }, 400);
+        }
+        const elevenKey = env.ELEVENLABS_API_KEY;
+        const voiceId = body.voice_id || env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL';
+        if (!elevenKey) {
+          return jsonResponse({ error: 'ELEVENLABS_API_KEY not configured in runtime environment.' }, 400);
+        }
+        try {
+          const ttsResp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'xi-api-key': elevenKey
+            },
+            body: JSON.stringify({
+              text,
+              model_id: 'eleven_flash_v2_5',
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.8
+              }
+            })
+          });
+          if (!ttsResp.ok) {
+            const errBody = await ttsResp.text();
+            return jsonResponse({ error: `ElevenLabs TTS error (${ttsResp.status}): ${errBody}` }, ttsResp.status);
+          }
+          const audioBuffer = await ttsResp.arrayBuffer();
+          return new Response(audioBuffer, {
+            status: 200,
+            headers: {
+              'Content-Type': 'audio/mpeg',
+              'Cache-Control': 'public, max-age=86400',
+              ...corsHeaders
+            }
+          });
+        } catch (ttsErr) {
+          return jsonResponse({ error: ttsErr.message }, 500);
+        }
+      }
+
       if (url.pathname === '/api/v1/interview/avatar') {
         const company = url.searchParams.get('company') || 'Target Company';
         const role = url.searchParams.get('role') || 'Software Engineer';

@@ -125,6 +125,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const companyRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
   const focusRef = useRef<HTMLDivElement>(null);
@@ -195,27 +196,75 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     }, 1000);
   };
 
+  // High-fidelity speech playback using ElevenLabs Sarah voice with resilient fallback
+  const playQuestionAudio = async (text: string) => {
+    if (!text || isSpeakerMuted) return;
+    setBotVoiceState('speaking');
+
+    // 1. Send coordination message to iframe avatar
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_SPEAK', text }, '*');
+    }
+
+    // 2. Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback
+    try {
+      if (audioPlayerRef.current) {
+        audioPlayerRef.current.pause();
+        audioPlayerRef.current = null;
+      }
+      const res = await axios.post('/api/v1/interview/tts', { text }, { responseType: 'blob' });
+      if (res.data) {
+        const audioUrl = URL.createObjectURL(res.data);
+        const audio = new Audio(audioUrl);
+        audioPlayerRef.current = audio;
+        audio.onplay = () => setBotVoiceState('speaking');
+        audio.onended = () => {
+          setBotVoiceState('listening');
+          URL.revokeObjectURL(audioUrl);
+        };
+        audio.onerror = () => {
+          setBotVoiceState('listening');
+          URL.revokeObjectURL(audioUrl);
+        };
+        await audio.play();
+      }
+    } catch (err) {
+      console.warn('[Interview] Direct ElevenLabs audio stream error, falling back to speech synthesis:', err);
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window && !isSpeakerMuted) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.05;
+        try {
+          const voices = window.speechSynthesis.getVoices();
+          const femaleVoice = voices.find(v => /female|woman|sarah|zira|samantha/i.test(v.name));
+          if (femaleVoice) utterance.voice = femaleVoice;
+        } catch (e) {}
+        utterance.onstart = () => setBotVoiceState('speaking');
+        utterance.onend = () => setBotVoiceState('listening');
+        utterance.onerror = () => setBotVoiceState('listening');
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setBotVoiceState('listening');
+      }
+    }
+  };
+
   // Automatically speak the interview question and activate speech pipeline in Live Stage
   useEffect(() => {
     if (stage === 'live' && sessionData?.questions?.[currentQIndex]) {
+      const qText = sessionData.questions[currentQIndex];
       const timer = setTimeout(() => {
         setConnectionStatus('connected');
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window && !isSpeakerMuted) {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(sessionData.questions[currentQIndex]);
-          utterance.rate = 1.0;
-          utterance.pitch = 1.0;
-          utterance.onstart = () => setBotVoiceState('speaking');
-          utterance.onend = () => setBotVoiceState('listening');
-          utterance.onerror = () => setBotVoiceState('listening');
-          window.speechSynthesis.speak(utterance);
-        } else {
-          setBotVoiceState('listening');
-        }
-      }, 1000);
+        playQuestionAudio(qText);
+      }, 700);
 
       return () => {
         clearTimeout(timer);
+        if (audioPlayerRef.current) {
+          audioPlayerRef.current.pause();
+          audioPlayerRef.current = null;
+        }
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
           window.speechSynthesis.cancel();
         }
@@ -430,6 +479,10 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   // Handle cleanup of speech, media, and evaluation on exit/end call
   const handleTeardownLiveCall = () => {
     stopMedia();
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.pause();
+      audioPlayerRef.current = null;
+    }
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_DISCONNECT' }, '*');
     }
@@ -759,9 +812,19 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
                     <Radio className="w-3.5 h-3.5 animate-pulse" />
                     Current Interview Question ({currentTier})
                   </span>
-                  <span className="text-[11px] font-mono text-slate-400 truncate max-w-xs">
-                    {currentTopic}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => playQuestionAudio(sessionData.questions[currentQIndex])}
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/80 text-emerald-300 text-xs font-bold transition cursor-pointer shadow-xs"
+                      title="Listen to AI Interviewer speak this question"
+                    >
+                      <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{botVoiceState === 'speaking' ? 'Speaking...' : 'Listen'}</span>
+                    </button>
+                    <span className="text-[11px] font-mono text-slate-400 truncate max-w-xs hidden sm:inline">
+                      {currentTopic}
+                    </span>
+                  </div>
                 </div>
                 <p className="text-sm sm:text-base font-extrabold text-white leading-relaxed max-h-24 overflow-y-auto pr-2">
                   "{sessionData.questions[currentQIndex]}"
