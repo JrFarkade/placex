@@ -1,6 +1,18 @@
 // PlaceX ATS Resume Analysis & Document Classifier Engine
 // Faithful Edge Port of backend/app/resume_service/
-import { extractText as extractPdfText } from 'unpdf';
+
+// Global Edge Polyfills for PDF.js / unpdf runtime
+if (typeof globalThis.window === 'undefined') {
+  globalThis.window = globalThis;
+}
+if (typeof globalThis.location === 'undefined') {
+  globalThis.location = { href: 'https://placex.jrfarkade.workers.dev/', origin: 'https://placex.jrfarkade.workers.dev' };
+}
+if (typeof globalThis.document === 'undefined') {
+  globalThis.document = { createElement: () => ({}) };
+}
+
+import { extractText as extractPdfText, getDocumentProxy } from 'unpdf';
 
 export const DocumentType = {
   RESUME: "RESUME",
@@ -92,15 +104,26 @@ export async function extractTextFromBuffer(buffer, filename = "") {
 
   if (isPdf) {
     try {
-      const res = await extractPdfText(bytes);
-      totalPages = res.totalPages || 0;
-      if (Array.isArray(res.text)) {
-        text = res.text.join("\n").trim();
-      } else if (typeof res.text === 'string') {
+      const pdf = await getDocumentProxy(bytes);
+      totalPages = pdf.numPages || 0;
+      const res = await extractPdfText(pdf, { mergePages: true });
+      if (typeof res.text === 'string') {
         text = res.text.trim();
+      } else if (Array.isArray(res.text)) {
+        text = res.text.join("\n").trim();
       }
     } catch (e) {
-      return { text: "", status: "EXTRACTION_FAILED", pageCount: 0, characterCount: 0, error: e.message };
+      try {
+        const res = await extractPdfText(bytes);
+        totalPages = res.totalPages || 0;
+        if (typeof res.text === 'string') {
+          text = res.text.trim();
+        } else if (Array.isArray(res.text)) {
+          text = res.text.join("\n").trim();
+        }
+      } catch (e2) {
+        return { text: "", status: "EXTRACTION_FAILED", pageCount: 0, characterCount: 0, error: e.message + " | " + e2.message };
+      }
     }
 
     const clean = text.replace(/\s+/g, '');

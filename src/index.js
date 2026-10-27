@@ -1,4 +1,14 @@
 // PlaceX Cloudflare Edge Worker - Live Production & Authentic Edge Intelligence
+if (typeof globalThis.window === 'undefined') {
+  globalThis.window = globalThis;
+}
+if (typeof globalThis.location === 'undefined') {
+  globalThis.location = { href: 'https://placex.jrfarkade.workers.dev/', origin: 'https://placex.jrfarkade.workers.dev' };
+}
+if (typeof globalThis.document === 'undefined') {
+  globalThis.document = { createElement: () => ({}) };
+}
+
 import { getRoadmapBranches, getRoadmapPath, updateWeekStatus } from './services/roadmapStore.js';
 import { getQuizDomains, startQuizSession, gradeQuizSubmission } from './services/quizEngine.js';
 import { extractTextFromBuffer, classifyDocument, evaluateATS, parseResume, evaluateModeA, evaluateModeB, DocumentType } from './services/atsAnalyzer.js';
