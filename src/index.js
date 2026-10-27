@@ -1638,7 +1638,8 @@ Respond in clean JSON format with keys:
               is_valid_resume: false,
               ats_score: 0,
               filename: filename,
-              message: 'Your PDF could not be read. Please upload a standard text-based PDF.'
+              message: 'Your PDF could not be read. Please upload a standard text-based PDF.',
+              debug_error: extracted.error || 'Unknown error'
             });
           }
 

@@ -34,6 +34,46 @@ export const STANDARD_SKILLS_DB = {
   "Action Verbs": ["developed", "built", "designed", "implemented", "optimized", "architected", "engineered", "scaled", "spearheaded", "improved", "created", "led"]
 };
 
+async function extractDocxText(bytes) {
+  try {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    let offset = 0;
+    while (offset < bytes.length - 30) {
+      if (view.getUint32(offset, true) === 0x04034b50) {
+        const compMethod = view.getUint16(offset + 8, true);
+        const compSize = view.getUint32(offset + 18, true);
+        const nameLen = view.getUint16(offset + 26, true);
+        const extraLen = view.getUint16(offset + 28, true);
+        const nameBytes = bytes.slice(offset + 30, offset + 30 + nameLen);
+        const name = new TextDecoder().decode(nameBytes);
+        const dataStart = offset + 30 + nameLen + extraLen;
+        if (name === 'word/document.xml') {
+          const compData = bytes.slice(dataStart, dataStart + compSize);
+          let xml = '';
+          if (compMethod === 8 && typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('deflate-raw');
+            const writer = ds.writable.getWriter();
+            writer.write(compData);
+            writer.close();
+            const res = new Response(ds.readable);
+            xml = await res.text();
+          } else {
+            xml = new TextDecoder().decode(compData);
+          }
+          const matches = xml.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g) || [];
+          return matches.map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean).join(' ');
+        }
+        offset = dataStart + compSize;
+      } else {
+        offset++;
+      }
+    }
+  } catch (e) {
+    // Fallback to regex text extraction
+  }
+  return '';
+}
+
 export async function extractTextFromBuffer(buffer, filename = "") {
   const bytes = new Uint8Array(buffer);
   if (bytes.length === 0) {
@@ -72,14 +112,19 @@ export async function extractTextFromBuffer(buffer, filename = "") {
     }
   } else {
     // DOCX handling
-    const decoder = new TextDecoder('utf-8', { fatal: false });
-    const rawString = decoder.decode(bytes);
-    const xmlMatches = rawString.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g) || [];
-    if (xmlMatches.length > 0) {
-      text = xmlMatches.map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean).join(" ");
+    const docxText = await extractDocxText(bytes);
+    if (docxText && docxText.length >= 25) {
+      text = docxText;
     } else {
-      const asciiRuns = rawString.match(/[A-Za-z0-9@\.\-\+\#\/ ]{4,}/g) || [];
-      text = asciiRuns.join(" ");
+      const decoder = new TextDecoder('utf-8', { fatal: false });
+      const rawString = decoder.decode(bytes);
+      const xmlMatches = rawString.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g) || [];
+      if (xmlMatches.length > 0) {
+        text = xmlMatches.map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean).join(" ");
+      } else {
+        const asciiRuns = rawString.match(/[A-Za-z0-9@\.\-\+\#\/ ]{4,}/g) || [];
+        text = asciiRuns.join(" ");
+      }
     }
     if (text.length < 25) {
       return { text: "", status: "EXTRACTION_FAILED", error: "Could not extract readable text from document." };
