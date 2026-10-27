@@ -1,7 +1,7 @@
 // PlaceX Cloudflare Edge Worker - Live Production & Authentic Edge Intelligence
 import { getRoadmapBranches, getRoadmapPath, updateWeekStatus } from './services/roadmapStore.js';
 import { getQuizDomains, startQuizSession, gradeQuizSubmission } from './services/quizEngine.js';
-import { extractTextFromBuffer, classifyDocument, evaluateATS, DocumentType } from './services/atsAnalyzer.js';
+import { extractTextFromBuffer, classifyDocument, evaluateATS, parseResume, evaluateModeA, evaluateModeB, DocumentType } from './services/atsAnalyzer.js';
 import { recordStudentActivity, getDashboardActivity, studentActivityMap } from './services/activityStore.js';
 import { getAvatarHtml } from './services/avatarPage.js';
 
@@ -1625,7 +1625,7 @@ Respond in clean JSON format with keys:
           }
 
           const buffer = await file.arrayBuffer();
-          const extracted = extractTextFromBuffer(buffer, filename);
+          const extracted = await extractTextFromBuffer(buffer, filename);
 
           if (extracted.status === 'INVALID_FORMAT') {
             return jsonResponse({ detail: extracted.error }, 400);
@@ -1639,12 +1639,24 @@ Respond in clean JSON format with keys:
               ats_score: 0,
               filename: filename,
               message: 'Your PDF could not be read. Please upload a standard text-based PDF.'
-            }, 422);
+            });
+          }
+
+          if (extracted.status === 'IMAGE_ONLY') {
+            return jsonResponse({
+              status: 'rejected',
+              doc_type: DocumentType.IMAGE_ONLY,
+              confidence_score: 0.0,
+              is_valid_resume: false,
+              filename: filename,
+              red_flags: ['PDF appears to contain images rather than selectable text.'],
+              message: 'This PDF appears to contain images rather than selectable text. Please upload a text-based PDF or enable OCR.'
+            });
           }
 
           const classification = classifyDocument(extracted.text, extracted.status);
 
-          if (!classification.is_valid_resume) {
+          if (!classification.is_valid_resume && classification.doc_type !== DocumentType.UNKNOWN) {
             return jsonResponse({
               status: 'rejected',
               doc_type: classification.doc_type,
@@ -1653,22 +1665,31 @@ Respond in clean JSON format with keys:
               filename: filename,
               red_flags: classification.red_flags,
               message: classification.message
-            }, 422);
+            });
           }
 
-          // Compute authentic ATS evaluation
-          const evaluation = evaluateATS(extracted.text, targetJd);
+          // Authentic ATS parsing & evaluation matching Localhost
+          const parsed = parseResume(extracted.text);
+          const hasJd = Boolean(targetJd && targetJd.trim().length > 20);
+          const evaluation = hasJd ? evaluateModeB(parsed, extracted.text, targetJd) : evaluateModeA(parsed, extracted.text);
           const resumeId = Date.now();
+          const nextVersion = studentResumeHistory.length + 1;
+          const atsScore = hasJd ? evaluation.placex_match_score : evaluation.resume_quality_score;
 
           const resumeRecord = {
             id: resumeId,
             resume_id: resumeId,
+            version: nextVersion,
             filename: filename,
+            original_filename: filename,
             uploaded_at: new Date().toISOString(),
             doc_type: classification.doc_type,
-            analysis_mode: targetJd ? 'MODE_B_JD_TARGETED_AUDIT' : 'MODE_A_RESUME_HEALTH_CHECK',
-            ats_score: evaluation.ats_score,
-            analysis_result: evaluation
+            confidence_score: classification.confidence_score,
+            analysis_mode: evaluation.analysis_mode,
+            ats_score: atsScore,
+            parsed_resume: parsed,
+            analysis_result: evaluation,
+            message: classification.message
           };
 
           studentResumeHistory.unshift(resumeRecord);
@@ -1685,6 +1706,15 @@ Respond in clean JSON format with keys:
 
       if (url.pathname === '/api/v1/resume/history') {
         return jsonResponse(studentResumeHistory.slice(0, 10));
+      }
+
+      if (url.pathname.startsWith('/api/v1/resume/') && request.method === 'DELETE') {
+        const idToDelete = parseInt(url.pathname.split('/').pop(), 10);
+        const idx = studentResumeHistory.findIndex(h => h.id === idToDelete || h.resume_id === idToDelete);
+        if (idx !== -1) {
+          studentResumeHistory.splice(idx, 1);
+        }
+        return jsonResponse({ status: 'success', message: 'Resume version deleted.' });
       }
 
       // ==========================================

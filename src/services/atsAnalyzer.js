@@ -1,5 +1,6 @@
 // PlaceX ATS Resume Analysis & Document Classifier Engine
-// Faithful port of backend/app/resume_service/
+// Faithful Edge Port of backend/app/resume_service/
+import { extractText as extractPdfText } from 'unpdf';
 
 export const DocumentType = {
   RESUME: "RESUME",
@@ -15,7 +16,7 @@ export const NON_RESUME_RED_FLAGS = [
   "abstract", "references", "table of contents", "chapter 1", "chapter 2",
   "invoice #", "bill to", "tax invoice", "receipt", "total amount",
   "submitted by:", "submitted to:", "department of", "university exam",
-  "question paper", "syllabus", "user manual"
+  "question paper", "syllabus", "user manual", "manga", "chapter"
 ];
 
 export const RESUME_HEADINGS = [
@@ -33,7 +34,7 @@ export const STANDARD_SKILLS_DB = {
   "Action Verbs": ["developed", "built", "designed", "implemented", "optimized", "architected", "engineered", "scaled", "spearheaded", "improved", "created", "led"]
 };
 
-export function extractTextFromBuffer(buffer, filename = "") {
+export async function extractTextFromBuffer(buffer, filename = "") {
   const bytes = new Uint8Array(buffer);
   if (bytes.length === 0) {
     return { text: "", status: "EXTRACTION_FAILED", error: "File is empty." };
@@ -46,31 +47,33 @@ export function extractTextFromBuffer(buffer, filename = "") {
     return { text: "", status: "INVALID_FORMAT", error: "Unsupported file format. Please upload a PDF or DOCX file." };
   }
 
-  // Extract readable text characters from raw stream
-  const decoder = new TextDecoder('utf-8', { fatal: false });
-  const rawString = decoder.decode(bytes);
-
-  // If PDF, extract stream chunks and textual glyphs
   let text = "";
-  if (isPdf) {
-    // Collect text from PDF text object blocks BT ... ET and literal strings (...)
-    const matches = rawString.match(/\((.*?)\)|\[(.*?)\]|BT[\s\S]*?ET/g) || [];
-    const textPieces = [];
-    for (const m of matches) {
-      const clean = m.replace(/[\\()\[\]]/g, ' ').replace(/\\r|\\n/g, ' ').trim();
-      if (clean.length > 2 && /[a-zA-Z0-9]/.test(clean)) {
-        textPieces.push(clean);
-      }
-    }
-    text = textPieces.join(" ");
+  let totalPages = 0;
 
-    // If stream compressed or structured, extract ASCII alphanumeric runs
-    if (text.length < 50) {
-      const asciiRuns = rawString.match(/[A-Za-z0-9@\.\-\+\#\/ ]{4,}/g) || [];
-      text = asciiRuns.filter(r => !r.includes('/Filter') && !r.includes('/Length') && !r.includes('/Type')).join(" ");
+  if (isPdf) {
+    try {
+      const res = await extractPdfText(bytes);
+      totalPages = res.totalPages || 0;
+      if (Array.isArray(res.text)) {
+        text = res.text.join("\n").trim();
+      } else if (typeof res.text === 'string') {
+        text = res.text.trim();
+      }
+    } catch (e) {
+      return { text: "", status: "EXTRACTION_FAILED", pageCount: 0, characterCount: 0, error: e.message };
+    }
+
+    const clean = text.replace(/\s+/g, '');
+    if (clean.length === 0 && totalPages > 0) {
+      return { text: "", status: "IMAGE_ONLY", pageCount: totalPages, characterCount: 0 };
+    }
+    if (clean.length < 20) {
+      return { text: "", status: "EXTRACTION_FAILED", pageCount: totalPages, characterCount: clean.length };
     }
   } else {
-    // DOCX (ZIP archive containing word/document.xml)
+    // DOCX handling
+    const decoder = new TextDecoder('utf-8', { fatal: false });
+    const rawString = decoder.decode(bytes);
     const xmlMatches = rawString.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g) || [];
     if (xmlMatches.length > 0) {
       text = xmlMatches.map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean).join(" ");
@@ -78,18 +81,26 @@ export function extractTextFromBuffer(buffer, filename = "") {
       const asciiRuns = rawString.match(/[A-Za-z0-9@\.\-\+\#\/ ]{4,}/g) || [];
       text = asciiRuns.join(" ");
     }
+    if (text.length < 25) {
+      return { text: "", status: "EXTRACTION_FAILED", error: "Could not extract readable text from document." };
+    }
   }
 
-  text = text.replace(/\s+/g, ' ').trim();
-
-  if (text.length < 25) {
-    return { text: "", status: "EXTRACTION_FAILED", error: "Could not extract readable text from document." };
-  }
-
-  return { text, status: "SUCCESS" };
+  return { text, status: "SUCCESS", pageCount: totalPages, characterCount: text.length };
 }
 
 export function classifyDocument(text, extractionStatus = "SUCCESS") {
+  if (extractionStatus === "IMAGE_ONLY") {
+    return {
+      doc_type: DocumentType.IMAGE_ONLY,
+      confidence_score: 0.0,
+      is_valid_resume: false,
+      signals: [],
+      red_flags: ["PDF appears to contain images rather than selectable text."],
+      message: "This PDF appears to contain images rather than selectable text. Please upload a text-based PDF or enable OCR."
+    };
+  }
+
   if (extractionStatus === "EXTRACTION_FAILED" || !text || text.length < 20) {
     return {
       doc_type: DocumentType.EXTRACTION_FAILED,
@@ -106,57 +117,51 @@ export function classifyDocument(text, extractionStatus = "SUCCESS") {
   const signals = [];
   const redFlags = [];
 
-  // 1. Red Flag Penalties for obvious non-resumes
-  for (const flag of NON_RESUME_RED_FLAGS) {
-    if (textLower.includes(flag)) {
-      redFlags.push(flag);
-      score -= 35.0;
-    }
-  }
-
-  // 2. Contact Information Signals (Max 35 pts)
   const hasEmail = /[\w\.-]+@[\w\.-]+\.\w+/.test(text);
   const hasPhone = /\+?\d[\d\s-]{8,}/.test(text);
-  const hasLinks = ['linkedin', 'github', 'leetcode', 'portfolio', 'hackerrank'].some(d => textLower.includes(d));
+  const hasLinks = ['linkedin', 'github', 'leetcode', 'portfolio', 'hackerrank'].some(domain => textLower.includes(domain));
 
   if (hasEmail) { score += 15.0; signals.push("Email address found"); }
   if (hasPhone) { score += 10.0; signals.push("Phone number found"); }
-  if (hasLinks) { score += 10.0; signals.push("Professional profile link found"); }
+  if (hasLinks) { score += 10.0; signals.push("Professional link found"); }
 
-  // 3. Resume Headings (Max 40 pts)
-  const detectedHeadings = RESUME_HEADINGS.filter(h => new RegExp(`\\b${h}\\b`, 'i').test(textLower));
+  const detectedHeadings = RESUME_HEADINGS.filter(h => new RegExp('\\b' + h.replace('+', '\\+') + '\\b', 'i').test(textLower));
   score += Math.min(40.0, detectedHeadings.length * 10.0);
   if (detectedHeadings.length > 0) {
     signals.push(`Headings: ${detectedHeadings.slice(0, 4).join(', ')}`);
   }
 
-  // 4. Content Structure (Max 25 pts)
-  const hasSkills = ["python", "java", "c++", "sql", "react", "html", "css", "javascript", "node", "git"].some(s => textLower.includes(s));
-  const hasDegrees = ["b.tech", "b.e.", "b.s.", "m.tech", "bachelor", "master", "gpa", "cgpa", "university", "college", "degree"].some(d => textLower.includes(d));
-  const hasActionVerbs = ["developed", "built", "designed", "implemented", "managed", "created", "spearheaded", "engineered"].some(v => textLower.includes(v));
+  const hasSkills = ['python', 'java', 'c++', 'sql', 'react', 'html', 'css', 'javascript', 'node', 'git'].some(s => textLower.includes(s));
+  const hasDegrees = ['b.tech', 'b.e.', 'b.s.', 'm.tech', 'bachelor', 'master', 'gpa', 'cgpa', 'university', 'college'].some(d => textLower.includes(d));
+  const hasActionVerbs = ['developed', 'built', 'designed', 'implemented', 'managed', 'created'].some(v => textLower.includes(v));
 
   if (hasSkills) score += 10.0;
   if (hasDegrees) score += 10.0;
   if (hasActionVerbs) score += 5.0;
 
-  const wordCount = text.split(/\s+/).length;
+  for (const flag of NON_RESUME_RED_FLAGS) {
+    if (textLower.includes(flag)) {
+      redFlags.push(flag);
+      score -= 30.0;
+    }
+  }
+
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
   if (wordCount > 2500) {
     score -= 20.0;
     redFlags.push("Excessive word count (>2500 words)");
   }
 
-  let finalScore = Math.max(0.0, Math.min(100.0, Math.round(score * 10) / 10));
-
-  // Student / Fresher protection rule
-  const isFresher = (hasEmail || hasPhone) && (hasDegrees || textLower.includes("education")) && (hasSkills || textLower.includes("projects") || textLower.includes("internship"));
-  if (isFresher && redFlags.length === 0 && finalScore < 70.0) {
-    finalScore = 80.0;
-    signals.push("Student/Fresher resume structure verified");
+  // Fresher / Student resume protection rule
+  if ((hasEmail || hasPhone) && hasDegrees && (hasSkills || detectedHeadings.some(h => ['projects', 'skills', 'internship'].includes(h)))) {
+    score = Math.max(score, 75.0);
   }
+
+  const finalScore = Math.max(0.0, Math.min(100.0, Math.round(score * 10) / 10));
 
   let docType = DocumentType.NON_RESUME;
   let isValid = false;
-  let message = "This document does not appear to be a resume.";
+  let message = "";
 
   if (redFlags.length > 0 && finalScore < 40.0) {
     docType = DocumentType.NON_RESUME;
@@ -186,159 +191,162 @@ export function classifyDocument(text, extractionStatus = "SUCCESS") {
   };
 }
 
-export function extractSkills(text) {
+export function parseResume(text) {
   const textLower = text.toLowerCase();
-  const extracted = {};
+  const emailMatch = text.match(/[\w\.-]+@[\w\.-]+\.\w+/);
+  const phoneMatch = text.match(/\+?\d[\d\s-]{8,}/);
+  const links = text.match(/https?:\/\/[^\s]+|(?:linkedin\.com|github\.com|leetcode\.com)\/[^\s]+/gi) || [];
 
+  const skillsByCategory = {};
+  let totalSkillsDetected = 0;
   for (const [category, skills] of Object.entries(STANDARD_SKILLS_DB)) {
-    const found = new Set();
+    const found = [];
     for (const skill of skills) {
-      const pattern = new RegExp(`\\b${skill.replace('+', '\\+')}\\b`, 'i');
+      const pattern = new RegExp('\\b' + skill.replace('+', '\\+') + '\\b', 'i');
       if (pattern.test(textLower)) {
-        found.add(skill.toUpperCase() === 'SQL' || skill.toUpperCase() === 'HTML' || skill.toUpperCase() === 'CSS' || skill.toUpperCase() === 'AWS' || skill.toUpperCase() === 'GCP' || skill.toUpperCase() === 'OOP' ? skill.toUpperCase() : (skill.charAt(0).toUpperCase() + skill.slice(1)));
+        found.push(skill.toUpperCase() === 'SQL' || skill.toUpperCase() === 'HTML' || skill.toUpperCase() === 'CSS' || skill.toUpperCase() === 'AWS' || skill.toUpperCase() === 'GCP' || skill.toUpperCase() === 'OOP' ? skill.toUpperCase() : (skill.charAt(0).toUpperCase() + skill.slice(1)));
       }
     }
-    extracted[category] = Array.from(found);
+    skillsByCategory[category] = found;
+    if (category !== 'Action Verbs') totalSkillsDetected += found.length;
   }
 
-  let totalSkills = 0;
-  for (const [k, v] of Object.entries(extracted)) {
-    if (k !== "Action Verbs") totalSkills += v.length;
+  const hasEducation = ['education', 'academic', 'bachelor', 'b.tech', 'university', 'college'].some(k => textLower.includes(k));
+  const hasExperience = ['experience', 'employment', 'internship', 'internships'].some(k => textLower.includes(k));
+  const hasProjects = ['project', 'projects'].some(k => textLower.includes(k));
+  const hasCerts = ['certifications', 'certification', 'certificates', 'achievements'].some(k => textLower.includes(k));
+
+  return {
+    personal_info: {
+      email: emailMatch ? emailMatch[0] : null,
+      phone: phoneMatch ? phoneMatch[0] : null,
+      links: Array.from(new Set(links))
+    },
+    education: hasEducation ? [true] : [],
+    experience: hasExperience ? [true] : [],
+    projects: hasProjects ? [true] : [],
+    certifications: hasCerts ? [true] : [],
+    skills: skillsByCategory,
+    total_skills_detected: totalSkillsDetected
+  };
+}
+
+export function evaluateModeA(parsed, text) {
+  let sectionsFound = 0;
+  if (parsed.education && parsed.education.length) sectionsFound += 1;
+  if (parsed.experience && parsed.experience.length) sectionsFound += 1;
+  if (parsed.projects && parsed.projects.length) sectionsFound += 1;
+  if (parsed.total_skills_detected > 0) sectionsFound += 1;
+  if (parsed.certifications && parsed.certifications.length) sectionsFound += 1;
+
+  const scoreStructure = Math.min(100.0, (sectionsFound / 4.0) * 100.0);
+
+  let contactPts = 0;
+  if (parsed.personal_info.email) contactPts += 1;
+  if (parsed.personal_info.phone) contactPts += 1;
+  if (parsed.personal_info.links && parsed.personal_info.links.length > 0) contactPts += 1;
+  const scoreContact = Math.min(100.0, (contactPts / 3.0) * 100.0);
+
+  const scoreSkills = Math.min(100.0, (parsed.total_skills_detected / 7.0) * 100.0);
+
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
+  const scoreFormatting = (wordCount >= 200 && wordCount <= 900) ? 95.0 : (wordCount <= 1400 ? 75.0 : 50.0);
+
+  const actionCount = (parsed.skills['Action Verbs'] || []).length;
+  const scoreActionVerbs = Math.min(100.0, (actionCount / 4.0) * 100.0);
+
+  const resumeQualityScore = Math.round(
+    ((scoreStructure * 0.25) +
+    (scoreContact * 0.20) +
+    (scoreSkills * 0.25) +
+    (scoreFormatting * 0.15) +
+    (scoreActionVerbs * 0.15)) * 10
+  ) / 10;
+
+  const suggestions = [];
+  if (scoreContact < 100.0) suggestions.push('Ensure your resume explicitly includes an email address, phone number, and LinkedIn/GitHub links.');
+  if (scoreSkills < 70.0) suggestions.push('List relevant technical skills, programming languages, databases, and developer tools in a dedicated Skills section.');
+  if (scoreActionVerbs < 70.0) suggestions.push('Use strong action verbs like "Architected", "Optimized", "Engineered", or "Spearheaded" to start bullet points.');
+  if (!parsed.projects || parsed.projects.length === 0) suggestions.push('Include 1–2 practical projects with tech stack details and measurable results.');
+
+  return {
+    analysis_mode: 'MODE_A_RESUME_HEALTH_CHECK',
+    resume_quality_score: resumeQualityScore,
+    section_scores: {
+      'Section Structure': Math.round(scoreStructure * 10) / 10,
+      'Contact Completeness': Math.round(scoreContact * 10) / 10,
+      'Skills Coverage': Math.round(scoreSkills * 10) / 10,
+      'Formatting & Readability': Math.round(scoreFormatting * 10) / 10,
+      'Action Verbs': Math.round(scoreActionVerbs * 10) / 10
+    },
+    suggestions,
+    note: 'Mode A evaluates overall structural health. Provide a Job Description to enable Mode B Job Match analysis.'
+  };
+}
+
+export function evaluateModeB(parsed, text, jobDescription) {
+  const healthCheck = evaluateModeA(parsed, text);
+  const jdTextLower = jobDescription.toLowerCase();
+  const resTextLower = text.toLowerCase();
+
+  const jdWords = new Set(jdTextLower.match(/\b[a-zA-Z0-9\+\#\.]{3,}\b/g) || []);
+  const stopWords = new Set(["with", "that", "this", "from", "have", "will", "your", "must", "work", "team", "years", "experience", "role"]);
+  for (const sw of stopWords) jdWords.delete(sw);
+
+  const resWords = new Set(resTextLower.match(/\b[a-zA-Z0-9\+\#\.]{3,}\b/g) || []);
+
+  const matchingKeywords = Array.from(jdWords).filter(w => resWords.has(w));
+  const missingKeywords = Array.from(jdWords).filter(w => !resWords.has(w));
+
+  const displayMissing = missingKeywords.filter(k => k.length >= 3).map(k => k.charAt(0).toUpperCase() + k.slice(1)).slice(0, 8);
+  const displayMatching = matchingKeywords.filter(k => k.length >= 3).map(k => k.charAt(0).toUpperCase() + k.slice(1)).slice(0, 10);
+
+  const exactMatchScore = jdWords.size > 0 ? Math.min(100.0, (matchingKeywords.length / jdWords.size) * 100.0) : 75.0;
+
+  const set1 = new Set(resTextLower.match(/\w{4,}/g) || []);
+  const set2 = new Set(jdTextLower.match(/\w{4,}/g) || []);
+  const union = new Set([...set1, ...set2]);
+  const intersection = Array.from(set1).filter(w => set2.has(w));
+  const jaccard = union.size > 0 ? (intersection.length / union.size) : 0.25;
+  const semanticScore = Math.max(30.0, Math.min(100.0, Math.round(jaccard * 250.0 * 10) / 10));
+
+  const matchScore = Math.round(((exactMatchScore * 0.5) + (semanticScore * 0.5)) * 10) / 10;
+
+  const suggestions = [];
+  if (displayMissing.length > 0) {
+    const topMissing = displayMissing.slice(0, 3).join(', ');
+    suggestions.push(`If you genuinely have experience with technologies like ${topMissing}, consider adding them to your skills or project descriptions.`);
+  }
+  if (matchingKeywords.length < 5) {
+    suggestions.push("Align your project bullet points with the key tools and methodologies highlighted in the job description.");
   }
 
   return {
-    skills_by_category: extracted,
-    total_skills_detected: totalSkills,
-    action_verbs_detected: extracted["Action Verbs"] || [],
-    action_verb_count: (extracted["Action Verbs"] || []).length
+    analysis_mode: "MODE_B_JOB_MATCH_ANALYSIS",
+    placex_match_score: matchScore,
+    ats_compatibility_score: matchScore,
+    resume_quality_score: healthCheck.resume_quality_score,
+    semantic_similarity_score: Math.round(semanticScore),
+    exact_keyword_match_score: Math.round(exactMatchScore),
+    matching_skills: displayMatching,
+    missing_skills: displayMissing,
+    suggestions
   };
 }
 
 export function evaluateATS(text, targetJd = "") {
-  const textLower = text.toLowerCase();
-  const skillsRes = extractSkills(text);
-
-  // 1. Structure
-  const sections = ["education", "experience", "projects", "skills", "certifications", "summary"];
-  const detectedSections = sections.filter(s => textLower.includes(s));
-  const scoreStructure = Math.min(100.0, (detectedSections.length / sections.length) * 100.0);
-
-  // 2. Contact Information
-  const hasEmail = /[\w\.-]+@[\w\.-]+/.test(text) ? 1 : 0;
-  const hasPhone = /\+?\d[\d\s-]{8,}/.test(text) ? 1 : 0;
-  const hasLinks = textLower.includes('linkedin') || textLower.includes('github') ? 1 : 0;
-  const scoreContact = ((hasEmail + hasPhone + hasLinks) / 3.0) * 100.0;
-
-  // 3. Education
-  const hasDegree = ["b.tech", "b.e.", "b.s.", "m.tech", "bachelor", "master", "computer science"].some(d => textLower.includes(d)) ? 1 : 0;
-  const hasYear = /20\d\d/.test(text) ? 1 : 0;
-  const scoreEducation = ((hasDegree + hasYear) / 2.0) * 100.0;
-
-  // 4. Experience & Chronology
-  const hasExp = textLower.includes("experience") || textLower.includes("internship");
-  const scoreExperience = hasExp ? 85.0 : 50.0;
-
-  // 5. Projects & Quantified Achievements
-  const metricsMatches = textLower.match(/\b\d+%\b|\b\d+x\b|\$\d+|\b\d+k\b/g) || [];
-  const scoreProjects = Math.min(100.0, 50.0 + (metricsMatches.length * 15.0));
-
-  // 6. Technical Skills Coverage
-  const totalSkills = skillsRes.total_skills_detected;
-  const scoreSkills = Math.min(100.0, (totalSkills / 8.0) * 100.0);
-
-  // 7. Certifications
-  const hasCerts = textLower.includes("certification") || textLower.includes("certified");
-  const scoreCerts = hasCerts ? 90.0 : 60.0;
-
-  // 8. Keyword Coverage vs JD
-  let scoreKeywords = 75.0;
-  let missingKeywords = ["System Design", "Microservices", "Docker"];
-  const allDetectedSkillsList = Object.values(skillsRes.skills_by_category).flat().filter(s => !STANDARD_SKILLS_DB["Action Verbs"].map(v => v.toLowerCase()).includes(s.toLowerCase()));
-
-  if (targetJd && targetJd.trim().length > 10) {
-    const jdWords = Array.from(new Set(targetJd.toLowerCase().match(/\w{4,}/g) || []));
-    const resWords = new Set(textLower.match(/\w{4,}/g) || []);
-    const overlap = jdWords.filter(w => resWords.has(w));
-    scoreKeywords = Math.min(100.0, (overlap.length / Math.max(1, jdWords.length)) * 150.0);
-    const missing = jdWords.filter(w => !resWords.has(w));
-    missingKeywords = missing.slice(0, 5).map(w => w.charAt(0).toUpperCase() + w.slice(1));
+  const parsed = parseResume(text);
+  if (targetJd && targetJd.trim().length > 20) {
+    const res = evaluateModeB(parsed, text, targetJd);
+    return {
+      ats_score: res.placex_match_score,
+      ...res
+    };
+  } else {
+    const res = evaluateModeA(parsed, text);
+    return {
+      ats_score: res.resume_quality_score,
+      ...res
+    };
   }
-
-  // 9. Semantic Match
-  const scoreSemantic = Math.min(100.0, scoreKeywords * 1.05);
-
-  // 10. Formatting Spacing
-  const scoreFormatting = text.length > 400 ? 88.0 : 45.0;
-
-  // 11. Readability
-  const wordCount = text.split(/\s+/).length;
-  const scoreReadability = (wordCount >= 250 && wordCount <= 850) ? 92.0 : 65.0;
-
-  // 12. Action Verbs
-  const scoreActionVerbs = Math.min(100.0, (skillsRes.action_verb_count / 4.0) * 100.0);
-
-  // 13. Grammar
-  const scoreGrammar = 94.0;
-
-  const weights = {
-    structure: 0.10,
-    contact_info: 0.10,
-    education: 0.10,
-    experience: 0.10,
-    projects: 0.10,
-    technical_skills: 0.10,
-    certifications: 0.05,
-    keyword_coverage: 0.10,
-    semantic_match: 0.10,
-    formatting: 0.05,
-    readability: 0.05,
-    action_verbs: 0.05,
-    grammar: 0.05
-  };
-
-  const categoryScores = {
-    "Contact Information": Math.round(scoreContact),
-    "Education": Math.round(scoreEducation),
-    "Work Experience": Math.round(scoreExperience),
-    "Projects": Math.round(scoreProjects),
-    "Technical Skills": Math.round(scoreSkills),
-    "Structure": Math.round(scoreStructure),
-    "Certifications": Math.round(scoreCerts),
-    "Keyword Coverage": Math.round(scoreKeywords),
-    "Formatting & Layout": Math.round(scoreFormatting),
-    "Action Verbs": Math.round(scoreActionVerbs)
-  };
-
-  const weightedSum = 
-    (scoreStructure * weights.structure) +
-    (scoreContact * weights.contact_info) +
-    (scoreEducation * weights.education) +
-    (scoreExperience * weights.experience) +
-    (scoreProjects * weights.projects) +
-    (scoreSkills * weights.technical_skills) +
-    (scoreCerts * weights.certifications) +
-    (scoreKeywords * weights.keyword_coverage) +
-    (scoreSemantic * weights.semantic_match) +
-    (scoreFormatting * weights.formatting) +
-    (scoreReadability * weights.readability) +
-    (scoreActionVerbs * weights.action_verbs) +
-    (scoreGrammar * weights.grammar);
-
-  const finalScore = Math.max(25, Math.min(98, Math.round(weightedSum)));
-
-  const suggestions = [];
-  if (scoreProjects < 75) suggestions.push("Quantify key project achievements with concrete percentages or speedups (e.g. 'Improved query latency by 35%')");
-  if (skillsRes.action_verb_count < 3) suggestions.push("Start project bullet points with active engineering verbs like 'Architected', 'Implemented', or 'Optimized'");
-  if (missingKeywords.length > 0) suggestions.push(`Incorporate target technical keywords: ${missingKeywords.slice(0, 3).join(', ')}`);
-  if (!hasLinks) suggestions.push("Include demonstrable repository links (GitHub) and live demo URLs in your contact header");
-
-  return {
-    ats_score: finalScore,
-    section_scores: categoryScores,
-    matching_skills: allDetectedSkillsList.slice(0, 10),
-    missing_skills: missingKeywords,
-    suggestions: suggestions.slice(0, 3),
-    exact_keyword_match_score: Math.round(scoreKeywords),
-    semantic_similarity_score: Math.round(scoreSemantic)
-  };
 }
