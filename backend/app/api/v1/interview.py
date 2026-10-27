@@ -56,60 +56,6 @@ def finish_interview(
     session_id = payload.get("session_id", 1)
     return InterviewService.finish_session(db=db, session_id=session_id)
 
-@router.get("/simli-session")
-def get_simli_session():
-    import os, requests
-    simli_key = os.getenv("SIMLI_API_KEY", "").strip()
-    face_id = os.getenv("SIMLI_FACE_ID", "cace3ef7-a4c4-425d-a8cf-a5358eb0c427").strip()
-    if not simli_key:
-        return {"available": False, "error": "SIMLI_API_KEY not configured"}
-    try:
-        tok_res = requests.post(
-            "https://api.simli.ai/compose/token",
-            json={"faceId": face_id, "handleSilence": True, "maxSessionLength": 600, "maxIdleTime": 30},
-            headers={"x-simli-api-key": simli_key},
-            timeout=5
-        )
-        ice_res = requests.get(
-            "https://api.simli.ai/compose/ice",
-            headers={"x-simli-api-key": simli_key},
-            timeout=5
-        )
-        if not tok_res.ok:
-            return {"available": False, "error": tok_res.text}
-        return {
-            "available": True,
-            "session_token": tok_res.json().get("session_token"),
-            "ice_servers": ice_res.json() if ice_res.ok else [],
-            "face_id": face_id
-        }
-    except Exception as e:
-        return {"available": False, "error": str(e)}
-
-@router.post("/tts")
-def interview_tts(payload: dict = Body(...)):
-    import os, requests
-    from fastapi.responses import Response
-    text = (payload.get("text") or "").strip()
-    if not text:
-        return Response(content="Text required", status_code=400)
-    eleven_key = os.getenv("ELEVENLABS_API_KEY", "").strip()
-    voice_id = payload.get("voice_id") or os.getenv("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")
-    if not eleven_key:
-        return Response(content="ELEVENLABS_API_KEY not configured", status_code=400)
-    try:
-        r = requests.post(
-            f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
-            headers={"Content-Type": "application/json", "xi-api-key": eleven_key},
-            json={"text": text, "model_id": "eleven_flash_v2_5", "voice_settings": {"stability": 0.5, "similarity_boost": 0.8}},
-            timeout=10
-        )
-        if not r.ok:
-            return Response(content=r.text, status_code=r.status_code)
-        return Response(content=r.content, media_type="audio/mpeg", headers={"Cache-Control": "public, max-age=86400"})
-    except Exception as e:
-        return Response(content=str(e), status_code=500)
-
 @router.post("/teardown")
 def teardown_interview(
     payload: dict = Body(default={}),

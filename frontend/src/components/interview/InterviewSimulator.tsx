@@ -123,15 +123,8 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   // Media Devices state (Camera + Mic)
   const [cameraActive, setCameraActive] = useState(false);
   const [permissionError, setPermissionError] = useState<string | null>(null);
-  const [micAudioLevel, setMicAudioLevel] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
-  const lastSpokenTextRef = useRef<string>('');
-  const lastSpokenTimeRef = useRef<number>(0);
-  const recognitionRef = useRef<any>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const mediaStreamRef = useRef<MediaStream | null>(null);
   const companyRef = useRef<HTMLDivElement>(null);
   const roleRef = useRef<HTMLDivElement>(null);
   const focusRef = useRef<HTMLDivElement>(null);
@@ -168,7 +161,6 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     const handleMessage = (ev: MessageEvent) => {
       if (!ev.data || typeof ev.data !== 'object') return;
       switch (ev.data.type) {
-        case 'RTVI_READY':
         case 'RTVI_CONNECTED':
           setConnectionStatus('connected');
           break;
@@ -198,153 +190,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_CONNECT' }, '*');
     }
-    setTimeout(() => {
-      setConnectionStatus('connected');
-    }, 1000);
   };
-
-  // High-fidelity speech playback using ElevenLabs Sarah voice routed through avatar audio player
-  const playQuestionAudio = async (text: string, force: boolean = false) => {
-    if (!text || isSpeakerMuted) return;
-
-    // Deduplicate rapid consecutive triggers of identical question text
-    const now = Date.now();
-    if (!force && lastSpokenTextRef.current === text && now - lastSpokenTimeRef.current < 4000) {
-      return;
-    }
-    lastSpokenTextRef.current = text;
-    lastSpokenTimeRef.current = now;
-
-    setBotVoiceState('speaking');
-
-    // Differentiate between Cloudflare avatar iframe (/api/v1/interview/avatar) and localhost Pipecat WebRTC runner (port 7860)
-    const isLocalhostPipecat = Boolean(
-      sessionData?.live_brain?.webrtc_url &&
-      sessionData.live_brain.webrtc_url.includes('7860')
-    );
-
-    // 1. If running Cloudflare avatar iframe, route speech via postMessage to avatarPage.js
-    if (!isLocalhostPipecat && iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_SPEAK', text }, '*');
-      return;
-    }
-
-    // 2. On localhost Pipecat, automatic speech generation is handled natively by bot.py via WebRTC.
-    // If this is an automatic turn trigger (!force), do not double-play in parent window to avoid echo.
-    if (isLocalhostPipecat && !force) {
-      return;
-    }
-
-    // 3. Explicit user replay or fallback: Play audio stream via ElevenLabs endpoint with browser speech synthesis fallback
-    try {
-      if (audioPlayerRef.current) {
-        audioPlayerRef.current.pause();
-        audioPlayerRef.current = null;
-      }
-      const res = await axios.post('/api/v1/interview/tts', { text }, { responseType: 'blob' });
-      if (res.data) {
-        const audioUrl = URL.createObjectURL(res.data);
-        const audio = new Audio(audioUrl);
-        audioPlayerRef.current = audio;
-        audio.onplay = () => setBotVoiceState('speaking');
-        audio.onended = () => {
-          setBotVoiceState('listening');
-          URL.revokeObjectURL(audioUrl);
-        };
-        audio.onerror = () => {
-          setBotVoiceState('listening');
-          URL.revokeObjectURL(audioUrl);
-        };
-        await audio.play();
-      }
-    } catch (err) {
-      console.warn('[Interview] Direct ElevenLabs audio stream error, falling back to speech synthesis:', err);
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window && !isSpeakerMuted) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.05;
-        try {
-          const voices = window.speechSynthesis.getVoices();
-          const femaleVoice = voices.find(v => /female|woman|sarah|zira|samantha/i.test(v.name));
-          if (femaleVoice) utterance.voice = femaleVoice;
-        } catch (e) {}
-        utterance.onstart = () => setBotVoiceState('speaking');
-        utterance.onend = () => setBotVoiceState('listening');
-        utterance.onerror = () => setBotVoiceState('listening');
-        window.speechSynthesis.speak(utterance);
-      } else {
-        setBotVoiceState('listening');
-      }
-    }
-  };
-
-  // Initialize Web Speech Recognition for candidate microphone transcription
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event: any) => {
-        let interim = '';
-        let final = '';
-        for (let i = 0; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            final += event.results[i][0].transcript + ' ';
-          } else {
-            interim += event.results[i][0].transcript;
-          }
-        }
-        const full = (final + interim).trim();
-        if (full) {
-          setAnswerText(full);
-        }
-      };
-
-      recognition.onerror = (e: any) => {
-        if (e.error !== 'no-speech') {
-          console.warn('[SpeechRecognition] error:', e.error);
-        }
-      };
-
-      recognitionRef.current = recognition;
-    }
-
-    return () => {
-      if (recognitionRef.current) {
-        try { recognitionRef.current.stop(); } catch (e) {}
-      }
-    };
-  }, []);
-
-  // Synchronize candidate microphone listening with interview turns:
-  // When AI finishes speaking (botVoiceState becomes 'listening'), activate speech recognition
-  useEffect(() => {
-    if (!recognitionRef.current || isMicMuted) return;
-
-    if (stage === 'live' && botVoiceState === 'listening') {
-      try {
-        recognitionRef.current.start();
-      } catch (e) {
-        // Recognition may already be listening
-      }
-    } else {
-      try {
-        recognitionRef.current.stop();
-      } catch (e) {}
-    }
-  }, [stage, botVoiceState, isMicMuted]);
-
-  // Automatically speak the interview question strictly after connection readiness has been confirmed
-  useEffect(() => {
-    if (stage === 'live' && connectionStatus === 'connected' && sessionData?.questions?.[currentQIndex]) {
-      const qText = sessionData.questions[currentQIndex];
-      playQuestionAudio(qText);
-    }
-  }, [stage, connectionStatus, currentQIndex, isSpeakerMuted]);
 
   // Request browser webcam & microphone streams
   const startMedia = async () => {
@@ -354,34 +200,10 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
         video: { width: { ideal: 640 }, height: { ideal: 360 } }, 
         audio: true 
       });
-      mediaStreamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
       setCameraActive(true);
-
-      // Create AudioContext analyzer to react to candidate microphone input
-      try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        audioContextRef.current = audioCtx;
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 64;
-        const source = audioCtx.createMediaStreamSource(stream);
-        source.connect(analyser);
-
-        const dataArr = new Uint8Array(analyser.frequencyBinCount);
-        const pollVolume = () => {
-          if (!stream.active) return;
-          analyser.getByteFrequencyData(dataArr);
-          let sum = 0;
-          for (let i = 0; i < dataArr.length; i++) sum += dataArr[i];
-          const avg = sum / dataArr.length;
-          setMicAudioLevel(Math.min(100, Math.round((avg / 128) * 100)));
-          requestAnimationFrame(pollVolume);
-        };
-        pollVolume();
-      } catch (e) {}
-
     } catch (err: any) {
       console.warn("Media device request error:", err);
       setPermissionError("Webcam/Mic permission was denied. You can continue testing with real-time speech and geometric telemetry.");
@@ -390,22 +212,12 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   };
 
   const stopMedia = () => {
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-      mediaStreamRef.current = null;
-    }
-    if (videoRef.current) {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
       videoRef.current.srcObject = null;
     }
-    if (audioContextRef.current) {
-      audioContextRef.current.close().catch(() => {});
-      audioContextRef.current = null;
-    }
-    if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch (e) {}
-    }
     setCameraActive(false);
-    setMicAudioLevel(0);
   };
 
   // Helper to toggle Focus Area selection
@@ -502,8 +314,6 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
     setEvalResult(null);
     setFinalReport(null);
     setTurnStartTime(Date.now());
-    lastSpokenTextRef.current = '';
-    lastSpokenTimeRef.current = 0;
 
     await startMedia();
 
@@ -558,8 +368,6 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
       setAnswerText('');
       setEvalResult(null);
       setTurnStartTime(Date.now());
-      lastSpokenTextRef.current = '';
-      lastSpokenTimeRef.current = 0;
     } else {
       try {
         const res = await axios.post(
@@ -591,10 +399,6 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
   // Handle cleanup of speech, media, and evaluation on exit/end call
   const handleTeardownLiveCall = () => {
     stopMedia();
-    if (audioPlayerRef.current) {
-      audioPlayerRef.current.pause();
-      audioPlayerRef.current = null;
-    }
     if (iframeRef.current?.contentWindow) {
       iframeRef.current.contentWindow.postMessage({ type: 'PLACEX_DISCONNECT' }, '*');
     }
@@ -901,16 +705,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
                 </div>
 
                 <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-black/60 text-slate-300 backdrop-blur-sm">
-                  {isMicMuted ? (
-                    <MicOff className="w-2.5 h-2.5 text-red-400" />
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      <Mic className={`w-2.5 h-2.5 ${micAudioLevel > 15 ? 'text-emerald-400' : 'text-slate-400'}`} />
-                      {micAudioLevel > 15 && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                      )}
-                    </div>
-                  )}
+                  {isMicMuted ? <MicOff className="w-2.5 h-2.5 text-red-400" /> : <Mic className="w-2.5 h-2.5 text-emerald-400" />}
                 </div>
 
                 <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
@@ -933,19 +728,9 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
                     <Radio className="w-3.5 h-3.5 animate-pulse" />
                     Current Interview Question ({currentTier})
                   </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => playQuestionAudio(sessionData.questions[currentQIndex], true)}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/80 text-emerald-300 text-xs font-bold transition cursor-pointer shadow-xs"
-                      title="Listen to AI Interviewer speak this question"
-                    >
-                      <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{botVoiceState === 'speaking' ? 'Speaking...' : 'Listen'}</span>
-                    </button>
-                    <span className="text-[11px] font-mono text-slate-400 truncate max-w-xs hidden sm:inline">
-                      {currentTopic}
-                    </span>
-                  </div>
+                  <span className="text-[11px] font-mono text-slate-400 truncate max-w-xs">
+                    {currentTopic}
+                  </span>
                 </div>
                 <p className="text-sm sm:text-base font-extrabold text-white leading-relaxed max-h-24 overflow-y-auto pr-2">
                   "{sessionData.questions[currentQIndex]}"
@@ -1128,20 +913,12 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ token, o
               className={`p-2.5 rounded-xl border transition flex items-center gap-2 cursor-pointer ${
                 isMicMuted
                   ? 'bg-red-950/80 border-red-700 text-red-400'
-                  : micAudioLevel > 15
-                  ? 'bg-emerald-950/80 border-emerald-500/80 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                   : 'bg-[#17202D] border-[#263346] text-slate-200 hover:text-white'
               }`}
               title={isMicMuted ? "Unmute microphone" : "Mute microphone"}
             >
-              {isMicMuted ? (
-                <MicOff className="w-4 h-4" />
-              ) : (
-                <Mic className={`w-4 h-4 ${micAudioLevel > 15 ? 'text-emerald-400 animate-pulse' : 'text-emerald-400'}`} />
-              )}
-              <span className="text-xs font-bold hidden sm:inline">
-                {isMicMuted ? 'Muted' : micAudioLevel > 15 ? 'Speaking...' : 'Mic Active'}
-              </span>
+              {isMicMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-emerald-400" />}
+              <span className="text-xs font-bold hidden sm:inline">{isMicMuted ? 'Muted' : 'Mic Active'}</span>
             </button>
 
             <button
