@@ -4,8 +4,5 @@
   "type": "module",
   "scripts": {
     "build": "cd frontend && npm install && npm run build"
-  },
-  "dependencies": {
-    "unpdf": "^1.9.1"
   }
 }

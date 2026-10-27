@@ -1,6 +1,7 @@
 // PlaceX ATS Resume Analysis & Document Classifier Engine
 // Faithful Edge Port of backend/app/resume_service/
-import { extractText as extractPdfText, getDocumentProxy } from 'unpdf';
+import zlib from 'node:zlib';
+import { Buffer } from 'node:buffer';
 
 export const DocumentType = {
   RESUME: "RESUME",
@@ -74,6 +75,214 @@ async function extractDocxText(bytes) {
   return '';
 }
 
+async function decompressPdfStream(buf) {
+  if (!buf || buf.length === 0) return '';
+  try {
+    const ds = new DecompressionStream('deflate');
+    const writer = ds.writable.getWriter();
+    writer.write(buf);
+    writer.close();
+    const res = new Response(ds.readable);
+    const arr = await res.arrayBuffer();
+    return new TextDecoder('latin1').decode(arr);
+  } catch (e) {
+    try {
+      const ds = new DecompressionStream('deflate-raw');
+      const writer = ds.writable.getWriter();
+      writer.write(buf);
+      writer.close();
+      const res = new Response(ds.readable);
+      const arr = await res.arrayBuffer();
+      return new TextDecoder('latin1').decode(arr);
+    } catch (e2) {
+      try {
+        return zlib.inflateSync(buf).toString('latin1');
+      } catch (e3) {
+        return '';
+      }
+    }
+  }
+}
+
+export async function extractPdfTextPure(buffer) {
+  try {
+    const bytes = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
+    const str = bytes.toString('latin1');
+
+    // 1. Map font names to ToUnicode CMap object IDs
+    const fontToUnicode = {};
+    const fontDictRegex = /\/Font\s*<<([^>]*)>>/g;
+    let fdm;
+    while ((fdm = fontDictRegex.exec(str)) !== null) {
+      const fdict = fdm[1];
+      const itemRegex = /\/([A-Za-z0-9]+)\s+(\d+)\s+(\d+)\s+R/g;
+      let im;
+      while ((im = itemRegex.exec(fdict)) !== null) {
+        const fname = im[1];
+        const fobj = im[2];
+        const foPattern = new RegExp('\\b' + fobj + '\\s+\\d+\\s+obj[\\r\\n\\s]*<<([^>]*)>>');
+        const foMatch = foPattern.exec(str);
+        if (foMatch) {
+          const fbody = foMatch[1];
+          const tuMatch = /\/ToUnicode\s+(\d+)\s+(\d+)\s+R/.exec(fbody);
+          if (tuMatch) {
+            fontToUnicode[fname] = parseInt(tuMatch[1], 10);
+          }
+        }
+      }
+    }
+
+    // 2. Parse all ToUnicode CMaps
+    const cmaps = {};
+    for (const [fname, tuId] of Object.entries(fontToUnicode)) {
+      const tuPattern = new RegExp('\\b' + tuId + '\\s+\\d+\\s+obj[\\r\\n\\s]*<<([^>]*)>>[\\r\\n\\s]*stream[\\r\\n]+([\\s\\S]*?)[\\r\\n]+endstream');
+      const tuMatch = tuPattern.exec(str);
+      if (tuMatch) {
+        const sdata = Buffer.from(tuMatch[2], 'latin1');
+        const decomp = await decompressPdfStream(sdata);
+
+        const cmap = {};
+        const bfcharRegex = /beginbfchar[\r\n\s]*([\s\S]*?)[\r\n\s]*endbfchar/g;
+        let bf;
+        while ((bf = bfcharRegex.exec(decomp)) !== null) {
+          const lines = bf[1].match(/<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/g) || [];
+          for (const l of lines) {
+            const p = /<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/.exec(l);
+            if (p) {
+              const src = parseInt(p[1], 16);
+              const destHex = p[2];
+              let destStr = '';
+              for (let k = 0; k < destHex.length; k += 4) {
+                destStr += String.fromCharCode(parseInt(destHex.slice(k, k + 4), 16));
+              }
+              cmap[src] = destStr;
+            }
+          }
+        }
+
+        const bfrangeRegex = /beginbfrange[\r\n\s]*([\s\S]*?)[\r\n\s]*endbfrange/g;
+        let bfr;
+        while ((bfr = bfrangeRegex.exec(decomp)) !== null) {
+          const lines = bfr[1].match(/<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/g) || [];
+          for (const l of lines) {
+            const p = /<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>\s*<([0-9a-fA-F]+)>/.exec(l);
+            if (p) {
+              const start = parseInt(p[1], 16);
+              const end = parseInt(p[2], 16);
+              let dest = parseInt(p[3], 16);
+              for (let c = start; c <= end; c++) {
+                cmap[c] = String.fromCharCode(dest++);
+              }
+            }
+          }
+        }
+        cmaps[fname] = cmap;
+      }
+    }
+
+    // 3. Extract text from content streams tracking font state
+    const extractedText = [];
+    const contentRegex = /<<([^>]*)>>[\r\n\s]*stream[\r\n]+([\s\S]*?)[\r\n]+endstream/g;
+    let cm;
+    const pageMatches = str.match(/\/Type\s*\/Page\b/g);
+    const pageCount = pageMatches ? pageMatches.length : 1;
+
+    while ((cm = contentRegex.exec(str)) !== null) {
+      const dictHdr = cm[1];
+      const sdata = Buffer.from(cm[2], 'latin1');
+      let decomp = '';
+      if (dictHdr.includes('/FlateDecode')) {
+        decomp = await decompressPdfStream(sdata);
+      } else {
+        decomp = sdata.toString('latin1');
+      }
+
+      if (decomp && (decomp.includes('BT') || decomp.includes('TJ') || decomp.includes('Tj'))) {
+        let currentFont = null;
+        const tokenRegex = /(\/([A-Za-z0-9]+)\s+[\d\.]+\s+Tf)|(\[([\s\S]*?)\]\s*TJ)|((\((?:[^\\)]|\\.)*\)|<[0-9a-fA-F]+>)\s*Tj)|([-\d\.]+\s+([-\d\.]+)\s+T[dD])|(T\*)|(ET)/g;
+        let tok;
+        while ((tok = tokenRegex.exec(decomp)) !== null) {
+          if (tok[1]) {
+            currentFont = tok[2];
+          } else if (tok[3]) {
+            const content = tok[4];
+            const parts = content.match(/<([0-9a-fA-F]+)>|\(((?:[^\\)]|\\.)*)\)|([-\d\.]+)/g) || [];
+            const curCmap = cmaps[currentFont] || {};
+            for (const p of parts) {
+              if (p.startsWith('<')) {
+                const hexStr = p.slice(1, -1);
+                for (let i = 0; i < hexStr.length; i += 4) {
+                  const code = parseInt(hexStr.slice(i, i + 4), 16);
+                  extractedText.push(curCmap[code] !== undefined ? curCmap[code] : String.fromCharCode(code));
+                }
+              } else if (p.startsWith('(')) {
+                extractedText.push(p.slice(1, -1));
+              } else {
+                const num = parseFloat(p);
+                if (num < -120) {
+                  extractedText.push(' ');
+                }
+              }
+            }
+          } else if (tok[5]) {
+            const strMatch = tok[6];
+            const curCmap = cmaps[currentFont] || {};
+            if (strMatch.startsWith('<')) {
+              const hexStr = strMatch.slice(1, -1);
+              for (let i = 0; i < hexStr.length; i += 4) {
+                const code = parseInt(hexStr.slice(i, i + 4), 16);
+                extractedText.push(curCmap[code] !== undefined ? curCmap[code] : String.fromCharCode(code));
+              }
+            } else if (strMatch.startsWith('(')) {
+              extractedText.push(strMatch.slice(1, -1));
+            }
+          } else if (tok[7]) {
+            const dy = Math.abs(parseFloat(tok[8]));
+            const dx = parseFloat(tok[7].split(' ')[0]);
+            if (dy > 2) extractedText.push('\n');
+            else if (dx > 30) extractedText.push(' ');
+          } else if (tok[9] || tok[10]) {
+            extractedText.push('\n');
+          }
+        }
+      }
+    }
+
+    let fullText = extractedText.join('')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/\n\s*\n+/g, '\n\n')
+      .trim();
+
+    // Fallback: If fullText is empty or very short (<25 chars), scan for uncompressed text streams or ASCII runs
+    if (fullText.length < 25) {
+      const rawMatches = str.match(/\(([^\(\)\\]{3,})\)/g) || [];
+      if (rawMatches.length > 5) {
+        const candidate = rawMatches.map(m => m.slice(1, -1)).join(' ').trim();
+        if (candidate.length > fullText.length) {
+          fullText = candidate;
+        }
+      }
+    }
+
+    const cleanLen = fullText.replace(/\s+/g, '').length;
+    if (cleanLen === 0) {
+      const hasImages = str.includes('/Image') || str.includes('/XObject') || str.includes('/Subtype/Image');
+      if (hasImages || pageCount > 0) {
+        return { text: "", status: "IMAGE_ONLY", pageCount, characterCount: 0 };
+      }
+      return { text: "", status: "EXTRACTION_FAILED", pageCount, characterCount: 0, error: "No readable text found in PDF." };
+    }
+
+    if (cleanLen < 20) {
+      return { text: "", status: "EXTRACTION_FAILED", pageCount, characterCount: cleanLen, error: "Text extracted was insufficient." };
+    }
+
+    return { text: fullText, status: "SUCCESS", pageCount, characterCount: fullText.length };
+  } catch (err) {
+    return { text: "", status: "EXTRACTION_FAILED", pageCount: 0, characterCount: 0, error: err.message };
+  }
+}
+
 export async function extractTextFromBuffer(buffer, filename = "") {
   const bytes = new Uint8Array(buffer);
   if (bytes.length === 0) {
@@ -87,42 +296,11 @@ export async function extractTextFromBuffer(buffer, filename = "") {
     return { text: "", status: "INVALID_FORMAT", error: "Unsupported file format. Please upload a PDF or DOCX file." };
   }
 
-  let text = "";
-  let totalPages = 0;
-
   if (isPdf) {
-    try {
-      const pdf = await getDocumentProxy(bytes);
-      totalPages = pdf.numPages || 0;
-      const res = await extractPdfText(pdf, { mergePages: true });
-      if (typeof res.text === 'string') {
-        text = res.text.trim();
-      } else if (Array.isArray(res.text)) {
-        text = res.text.join("\n").trim();
-      }
-    } catch (e) {
-      try {
-        const res = await extractPdfText(bytes);
-        totalPages = res.totalPages || 0;
-        if (typeof res.text === 'string') {
-          text = res.text.trim();
-        } else if (Array.isArray(res.text)) {
-          text = res.text.join("\n").trim();
-        }
-      } catch (e2) {
-        return { text: "", status: "EXTRACTION_FAILED", pageCount: 0, characterCount: 0, error: e.message + " | " + e2.message };
-      }
-    }
-
-    const clean = text.replace(/\s+/g, '');
-    if (clean.length === 0 && totalPages > 0) {
-      return { text: "", status: "IMAGE_ONLY", pageCount: totalPages, characterCount: 0 };
-    }
-    if (clean.length < 20) {
-      return { text: "", status: "EXTRACTION_FAILED", pageCount: totalPages, characterCount: clean.length };
-    }
+    return await extractPdfTextPure(bytes);
   } else {
     // DOCX handling
+    let text = "";
     const docxText = await extractDocxText(bytes);
     if (docxText && docxText.length >= 25) {
       text = docxText;
@@ -140,9 +318,8 @@ export async function extractTextFromBuffer(buffer, filename = "") {
     if (text.length < 25) {
       return { text: "", status: "EXTRACTION_FAILED", error: "Could not extract readable text from document." };
     }
+    return { text, status: "SUCCESS", pageCount: 1, characterCount: text.length };
   }
-
-  return { text, status: "SUCCESS", pageCount: totalPages, characterCount: text.length };
 }
 
 export function classifyDocument(text, extractionStatus = "SUCCESS") {
