@@ -122,22 +122,150 @@ CORE OPERATING PRINCIPLES:
    - Help guide students to the right PlaceX modules (Coding Sandbox, Quiz Module, Career Roadmap, ATS Resume Checker, Mock Interview) when it helps their progress.`;
 
 function parseJsonFromText(rawText) {
-  if (!rawText) return null;
+  if (!rawText || typeof rawText !== 'string') return null;
+
   let text = rawText.trim();
-  if (text.startsWith('```json')) text = text.slice(7);
-  else if (text.startsWith('```')) text = text.slice(3);
-  if (text.endsWith('```')) text = text.slice(0, -3);
+  // Strip code block markers if present
+  const jsonBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+  if (jsonBlockMatch && jsonBlockMatch[1]) {
+    text = jsonBlockMatch[1].trim();
+  } else {
+    if (text.startsWith('```json')) text = text.slice(7);
+    else if (text.startsWith('```')) text = text.slice(3);
+    if (text.endsWith('```')) text = text.slice(0, -3);
+    text = text.trim();
+  }
+
+  // 1. Direct parse attempt
   try {
-    return JSON.parse(text.trim());
-  } catch (e) {
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      try {
-        return JSON.parse(jsonMatch[0]);
-      } catch (_) {}
+    return JSON.parse(text);
+  } catch (e) {}
+
+  // 2. Extract between first { and last }
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    const sliced = text.slice(firstBrace, lastBrace + 1);
+    try {
+      return JSON.parse(sliced);
+    } catch (e) {}
+
+    // 3. Sanitize unescaped control characters inside JSON strings (literal newlines, tabs, etc.)
+    let inString = false;
+    let escaped = false;
+    let sanitized = '';
+    for (let i = 0; i < sliced.length; i++) {
+      const char = sliced[i];
+      if (char === '"' && !escaped) {
+        inString = !inString;
+        sanitized += char;
+      } else if (inString) {
+        if (char === '\\') {
+          escaped = !escaped;
+          sanitized += char;
+        } else {
+          escaped = false;
+          if (char === '\n') {
+            sanitized += '\\n';
+          } else if (char === '\r') {
+            // skip carriage return
+          } else if (char === '\t') {
+            sanitized += '\\t';
+          } else {
+            sanitized += char;
+          }
+        }
+      } else {
+        escaped = false;
+        sanitized += char;
+      }
+    }
+
+    // Strip trailing commas before } or ]
+    sanitized = sanitized.replace(/,\s*([}\]])/g, '$1');
+
+    try {
+      return JSON.parse(sanitized);
+    } catch (e) {}
+  }
+
+  // 4. Regex field extraction fallback
+  const extracted = {};
+  function extractString(field) {
+    const re = new RegExp(`"${field}"\\s*:\\s*"([\\s\\S]*?)"\\s*(?:,\\s*"|\\})`);
+    const match = text.match(re);
+    if (match && match[1]) {
+      return match[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').trim();
     }
     return null;
   }
+  function extractArray(field) {
+    const re = new RegExp(`"${field}"\\s*:\\s*\\[([\\s\\S]*?)\\]`);
+    const match = text.match(re);
+    if (match && match[1]) {
+      const items = [];
+      const itemRegex = /"([^"\\]*(?:\\.[^"\\]*)*)"/g;
+      let m;
+      while ((m = itemRegex.exec(match[1])) !== null) {
+        items.push(m[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').trim());
+      }
+      if (items.length > 0) return items;
+    }
+    return null;
+  }
+
+  const exp = extractString('explanation');
+  if (exp) extracted.explanation = exp;
+  const ans = extractString('answer');
+  if (ans) extracted.answer = ans;
+  const reply = extractString('reply');
+  if (reply) extracted.reply = reply;
+  const kc = extractArray('key_concepts');
+  if (kc) extracted.key_concepts = kc;
+  const pe = extractArray('practical_exercises');
+  if (pe) extracted.practical_exercises = pe;
+  const cm = extractArray('common_mistakes');
+  if (cm) extracted.common_mistakes = cm;
+  const vg = extractString('verification_goal');
+  if (vg) extracted.verification_goal = vg;
+  const fc = extractString('future_connection');
+  if (fc) extracted.future_connection = fc;
+  const res = extractArray('resources');
+  if (res) extracted.resources = res;
+
+  if (Object.keys(extracted).length > 0) {
+    return extracted;
+  }
+
+  return null;
+}
+
+function getStudentNameFromRequest(request, body = {}) {
+  if (body && body.student_name && typeof body.student_name === 'string' && body.student_name.trim()) {
+    return body.student_name.trim();
+  }
+  const authHeader = request.headers.get('Authorization') || '';
+  if (authHeader.startsWith('Bearer placex_google_jwt_')) {
+    try {
+      const p = JSON.parse(atob(authHeader.replace('Bearer placex_google_jwt_', '')));
+      if (p.user && (p.user.full_name || p.user.name)) {
+        return (p.user.full_name || p.user.name).split(' ')[0];
+      }
+    } catch (e) {}
+  }
+  if (authHeader.startsWith('Bearer placex_jwt_')) {
+    try {
+      const p = JSON.parse(atob(authHeader.replace('Bearer placex_jwt_', '')));
+      if (p.user && (p.user.full_name || p.user.name)) {
+        return (p.user.full_name || p.user.name).split(' ')[0];
+      }
+      if (p.email) {
+        const local = p.email.split('@')[0];
+        return local.charAt(0).toUpperCase() + local.slice(1);
+      }
+    } catch (e) {}
+  }
+  return 'Sahil';
 }
 
 export default {
@@ -1188,13 +1316,15 @@ export default {
           reply = "Live campus recruitment vacancies and company ATS feeds are matched dynamically against your verified skills. In PlaceX, the best route to secure tier-1 interviews is to run an ATS audit on your resume, target high-frequency system design topics, and complete mock interview blueprints. Would you like to optimize your resume for your target role or launch a technical interview right now?";
         } else {
           // Construct targeted prompt adhering to localhost PlaceX Host Agent persona
-          const prompt = `Student Target Role: Software Development Engineer (Tier 1 / FAANG)
+          const studentName = getStudentNameFromRequest(request, body);
+          const prompt = `Student Name: ${studentName}
+Student Target Role: Software Development Engineer (Tier 1 / FAANG)
 Active Module: ${activeModule}
 Current Readiness Score: 82/100
 
 Student Message: "${message}"
 
-Give a sharp, authentic, and encouraging mentor response. Answer their question directly with clear technical insight, using simple code snippets or analogies if appropriate.`;
+Give a sharp, authentic, and encouraging mentor response addressing ${studentName}. Answer their question directly with clear technical insight, using simple code snippets or analogies if appropriate.`;
 
           const geminiReply = await callGemini(prompt, HOST_AGENT_SYSTEM_PROMPT, history, 1200);
           if (geminiReply) {
@@ -1679,7 +1809,7 @@ Respond with a clean JSON object with keys:
       if (url.pathname === '/api/v1/agent/explain/roadmap-week') {
         let body = {};
         try { body = await request.json(); } catch (e) {}
-        const branch = body.branch || 'Software Development';
+        const branch = body.branch || 'Data Science';
         const level = body.level || 'Beginner';
         const weekNum = body.week_number || body.week_num || 1;
         const weekTitle = body.week_title || 'Core Engineering Foundations';
@@ -1687,14 +1817,18 @@ Respond with a clean JSON object with keys:
         const prerequisites = body.prerequisites || 'Standard foundation';
         const completionCriteria = body.completion_criteria || 'Implement practical exercises';
 
+        const studentName = getStudentNameFromRequest(request, body);
+
         let prompt = `You are the PlaceX Main Host Agent and Career Mentor.
-The student is studying their 24-week Career Roadmap on PlaceX:
+The student (${studentName}) is studying their 24-week Career Roadmap on PlaceX.
+They are currently viewing:
 - Career Track / Branch: ${branch}
 - Expertise Level: ${level}
 - Week Number: Week ${weekNum}
 - Week Topic / Title: ${weekTitle}
 - Prerequisites: ${prerequisites}
 - Verification Completion Criteria: ${completionCriteria}
+- Student's current verified skills: Building foundations
 `;
 
         if (userQuestion) {
@@ -1702,8 +1836,7 @@ The student is studying their 24-week Career Roadmap on PlaceX:
 The student has asked this specific question about Week ${weekNum}:
 "${userQuestion}"
 
-Provide a direct, practical, and highly specific answer for this week and topic.
-Respond in clean JSON format with keys:
+Respond in clean, valid JSON format with EXACTLY these keys:
 {
   "status": "success",
   "branch": "${branch}",
@@ -1721,14 +1854,24 @@ Respond in clean JSON format with keys:
         } else {
           prompt += `
 Break down this week dynamically for the student so they thoroughly understand what to do, why it matters, and how to master it.
-Respond in clean JSON format with keys:
+Cover:
+1. What this week means in practice
+2. Why this topic matters in hiring and real engineering
+3. Key concepts to learn (in optimal step-by-step learning order)
+4. Practical exercises / projects to build
+5. Common mistakes to avoid
+6. End-of-week verification goal
+7. How this connects to future weeks
+8. Recommended official resources
+
+Respond in clean, valid JSON format with EXACTLY these keys:
 {
   "status": "success",
   "branch": "${branch}",
   "level": "${level}",
   "week_number": ${weekNum},
   "week_title": "${weekTitle}",
-  "explanation": "<Engaging 2-3 paragraph breakdown of what this week means and why it matters>",
+  "explanation": "<Engaging, student-friendly 2-3 paragraph breakdown of what this week means and why it matters, addressing ${studentName} warmly>",
   "key_concepts": ["<Step 1 concept>", "<Step 2 concept>", "<Step 3 concept>", "<Step 4 concept>"],
   "practical_exercises": ["<Concrete coding or practical exercise 1>", "<Concrete coding or practical exercise 2>", "<Concrete coding or practical exercise 3>"],
   "common_mistakes": ["<Frequent pitfall 1>", "<Frequent pitfall 2>"],
@@ -1739,35 +1882,125 @@ Respond in clean JSON format with keys:
 `;
         }
 
-        const geminiRes = await callGemini(prompt, HOST_AGENT_SYSTEM_PROMPT, null, 2500);
-        const parsed = parseJsonFromText(geminiRes);
+        const geminiRes = await callGemini(prompt, HOST_AGENT_SYSTEM_PROMPT, null, 3000);
+        let parsed = parseJsonFromText(geminiRes);
 
         if (parsed) {
           parsed.status = 'success';
+          parsed.branch = branch;
+          parsed.level = level;
           parsed.week_number = weekNum;
           parsed.week_title = weekTitle;
-          const replyContent = parsed.answer || parsed.explanation || '';
-          parsed.reply = replyContent;
-          parsed.answer = replyContent;
-          parsed.explanation = parsed.explanation || replyContent;
+
+          if (userQuestion) {
+            let answerText = parsed.answer || parsed.reply || parsed.explanation || '';
+            if (typeof answerText === 'string' && answerText.trim().startsWith('{')) {
+              const inner = parseJsonFromText(answerText);
+              if (inner && (inner.answer || inner.explanation)) {
+                answerText = inner.answer || inner.explanation;
+              }
+            }
+            parsed.answer = answerText;
+            parsed.reply = answerText;
+          } else {
+            // Week overview mode
+            let explanationText = parsed.explanation || '';
+            if (typeof explanationText === 'string' && explanationText.trim().startsWith('{')) {
+              const inner = parseJsonFromText(explanationText);
+              if (inner && inner.explanation) {
+                explanationText = inner.explanation;
+              }
+            }
+            if (!explanationText || explanationText.trim().startsWith('{')) {
+              explanationText = `Welcome to Week ${weekNum} of your ${branch} journey, ${studentName}! This week is dedicated to mastering ${weekTitle}, building a robust engineering foundation for technical interviews and production applications.`;
+            }
+            parsed.explanation = explanationText;
+
+            if (!Array.isArray(parsed.key_concepts) || parsed.key_concepts.length === 0) {
+              parsed.key_concepts = [
+                `${weekTitle} Syntax & Core Principles`,
+                `Algorithmic Problem Solving & Control Flow`,
+                `Applied Architecture & Modular Implementation`,
+                `Verification & Real-world Practice`
+              ];
+            }
+            if (!Array.isArray(parsed.practical_exercises) || parsed.practical_exercises.length === 0) {
+              parsed.practical_exercises = [
+                `Solve 10 algorithmic challenges on LeetCode/HackerRank focusing on ${weekTitle} fundamentals`,
+                `Build a CLI-based practical tool or calculator that processes inputs and computes results`,
+                `Initialize a GitHub repo, commit your code with descriptive messages, and push it`
+              ];
+            }
+            if (!Array.isArray(parsed.common_mistakes) || parsed.common_mistakes.length === 0) {
+              parsed.common_mistakes = [
+                `Focusing only on theory without writing code daily`,
+                `Neglecting version control and writing entire scripts in a single unorganized file`
+              ];
+            }
+            if (!parsed.verification_goal) {
+              parsed.verification_goal = completionCriteria || `Master ${weekTitle} concepts and pass the topic verification quiz`;
+            }
+          }
           return jsonResponse(parsed);
         }
 
+        // Emergency recovery if full JSON parsing failed: extract fields directly
         if (geminiRes) {
-          const cleanText = geminiRes.replace(/```json|```/g, '').trim();
+          let cleanText = geminiRes.replace(/```json|```/g, '').trim();
+
+          let extractedExp = '';
+          let extractedAns = '';
+          const expMatch = cleanText.match(/"explanation"\s*:\s*"([\s\S]*?)(?=",\s*"\w+"|"\}|$)/);
+          if (expMatch && expMatch[1]) {
+            extractedExp = expMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').trim();
+          }
+          const ansMatch = cleanText.match(/"answer"\s*:\s*"([\s\S]*?)(?=",\s*"\w+"|"\}|$)/);
+          if (ansMatch && ansMatch[1]) {
+            extractedAns = ansMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"').trim();
+          }
+
+          if (userQuestion) {
+            let finalAns = extractedAns || (cleanText.startsWith('{') ? 'Here is guidance on your question for this week.' : cleanText);
+            return jsonResponse({
+              status: 'success',
+              branch,
+              level,
+              week_number: weekNum,
+              week_title: weekTitle,
+              answer: finalAns,
+              reply: finalAns
+            });
+          }
+
+          let finalExp = extractedExp;
+          if (!finalExp || finalExp.startsWith('{')) {
+            finalExp = `Welcome to Week ${weekNum} of your ${branch} journey, ${studentName}! This week is dedicated to mastering ${weekTitle}, building a robust engineering foundation for technical interviews and production applications.`;
+          }
+
           return jsonResponse({
             status: 'success',
             branch,
             level,
             week_number: weekNum,
             week_title: weekTitle,
-            answer: cleanText,
-            reply: cleanText,
-            explanation: cleanText,
-            key_concepts: [weekTitle],
-            practical_exercises: ['Implement exercises in Coding Sandbox'],
-            common_mistakes: ['Skipping foundational concepts'],
-            resources: ['Official Track Documentation']
+            explanation: finalExp,
+            key_concepts: [
+              `${weekTitle} Syntax & Core Principles`,
+              `Algorithmic Problem Solving & Control Flow`,
+              `Applied Architecture & Modular Implementation`,
+              `Verification & Real-world Practice`
+            ],
+            practical_exercises: [
+              `Solve 10 algorithmic challenges on LeetCode/HackerRank focusing on ${weekTitle} fundamentals`,
+              `Build a CLI-based practical tool or calculator that processes inputs and computes results`,
+              `Initialize a GitHub repo, commit your code with descriptive messages, and push it`
+            ],
+            common_mistakes: [
+              `Focusing only on theory without writing code daily`,
+              `Neglecting version control and writing entire scripts in a single unorganized file`
+            ],
+            verification_goal: completionCriteria || `Master ${weekTitle} concepts and pass the topic verification quiz`,
+            resources: ['Official Documentation and Track Guide']
           });
         }
 
