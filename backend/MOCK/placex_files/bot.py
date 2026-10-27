@@ -562,18 +562,18 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
             import urllib.request
             test_req = urllib.request.Request(
                 f"https://api.elevenlabs.io/v1/text-to-speech/{os.getenv('ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM')}",
-                data=json.dumps({"text": "health", "model_id": "eleven_flash_v2_5"}).encode("utf-8"),
+                data=json.dumps({"text": "Hello candidate, welcome to the PlaceX technical mock interview today.", "model_id": "eleven_flash_v2_5"}).encode("utf-8"),
                 headers={"xi-api-key": os.getenv("ELEVENLABS_API_KEY"), "Content-Type": "application/json"}
             )
-            with urllib.request.urlopen(test_req, timeout=3) as resp:
+            with urllib.request.urlopen(test_req, timeout=5) as resp:
                 pass
         except urllib.error.HTTPError as he:
-            if he.code in (401, 402, 429):
-                err_body = he.read().decode("utf-8", errors="ignore")
-                logger.warning(f"[LiveBrain] ElevenLabs TTS unavailable (HTTP {he.code}: {err_body[:120]}): auto-falling back to Deepgram Aura TTS.")
-                eleven_quota_ok = False
+            err_body = he.read().decode("utf-8", errors="ignore")
+            logger.warning(f"[LiveBrain] ElevenLabs TTS unavailable (HTTP {he.code}: {err_body[:120]}): auto-falling back to Deepgram Aura TTS.")
+            eleven_quota_ok = False
         except Exception as e:
-            logger.info(f"[LiveBrain] ElevenLabs pre-flight check ({e}); proceeding with primary initialization.")
+            logger.warning(f"[LiveBrain] ElevenLabs pre-flight check failed ({e}): auto-falling back to Deepgram Aura TTS.")
+            eleven_quota_ok = False
 
         if eleven_quota_ok:
             try:
@@ -591,12 +591,17 @@ async def run_bot(transport, runner_args: RunnerArguments) -> None:
     if tts is None:
         from pipecat.services.deepgram.tts import DeepgramTTSService
         dg_voice = os.getenv("DEEPGRAM_VOICE", "aura-asteria-en")
-        tts = DeepgramTTSService(
-            api_key=os.getenv("DEEPGRAM_API_KEY"),
-            voice=dg_voice,
-        )
+        try:
+            tts = DeepgramTTSService(
+                api_key=os.getenv("DEEPGRAM_API_KEY"),
+                settings=DeepgramTTSService.Settings(voice=dg_voice),
+            )
+        except Exception:
+            tts = DeepgramTTSService(
+                api_key=os.getenv("DEEPGRAM_API_KEY"),
+                voice=dg_voice,
+            )
         logger.info(f"[LiveBrain] Using Deepgram Aura TTS engine (voice={dg_voice}).")
-
     # Load Prep Brain Question Bank and compile strict-order system prompt
     question_bank = load_question_bank()
     system_prompt = build_interviewer_system_prompt(question_bank)
