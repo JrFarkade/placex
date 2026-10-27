@@ -45,6 +45,7 @@ function analyzeAST(sourceCode, language = 'python') {
 }
 
 // Persistent In-Memory State for Edge Runtime
+let activeLiveBrainTunnelUrl = null;
 const studentResumeHistory = [];
 const agentTasksStore = [
   { id: 1, title: 'Week 1 Focus: Core Engineering Foundations', module: 'roadmap', status: 'pending', target_route: 'roadmap' },
@@ -597,6 +598,24 @@ export default {
         });
       }
 
+      if (url.pathname === '/api/v1/interview/tunnel') {
+        if (request.method === 'POST') {
+          try {
+            const b = await request.json();
+            if (b.url && typeof b.url === 'string') {
+              activeLiveBrainTunnelUrl = b.url.trim();
+              return jsonResponse({ status: 'ok', tunnel_url: activeLiveBrainTunnelUrl });
+            }
+          } catch (e) {}
+          return jsonResponse({ error: 'invalid payload' }, 400);
+        } else {
+          return jsonResponse({
+            tunnel_url: activeLiveBrainTunnelUrl || env.LIVE_BRAIN_WEBRTC_URL || null,
+            status: 'active'
+          });
+        }
+      }
+
       if (url.pathname === '/api/v1/interview/start') {
         let body = {};
         try { body = await request.json(); } catch (e) {}
@@ -644,6 +663,22 @@ export default {
 
         const questionsList = questions_blueprint.map(q => q.question_text);
 
+        // Dynamically verify if WebRTC Live Brain tunnel is genuinely alive & reachable
+        const configuredUrl = activeLiveBrainTunnelUrl || env.LIVE_BRAIN_WEBRTC_URL || "";
+        let resolvedWebrtcUrl = `/api/v1/interview/avatar?company=${encodeURIComponent(target_company)}&role=${encodeURIComponent(role)}`;
+
+        if (configuredUrl && configuredUrl.trim() !== '') {
+          const candidateUrl = `${configuredUrl.trim().replace(/\/+$/, '')}/client/`;
+          try {
+            const probe = await fetch(candidateUrl, { method: 'HEAD', signal: AbortSignal.timeout(1500) });
+            if (probe.status < 500) {
+              resolvedWebrtcUrl = candidateUrl;
+            }
+          } catch (probeErr) {
+            console.warn('[LiveBrain] Tunnel probe failed or offline, falling back to edge avatar:', probeErr.message);
+          }
+        }
+
         return jsonResponse({
           status: 'success',
           session_id: Date.now(),
@@ -657,9 +692,7 @@ export default {
           first_question: questionsList[0] || '',
           live_brain: {
             status: 'launched',
-            webrtc_url: (env.LIVE_BRAIN_WEBRTC_URL && env.LIVE_BRAIN_WEBRTC_URL.trim() !== '')
-              ? `${env.LIVE_BRAIN_WEBRTC_URL.trim().replace(/\/+$/, '')}/client/`
-              : `/api/v1/interview/avatar?company=${encodeURIComponent(target_company)}&role=${encodeURIComponent(role)}`,
+            webrtc_url: resolvedWebrtcUrl,
             session_id: '1'
           }
         });

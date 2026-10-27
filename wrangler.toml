@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 account_id = "dec7061d171b2c48ce510dd4f1e39728"
 
 [vars]
-LIVE_BRAIN_WEBRTC_URL = "https://frozen-jean-shops-algebra.trycloudflare.com"
+LIVE_BRAIN_WEBRTC_URL = "https://comfort-boost-franchise-mpg.trycloudflare.com"
 
 [ai]
 binding = "AI"

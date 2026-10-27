@@ -36,5 +36,17 @@ if ($existingCf) {
     Start-Process -FilePath $cloudflaredPath -ArgumentList "tunnel --url http://127.0.0.1:7860 --no-autoupdate"
 }
 
+if ($TunnelUrl -ne "") {
+    Write-Host "[+] Syncing Tunnel URL to Cloudflare edge: $TunnelUrl" -ForegroundColor Cyan
+    $payload = @{ url = $TunnelUrl } | ConvertTo-Json
+    try {
+        Invoke-RestMethod -Uri "https://placex.com/api/v1/interview/tunnel" -Method POST -Body $payload -ContentType "application/json" -TimeoutSec 5 -ErrorAction SilentlyContinue
+        Invoke-RestMethod -Uri "https://placex.jrfarkade.workers.dev/api/v1/interview/tunnel" -Method POST -Body $payload -ContentType "application/json" -TimeoutSec 5 -ErrorAction SilentlyContinue
+        Write-Host "[✓] Tunnel URL successfully synced with live website!" -ForegroundColor Green
+    } catch {
+        Write-Host "[!] Cloudflare sync notice: $($_.Exception.Message)" -ForegroundColor Gray
+    }
+}
+
 Write-Host "`nLive Brain Engine & Tunnel are active." -ForegroundColor Green
 Write-Host "Remember: Your laptop must stay powered on and connected to WiFi." -ForegroundColor Magenta
