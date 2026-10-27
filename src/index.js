@@ -142,10 +142,10 @@ export default {
     try {
       const url = new URL(request.url);
 
-      // Google OAuth Credentials
+      // Google OAuth Credentials - dynamically preserve the user's current origin (e.g. placeux.com)
       const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID || env.VITE_GOOGLE_CLIENT_ID;
       const GOOGLE_CLIENT_SECRET = env.GOOGLE_CLIENT_SECRET;
-      const GOOGLE_REDIRECT_URI = env.GOOGLE_REDIRECT_URI || `${url.origin}/api/v1/auth/google/callback`;
+      const GOOGLE_REDIRECT_URI = `${url.origin}/api/v1/auth/google/callback`;
 
       // Robust Multi-Tier Gemini Querying with Persona & History
       async function callGemini(prompt, systemInstruction = null, history = null, maxTokens = 1200) {
