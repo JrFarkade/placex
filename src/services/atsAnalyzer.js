@@ -1,17 +1,5 @@
 // PlaceX ATS Resume Analysis & Document Classifier Engine
 // Faithful Edge Port of backend/app/resume_service/
-
-// Global Edge Polyfills for PDF.js / unpdf runtime
-if (typeof globalThis.window === 'undefined') {
-  globalThis.window = globalThis;
-}
-if (typeof globalThis.location === 'undefined') {
-  globalThis.location = { href: 'https://placex.jrfarkade.workers.dev/', origin: 'https://placex.jrfarkade.workers.dev' };
-}
-if (typeof globalThis.document === 'undefined') {
-  globalThis.document = { createElement: () => ({}) };
-}
-
 import { extractText as extractPdfText, getDocumentProxy } from 'unpdf';
 
 export const DocumentType = {

@@ -1,6 +1,7 @@
 name = "placex"
 main = "src/index.js"
 compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
 account_id = "dec7061d171b2c48ce510dd4f1e39728"
 
 [vars]
