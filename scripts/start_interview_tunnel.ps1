@@ -22,8 +22,8 @@ $existing = Get-NetTCPConnection -LocalPort 7860 -ErrorAction SilentlyContinue
 if ($existing) {
     Write-Host "[!] Port 7860 is already running (PID: $($existing.OwningProcess[0]))" -ForegroundColor Yellow
 } else {
-    Write-Host "[+] Launching Pipecat bot.py on port 7860..." -ForegroundColor Green
-    Start-Process -FilePath "python.exe" -ArgumentList "bot.py --host 127.0.0.1 --port 7860 -t webrtc" -WorkingDirectory $mockDir
+    Write-Host "[+] Launching Pipecat supervisor on port 7860 (auto-restart daemon)..." -ForegroundColor Green
+    Start-Process -FilePath "python.exe" -ArgumentList "supervisor.py" -WorkingDirectory $mockDir
     Start-Sleep -Seconds 3
 }
 
