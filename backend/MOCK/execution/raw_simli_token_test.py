@@ -52,3 +52,4 @@ with httpx.Client(timeout=15.0) as client:
             print(f"\n[Request {i}/5] Latency: {elapsed_ms:.1f}ms")
             print(f"  Error: {type(e).__name__}: {e}")
 print("\n" + "=" * 70)
+

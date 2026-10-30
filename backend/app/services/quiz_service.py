@@ -369,3 +369,4 @@ def seed_questions_if_empty(db: Session):
                     logger.info("Successfully seeded %d curated quiz questions into database.", len(seed_questions))
     except Exception as e:
         logger.error("Failed seeding quiz questions: %s", e)
+

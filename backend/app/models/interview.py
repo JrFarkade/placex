@@ -15,3 +15,4 @@ class InterviewSession(Base):
     score_breakdown = Column(JSON, default=dict, nullable=True)
     ai_feedback_report = Column(JSON, default=dict, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+

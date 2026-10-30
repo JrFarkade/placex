@@ -106,3 +106,4 @@ To configure MySQL locally:
 - [ ] LinkedIn Developer App created with OpenID Connect product and callback `http://localhost:8000/accounts/linkedin_oauth2/login/callback/`
 - [ ] `LINKEDIN_CLIENT_ID` and `LINKEDIN_CLIENT_SECRET` added to `.env`
 - [ ] Run `python webapp/manage.py migrate`
+

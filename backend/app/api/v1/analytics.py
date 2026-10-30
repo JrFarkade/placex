@@ -103,3 +103,4 @@ def delete_weekly_goal(
     if not success:
         raise HTTPException(status_code=404, detail="Goal not found.")
     return {"status": "deleted", "id": goal_id}
+

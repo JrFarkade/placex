@@ -43,3 +43,4 @@ def call_gemini(query: str):
 for q in questions:
     m, ans = call_gemini(q)
     print(f"=== Q: {q} (via {m}) ===\nA: {ans}\n")
+

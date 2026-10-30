@@ -1801,3 +1801,4 @@ async def seed(force: bool = False) -> None:
 if __name__ == "__main__":
     force_seed = "--force" in sys.argv or "-f" in sys.argv
     asyncio.run(seed(force=force_seed))
+

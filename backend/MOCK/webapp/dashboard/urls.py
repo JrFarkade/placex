@@ -12,3 +12,4 @@ urlpatterns = [
     path("setup/<int:setup_id>/review/", views.setup_review, name="setup_review"),
     path("setup/<int:setup_id>/launch/", views.setup_launch_interview, name="setup_launch"),
 ]
+

@@ -104,3 +104,4 @@ def check_env():
 if __name__ == "__main__":
     ready = check_env()
     sys.exit(0 if ready else 1)
+

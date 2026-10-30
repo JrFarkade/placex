@@ -149,3 +149,4 @@ class DocumentClassifier:
             "red_flags": red_flags,
             "message": message
         }
+

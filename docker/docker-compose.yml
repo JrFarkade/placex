@@ -26,3 +26,4 @@ services:
 volumes:
   placex_uploads:
   placex_logs:
+

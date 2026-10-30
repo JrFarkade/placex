@@ -86,3 +86,4 @@ if __name__ == "__main__":
         reload=settings.APP_ENV == "development",
         log_level=settings.LOG_LEVEL.lower(),
     )
+

@@ -23,3 +23,4 @@ for root, dirs, files in os.walk(search_dir):
 print(f"Found {len(matches)} matches:")
 for path, target in matches:
     print(f" - {path} (contains: '{target}')")
+

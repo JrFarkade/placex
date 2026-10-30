@@ -40,3 +40,4 @@ class StudentRoadmapProgress(Base):
         UniqueConstraint('user_id', 'branch', 'level', name='uix_user_branch_level'),
     )
 
+

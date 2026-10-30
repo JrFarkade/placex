@@ -107,3 +107,4 @@ def toggle_topic_status(
         db.commit()
     return LearningService.get_roadmap_and_plan(db=db, user_id=current_user.id)
 
+

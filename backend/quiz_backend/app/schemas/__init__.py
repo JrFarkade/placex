@@ -10,3 +10,4 @@ from app.schemas.quiz import (  # noqa: F401
     QuizSubmitResponse,
     SubmitAnswer,
 )
+

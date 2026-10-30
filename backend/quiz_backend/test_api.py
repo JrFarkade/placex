@@ -67,3 +67,4 @@ print("First question explanation snippet:", submit_data["answer_key"][0]["expla
 r_dash = client.get("/api/quiz/dashboard/alice")
 print("\n=== User Dashboard ===")
 print(r_dash.status_code, json.dumps(r_dash.json(), indent=2))
+

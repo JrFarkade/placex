@@ -147,3 +147,4 @@ The generated scoring report must strictly conform to the following schema:
    $$\text{Score}(Q_i) = \sum_{j} (\text{weight}_j \times \text{score}_j)$$
 3. **Constructive Tone**: Mistake callouts must be actionable, professional, and free of condescending phrasing.
 4. **Modality-Agnostic Format**: All outputs must be pure JSON adhering to standard PlaceX event models.
+

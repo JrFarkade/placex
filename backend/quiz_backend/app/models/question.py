@@ -67,3 +67,4 @@ class Question(Base):
 
     def __repr__(self) -> str:
         return f"<Question id={self.id} domain={self.domain} type={self.question_type} difficulty={self.difficulty}>"
+

@@ -129,3 +129,4 @@ class QuestionBank(models.Model):
 
     def __str__(self):
         return f"QuestionBank for Setup #{self.setup_id} ({self.setup.company})"
+

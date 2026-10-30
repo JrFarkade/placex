@@ -78,3 +78,4 @@ class PrepBrainJobInput(BaseModel):
     role_title: str = "Senior Software Engineer"
     target_level: str = "L5 / Senior"
     num_questions: int = Field(default=4, ge=2, le=8)
+

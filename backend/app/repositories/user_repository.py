@@ -189,3 +189,4 @@ class UserRepository:
         db.commit()
         db.refresh(profile)
         return profile
+

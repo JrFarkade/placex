@@ -42,3 +42,4 @@ class ProfileResponse(ProfileBase):
 
     class Config:
         from_attributes = True
+

@@ -25,3 +25,4 @@ async def test_stream():
     print(f"Generated text: {''.join(full_text)}")
 
 asyncio.run(test_stream())
+

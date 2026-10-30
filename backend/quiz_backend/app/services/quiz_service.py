@@ -243,3 +243,4 @@ async def _generate_and_persist_questions(
         exclude_ids.update(q.id for q in fresh)
 
     return new_questions
+

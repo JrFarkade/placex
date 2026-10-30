@@ -126,3 +126,4 @@ async def get_dashboard(db: AsyncSession, user_id: str) -> DashboardResponse:
         primary_domain=primary_domain,
         domain_stats=stat_list,
     )
+

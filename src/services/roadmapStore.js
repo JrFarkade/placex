@@ -117,3 +117,4 @@ export function updateWeekStatus(branch, level, weekNum, status) {
     new_status: status
   };
 }
+

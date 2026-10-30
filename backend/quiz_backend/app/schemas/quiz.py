@@ -102,3 +102,4 @@ class DomainListResponse(BaseModel):
     domains: list[str]
     question_types: list[str] = ["theory", "code", "scenario", "all"]
     description: str = "Supported domains and question types for quiz generation"
+

@@ -1003,3 +1003,4 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({ token, setActi
 };
 
 export default AnalyticsModule;
+

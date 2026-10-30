@@ -258,3 +258,4 @@ class LearningService:
             "mastered_skills": mastered_skills
         }
 
+

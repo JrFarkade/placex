@@ -116,3 +116,4 @@ class VisionEngine:
             "supplementary_note": "Non-verbal metrics serve purely as supplementary feedback signals (EU AI Act compliant)."
         }
 
+

@@ -73,3 +73,4 @@ def parse_docx():
 
 if __name__ == "__main__":
     parse_docx()
+

@@ -1410,3 +1410,4 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({ token, user }) =
     </div>
   );
 };
+

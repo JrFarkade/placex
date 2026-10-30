@@ -79,3 +79,4 @@ check(
 )
 
 print("ALL STDIN TESTS PASSED ACCURATELY!")
+

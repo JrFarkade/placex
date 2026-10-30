@@ -77,3 +77,4 @@ def test_coding_platform_upgrade():
 
 if __name__ == "__main__":
     test_coding_platform_upgrade()
+

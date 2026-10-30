@@ -104,3 +104,4 @@ When PlaceX revisits dynamic branching in future milestones, the architecture is
 - [x] Natural spoken conversational transitions and empathetic acknowledgments are active.
 - [x] Micro-clarification probing is strictly bounded (max 1–2 turns per question).
 - [x] Full transcript segments cleanly map to question IDs for downstream scoring.
+

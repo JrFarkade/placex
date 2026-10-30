@@ -117,3 +117,4 @@ class Notification(Base):
     read = Column(Boolean, default=False, nullable=False)
     action_url = Column(String(100), nullable=True) # target module e.g. 'knowledge', 'roadmap', 'coding', 'resume'
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+

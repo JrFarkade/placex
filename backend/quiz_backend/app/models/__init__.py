@@ -27,3 +27,4 @@ __all__ = [
     "QuizAttempt",
     "QuizAttemptDetail",
 ]
+

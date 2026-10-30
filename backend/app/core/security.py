@@ -38,3 +38,4 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[timede
     sig_b64 = b64url(signature)
     
     return f"{hdr_b64}.{pay_b64}.{sig_b64}"
+

@@ -281,3 +281,4 @@ export function getDashboardActivity(refDate = new Date()) {
     calendar: calendarDays
   };
 }
+

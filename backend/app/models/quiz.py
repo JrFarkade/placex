@@ -81,3 +81,4 @@ class UserProgress(Base):
     last_reviewed_at = Column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
 
     question = relationship("Question", lazy="joined")
+

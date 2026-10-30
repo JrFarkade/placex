@@ -52,3 +52,4 @@ class DOCXExtractor:
                 "character_count": 0,
                 "error": str(e)
             }
+

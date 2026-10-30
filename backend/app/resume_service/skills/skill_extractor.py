@@ -45,3 +45,4 @@ class SkillExtractor:
             "action_verbs_detected": extracted["Action Verbs"],
             "action_verb_count": action_verbs_count
         }
+

@@ -84,3 +84,4 @@ Although the watchdog message names `ElevenLabsTTSService#0`, **ElevenLabs produ
    Ensure your Simli account at [app.simli.com](https://app.simli.com/) has active credit/minutes so its cloud WebSocket does not close mid-stream.
 3. **ElevenLabs Key Permissions (Optional):**
    If you want quota monitoring tools to read your remaining character balance, generate a new key on ElevenLabs with the `user_read` permission enabled.
+

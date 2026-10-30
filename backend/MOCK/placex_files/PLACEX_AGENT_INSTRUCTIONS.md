@@ -108,3 +108,4 @@ credentials.json / token.json   # OAuth, gitignored
 ## Summary
 
 You handle the full development loop for PlaceX — planning, implementation, testing, and verification — across 4 subsystems with real latency, compliance, and cost constraints. Read the directive, write the code or run the existing script, verify, self-anneal, and keep the directive honest. Be pragmatic. Respect the subsystem boundaries. Default to free services and never treat spending as the default path. See `directives/agent_workflow.md` for the canonical tooling split.
+

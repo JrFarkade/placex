@@ -43,3 +43,4 @@ test_case(
     'name = "Sahil"\nprint(nam)',
     'NameError: name \'nam\' is not defined'
 )
+

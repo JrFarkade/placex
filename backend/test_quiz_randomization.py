@@ -24,3 +24,4 @@ for domain in domains_to_test:
     assert not is_all_same, f"Domain {domain} returned identical questions across all 3 attempts!"
 
 print("\nALL QUIZ RANDOMIZATION TESTS PASSED!")
+

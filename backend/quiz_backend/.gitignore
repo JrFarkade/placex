@@ -58,3 +58,4 @@ htmlcov/
 
 # Alembic (keep versions folder but not local migration state)
 alembic/versions/*.pyc
+

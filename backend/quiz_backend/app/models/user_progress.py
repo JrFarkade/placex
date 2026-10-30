@@ -48,3 +48,4 @@ class UserProgress(Base):
             f"<UserProgress user={self.user_id} q={self.question_id} "
             f"status={self.status} cc={self.consecutive_correct}>"
         )
+

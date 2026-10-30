@@ -713,3 +713,4 @@ export const QuizModule: React.FC<QuizModuleProps> = ({ token }) => {
     </div>
   );
 };
+

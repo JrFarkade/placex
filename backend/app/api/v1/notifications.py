@@ -48,3 +48,4 @@ def mark_all_notifications_as_read(
     """
     count = NotificationService.mark_all_read(db, current_user.id)
     return {"status": "success", "marked_read_count": count}
+

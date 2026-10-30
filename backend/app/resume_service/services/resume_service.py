@@ -145,3 +145,4 @@ class ResumeService:
         db.delete(record)
         db.commit()
         return True
+

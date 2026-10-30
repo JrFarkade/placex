@@ -669,3 +669,4 @@ class AnalyticsService:
             "interview_history": interview_history,
             "readiness": readiness
         }
+

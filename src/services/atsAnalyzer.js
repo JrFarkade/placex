@@ -583,3 +583,4 @@ export function evaluateATS(text, targetJd = "") {
     };
   }
 }
+

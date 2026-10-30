@@ -107,3 +107,4 @@ if server_ready:
 else:
     print("\n[!] Failed to connect to http://localhost:7860 within 25 seconds.")
     print(f"Check logs at: {log_file}")
+

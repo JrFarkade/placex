@@ -42,3 +42,4 @@ Antigravity expects the **`serverUrl`** key (not `url`) for HTTP/SSE-based remot
 * **Best Practices**:
   * Always invoke `get_me` upon connecting to verify current identity and scopes.
   * Use pagination (5–10 items per batch) and `minimal_output: true` for low-token footprint.
+

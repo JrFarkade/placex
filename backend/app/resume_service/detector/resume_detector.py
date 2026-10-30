@@ -108,3 +108,4 @@ class ResumeDetector:
             "red_flags_found": red_flags,
             "reason": reason
         }
+

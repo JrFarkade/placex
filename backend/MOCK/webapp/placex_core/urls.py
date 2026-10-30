@@ -18,3 +18,4 @@ urlpatterns = [
     path("dashboard/", include("dashboard.urls")),
     path("", RedirectView.as_view(url="/dashboard/", permanent=False), name="root_redirect"),
 ]
+

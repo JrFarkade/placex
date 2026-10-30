@@ -137,3 +137,4 @@ def get_skills_in_progress(
     """
     skills = DashboardService.get_skills_in_progress(db, current_user.id)
     return {"skills": skills}
+

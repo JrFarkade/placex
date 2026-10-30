@@ -37,3 +37,4 @@ class QuestionWithAnswer(BaseModel):
     source: str
 
     model_config = {"from_attributes": True}
+

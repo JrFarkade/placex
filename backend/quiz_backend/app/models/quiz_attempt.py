@@ -59,3 +59,4 @@ class QuizAttemptDetail(Base):
             f"<QuizAttemptDetail attempt={self.attempt_id} q={self.question_id} "
             f"correct={self.is_correct}>"
         )
+

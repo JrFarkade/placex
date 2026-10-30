@@ -624,3 +624,4 @@ class LiveCaptionSmoother(FrameProcessor):
         self._candidate_turn_index = 0
         self._interviewer_words.clear()
         self._interviewer_turn_index = 0
+

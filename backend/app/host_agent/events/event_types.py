@@ -59,3 +59,4 @@ class PlaceXEventPayload(BaseModel):
     module: Optional[str] = None
     data: Dict[str, Any] = Field(default_factory=dict)
     timestamp: Optional[datetime] = None
+

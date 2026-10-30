@@ -40,3 +40,4 @@ class ConnectedProfile(Base):
     __table_args__ = (
         UniqueConstraint('user_id', 'platform', name='uix_user_platform'),
     )
+

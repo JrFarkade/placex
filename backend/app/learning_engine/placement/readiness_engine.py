@@ -72,3 +72,4 @@ class ReadinessEngine:
                 "Consistency & Activity (10%)": f"{round(act_weight, 1)} pts"
             }
         }
+

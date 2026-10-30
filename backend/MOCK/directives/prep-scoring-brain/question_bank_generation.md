@@ -104,3 +104,4 @@ The generated question bank must strictly conform to the following schema:
 1. Must support `--dry-run` flag to validate inputs, schemas, and payload structure without consuming API credits.
 2. Intermediates (scraped HTML text, raw candidate repos) must be written to `.tmp/` and never committed to version control.
 3. Default LLM engine is **Gemini 1.5/2.0 Flash** ($0 ongoing tier).
+

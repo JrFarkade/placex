@@ -130,3 +130,4 @@ class HostAgentGeminiClient:
 
         logger.error("[HOST_AGENT] All Gemini model routes exhausted.")
         return None
+

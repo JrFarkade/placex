@@ -27,3 +27,4 @@ class PlaceXUserAdmin(UserAdmin):
     list_display = ("username", "email", "target_role", "target_level", "role", "is_staff")
     list_filter = ("role", "target_level", "is_staff", "is_active")
     search_fields = ("username", "email", "github_username", "target_role")
+

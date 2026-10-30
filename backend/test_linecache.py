@@ -36,3 +36,4 @@ proc = subprocess.run(
 
 print("STDERR:")
 print(proc.stderr)
+

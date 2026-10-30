@@ -93,3 +93,4 @@ if server_ready:
         print("Stopping server...")
 else:
     print("\n[ERROR] Bot server failed to respond within 20 seconds.")
+

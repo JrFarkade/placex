@@ -415,3 +415,4 @@ class HostAgentStateManager:
             st["current_focus"] = focus
         mem.short_term_context = st
         db.commit()
+

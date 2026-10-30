@@ -67,3 +67,4 @@ class KnowledgeBaseVectorStore:
             if any(word in doc['content'].lower() or word in doc['title'].lower() for word in query_lower.split()):
                 matched.append({"content": doc['content'], "metadata": {"title": doc['title'], "category": doc['category']}})
         return matched[:limit] if matched else [{"content": self.documents[0]['content'], "metadata": {"title": self.documents[0]['title']}}]
+

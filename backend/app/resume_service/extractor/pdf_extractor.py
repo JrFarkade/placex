@@ -116,3 +116,4 @@ class PDFExtractor:
     def extract_text(cls, file_path: str) -> str:
         res = cls.extract_text_and_info(file_path)
         return res["text"]
+

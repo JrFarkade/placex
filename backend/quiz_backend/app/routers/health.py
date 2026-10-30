@@ -38,3 +38,4 @@ async def health_check(db: AsyncSession = Depends(get_db)) -> dict:
         "environment": settings.APP_ENV,
         "database": db_status,
     }
+

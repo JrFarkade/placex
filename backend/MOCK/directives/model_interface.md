@@ -277,3 +277,4 @@ Application Session Record (Reference Mapping):
 * `"Leaning No Hire"` (Score: $4.0 - 5.4$)
 * `"No Hire"` (Score: $< 4.0$)
 * `"Inconclusive / Incomplete Session"` (Session terminated before completing substantive turns)
+

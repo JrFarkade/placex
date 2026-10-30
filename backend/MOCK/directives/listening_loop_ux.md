@@ -87,3 +87,4 @@ Raw STT partial frames emit rapidly fluctuating hypotheses, causing visual word 
 ```
 
 * **Implementation Phase**: To be routed for full pipeline implementation in Pipecat once core connectivity smoke tests are validated.
+

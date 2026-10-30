@@ -27,3 +27,4 @@ class DashboardResponse(BaseModel):
     total_learning: int
     primary_domain: str = Field(description="Domain with the most quiz activity")
     domain_stats: list[DomainStat]
+

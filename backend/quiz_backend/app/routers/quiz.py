@@ -150,3 +150,4 @@ async def get_dashboard(
     db: DbDep,
 ) -> DashboardResponse:
     return await dashboard_service.get_dashboard(db=db, user_id=user_id)
+

@@ -176,3 +176,4 @@ export function getAvatarHtml(company = "Target Company", role = "Software Engin
 </body>
 </html>`;
 }
+

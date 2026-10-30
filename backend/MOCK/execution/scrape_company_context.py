@@ -90,3 +90,4 @@ def fetch_candidate_signals(github_url: Optional[str] = None, linkedin_summary: 
         "experience_summary": linkedin_summary or "Backend systems experience",
         "is_dry_run": False
     }
+

@@ -164,3 +164,4 @@ async def run_benchmark():
 
 if __name__ == "__main__":
     asyncio.run(run_benchmark())
+

@@ -26,3 +26,4 @@ async def run_5_turns():
         print(f"Turn {i}: TTFB = {ttfb:.0f}ms | Total = {total:.0f}ms | {text_preview}")
 
 asyncio.run(run_5_turns())
+

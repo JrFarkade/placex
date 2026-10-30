@@ -44,3 +44,4 @@ class ASTAnalyzer:
             "detected_loops": total_loops,
             "lint_warnings": [] if quality_score > 80 else ["Consider adding inline comments explaining algorithmic step."]
         }
+

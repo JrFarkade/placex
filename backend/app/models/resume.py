@@ -16,3 +16,4 @@ class ResumeUpload(Base):
     ats_score = Column(Float, default=0.0, nullable=True)
     ats_breakdown = Column(JSON, default=dict, nullable=True)
     uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+

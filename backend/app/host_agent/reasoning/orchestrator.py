@@ -936,3 +936,4 @@ Respond in clean, valid JSON format with EXACTLY these keys:
                 "changed_lines": [fallback_line] if fallback_line else []
             }
         return None
+

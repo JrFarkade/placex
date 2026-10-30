@@ -160,3 +160,4 @@ def research_company(
         pass
 
     return result
+

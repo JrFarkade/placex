@@ -740,3 +740,4 @@ export const ResumeAnalyzer: React.FC<ResumeAnalyzerProps> = ({ token, setActive
     </div>
   );
 };
+

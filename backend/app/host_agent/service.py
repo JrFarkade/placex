@@ -148,3 +148,4 @@ class HostAgentService:
     @classmethod
     def update_task_status(cls, db: Session, task_id: int, user_id: int, status: str):
         return HostAgentStateManager.update_task_status(db, task_id, user_id, status)
+

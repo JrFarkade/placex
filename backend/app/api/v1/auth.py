@@ -661,3 +661,4 @@ def read_user_profile(db: Session = Depends(get_db), current_user=Depends(get_cu
 @router.post("/profile", response_model=ProfileResponse)
 def update_user_profile(profile_in: ProfileCreate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     return UserRepository.update_profile(db, user_id=current_user.id, profile_in=profile_in)
+

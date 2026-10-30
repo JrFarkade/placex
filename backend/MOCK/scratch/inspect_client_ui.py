@@ -28,3 +28,4 @@ for js in glob.glob(os.path.join(dist_dir, "assets", "*.js")):
                 end = min(len(content), pos + 80)
                 snippet = content[start:end].replace('\n', ' ')
                 print(f"    snippet: ... {snippet} ...")
+

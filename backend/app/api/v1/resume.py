@@ -117,3 +117,4 @@ def delete_resume_version(
     if not success:
         raise HTTPException(status_code=404, detail="Resume record not found.")
     return {"status": "success", "message": f"Resume version {resume_id} deleted successfully."}
+

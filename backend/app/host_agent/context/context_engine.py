@@ -296,3 +296,4 @@ class HostAgentContextEngine:
             "quiz_attempts": student_state["quiz"]["total_attempts"],
             "interviews_done": student_state["interview"]["completed_sessions"]
         }
+

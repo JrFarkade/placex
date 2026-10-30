@@ -77,3 +77,4 @@ class StructuredResumeParser:
                 if len(extracted) >= 6:
                     break
         return extracted
+

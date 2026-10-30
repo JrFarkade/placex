@@ -36,3 +36,4 @@ class PlaceXUser(AbstractUser):
     def __str__(self):
         display_name = self.get_full_name() or self.username
         return f"{display_name} ({self.target_role})"
+

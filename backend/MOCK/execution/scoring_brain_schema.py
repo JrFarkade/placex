@@ -102,3 +102,4 @@ class ScoringReport(BaseModel):
     mistake_callouts: List[MistakeCallout] = Field(default_factory=list)
     improvement_suggestions: List[ImprovementSuggestion] = Field(default_factory=list)
     behavioral_summary: Optional[BehavioralSummaryFeedback] = None
+

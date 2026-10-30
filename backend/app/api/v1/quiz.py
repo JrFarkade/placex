@@ -123,3 +123,4 @@ def get_dashboard(
     db: Session = Depends(get_db)
 ):
     return quiz_service.get_user_dashboard(db=db, user_id=user_id)
+

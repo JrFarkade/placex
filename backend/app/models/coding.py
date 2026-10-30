@@ -66,3 +66,4 @@ class CodingBookmark(Base):
     __table_args__ = (
         UniqueConstraint('user_id', 'question_id', name='uix_user_question_bookmark'),
     )
+

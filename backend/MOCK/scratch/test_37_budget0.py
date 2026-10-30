@@ -31,3 +31,4 @@ async def test_37_no_thinking():
         print(f"[gemini-3.7-flash (budget=0)] ERROR: {e}")
 
 asyncio.run(test_37_no_thinking())
+

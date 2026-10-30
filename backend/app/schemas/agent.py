@@ -111,3 +111,4 @@ class RoadmapWeekExplainRequest(BaseModel):
     prerequisites: Optional[str] = None
     completion_criteria: Optional[str] = None
     user_question: Optional[str] = None
+

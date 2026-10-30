@@ -103,3 +103,4 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFeature, setActiveFeatur
     </aside>
   );
 };
+

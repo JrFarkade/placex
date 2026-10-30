@@ -15,3 +15,4 @@ for m in test_models:
         print(f"[{m}] -> {dt:.0f}ms | Response: {r.text.strip()}")
     except Exception as e:
         print(f"[{m}] -> ERROR: {e}")
+

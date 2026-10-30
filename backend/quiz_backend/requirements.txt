@@ -8,3 +8,4 @@ google-genai>=1.10.0
 python-dotenv>=1.0.1
 alembic>=1.14.0
 httpx>=0.28.0
+
